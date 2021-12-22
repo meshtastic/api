@@ -27,7 +27,11 @@ app
         id: req.params.id,
       },
       include: {
-        materials: true,
+        materials: {
+          include: {
+            family: true,
+          },
+        },
         author: true,
         nodes: true,
         tags: true,

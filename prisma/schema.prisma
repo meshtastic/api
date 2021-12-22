@@ -30,6 +30,12 @@ model Showcase {
   authorId  String
 }
 
+model MaterialFamily {
+  id        String     @id @default(cuid())
+  name      String
+  materials Material[]
+}
+
 model Material {
   id      String @id @default(cuid())
   name    String
@@ -37,6 +43,8 @@ model Material {
   image   String
   url     String
 
+  family    MaterialFamily @relation(fields: [familyId], references: [id])
+  familyId  String
   showcases Showcase[]
 }
 
