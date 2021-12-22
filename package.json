@@ -6,6 +6,8 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "prestart": "prisma migrate deploy",
+    "generate": "prisma generate",
     "start": "tsm src/index.ts"
   },
   "dependencies": {
