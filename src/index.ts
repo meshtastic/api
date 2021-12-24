@@ -8,8 +8,11 @@ const app = new App();
 
 app
   .use(logger())
-  .use(cors({ origin: "https://meshtastic.org/" }))
-  .options("*", cors())
+  .use(
+    cors({
+      origin: "https://meshtastic.org",
+    })
+  )
   .get("/showcase", async (_, res) => {
     const showcases = await prisma.showcase.findMany({
       include: {
