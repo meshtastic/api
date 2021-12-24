@@ -13,6 +13,9 @@ app
       origin: "https://meshtastic.org",
     })
   )
+  .get("/", (_, res) => {
+    res.status(200);
+  })
   .get("/showcase", async (_, res) => {
     const showcases = await prisma.showcase.findMany({
       include: {
