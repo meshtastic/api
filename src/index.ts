@@ -1,4 +1,5 @@
 import { App } from '@tinyhttp/app';
+import { cors } from '@tinyhttp/cors';
 import { logger } from '@tinyhttp/logger';
 
 import { prisma } from './utils/prisma';
@@ -7,6 +8,8 @@ const app = new App();
 
 app
   .use(logger())
+  .use(cors({ origin: "https://meshtastic.org/" }))
+  .options("*", cors())
   .get("/showcase", async (_, res) => {
     const showcases = await prisma.showcase.findMany({
       include: {
