@@ -1,3 +1,5 @@
+import { got } from 'got';
+
 import { App } from '@tinyhttp/app';
 import { cors } from '@tinyhttp/cors';
 import { logger } from '@tinyhttp/logger';
@@ -15,6 +17,18 @@ app
   )
   .get("/", (_, res) => {
     res.status(200);
+  })
+  .get("/mirror/webui", async (_, res) => {
+    await got
+      .get(
+        "https://github.com/meshtastic/meshtastic-web/releases/download/latest/build.tar"
+      )
+      .then((data) => {
+        res.setHeader("content-disposition", "attachment; filename=build.tar");
+        res.setHeader("content-type", "application/octet-stream");
+        res.setHeader("content-length", data.body.length);
+        res.send(data.rawBody);
+      });
   })
   .get("/showcase", async (_, res) => {
     const showcases = await prisma.showcase.findMany({
@@ -52,4 +66,5 @@ app
     }
     res.json(showcase);
   })
+
   .listen(parseInt(process.env.PORT ?? "4000"));
