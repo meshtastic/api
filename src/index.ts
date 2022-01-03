@@ -26,7 +26,6 @@ app
       .then((data) => {
         res.setHeader("content-disposition", "attachment; filename=build.tar");
         res.setHeader("content-type", "application/octet-stream");
-        res.setHeader("content-length", data.headers["content-length"] ?? "");
         res.send(data.rawBody);
       });
   })
