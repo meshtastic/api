@@ -16,7 +16,7 @@ app
     })
   )
   .get("/", (_, res) => {
-    res.status(200);
+    res.sendStatus(200);
   })
   .get("/mirror/webui", async (_, res) => {
     await got
