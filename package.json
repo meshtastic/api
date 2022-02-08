@@ -11,6 +11,8 @@
     "start": "tsm src/index.ts"
   },
   "dependencies": {
+    "@octokit/auth-app": "^3.6.1",
+    "@octokit/rest": "^18.12.0",
     "@prisma/client": "3.7.0",
     "@tinyhttp/app": "2.0.6",
     "@tinyhttp/cors": "^2.0.0",

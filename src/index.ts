@@ -6,6 +6,8 @@ import { logger } from '@tinyhttp/logger';
 
 import { prisma } from './utils/prisma';
 
+import { deviceOctokit, DeviceRequestOptions, DeviceFirmwareResource, FirmwareLinkRegex } from './github';
+
 const app = new App();
 
 app
@@ -65,5 +67,47 @@ app
     }
     res.json(showcase);
   })
+  .get("/device/firmware/release", async (req, res) => {
+    const releases = await deviceOctokit.rest.repos
+      .listReleases(DeviceRequestOptions)
+      
+    res.send(releases.data
+      .map(release => {
+        return <DeviceFirmwareResource> {
+          id: release.tag_name,
+          title: release.name,
+          page_url: release.html_url,
+          zip_url: release.assets
+            .find(asset => asset.name.startsWith('firmware-'))
+            ?.browser_download_url
+        }; 
+      })
+    );
+  })
+  .get("/device/firmware/pull-request", async (req, res) => {
+    const prs = await deviceOctokit.rest.pulls.list(DeviceRequestOptions);
 
+    const prArtifacts = await Promise.all(prs.data.map(async pr => { 
+      let zip_url: string | undefined;
+      const comments = await deviceOctokit.request(pr.comments_url);
+      // @ts-ignore
+      const artifactComments = comments.data.filter(comment => comment.user.login == 'github-actions[bot]');
+
+      if (artifactComments.length > 0) {
+        const matches = FirmwareLinkRegex.exec(artifactComments[0].body);
+        if (matches && matches.length > 0) {
+          zip_url = matches[1];
+        }
+      }
+      
+      return <DeviceFirmwareResource> {
+        id: pr.number.toString(),
+        title: pr.title,
+        page_url: pr.html_url,
+        zip_url: zip_url
+      };
+    }));
+      
+    res.send(prArtifacts.filter(pr => pr.zip_url));
+  })
   .listen(parseInt(process.env.PORT ?? "4000"));
