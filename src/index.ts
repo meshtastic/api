@@ -78,8 +78,7 @@ app
           title: release.name,
           page_url: release.html_url,
           zip_url: release.assets
-            .find(asset => asset.name.startsWith('firmware-'))
-            ?.browser_download_url
+            .find(asset => asset.name.startsWith('firmware-'))?.browser_download_url
         }; 
       })
     );
@@ -90,8 +89,8 @@ app
     const prArtifacts = await Promise.all(prs.data.map(async pr => { 
       let zip_url: string | undefined;
       const comments = await deviceOctokit.request(pr.comments_url);
-      // @ts-ignore
-      const artifactComments = comments.data.filter(comment => comment.user.login == 'github-actions[bot]');
+      const artifactComments = comments.data
+        .filter((comment: { user: { login: string } }) => comment.user.login == 'github-actions[bot]');
 
       if (artifactComments.length > 0) {
         const matches = FirmwareLinkRegex.exec(artifactComments[0].body);
