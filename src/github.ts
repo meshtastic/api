@@ -1,31 +1,31 @@
-import { Octokit } from '@octokit/rest';
 import { createAppAuth } from '@octokit/auth-app';
+import { Octokit } from '@octokit/rest';
 
-const DEVICE_OWNER = 'meshtastic';
-const DEVICE_REPO = 'Meshtastic-Device';
+const DEVICE_OWNER = "meshtastic";
+const DEVICE_REPO = "Meshtastic-Device";
 
 export const deviceOctokit = new Octokit({
-  userAgent: 'meshtastic-api v1',
+  userAgent: "meshtastic-api v1",
   // TODO: App auth
-  // authStrategy: createAppAuth,
-  // auth: {
-  //   appId: 1,
-  //   privateKey: "-----BEGIN PRIVATE KEY-----\n...",
-  //   clientId: "1234567890abcdef1234",
-  //   clientSecret: "1234567890abcdef1234567890abcdef12345678",
-  // },
+  authStrategy: createAppAuth,
+  auth: {
+    appId: process.env.GH_APP_ID,
+    privateKey: process.env.GH_APP_PRIVATE_KEY,
+    clientId: process.env.GH_APP_CLIENT_ID,
+    clientSecret: process.env.GH_APP_CLIENT_SECRET,
+  },
 });
 
 export interface DeviceFirmwareResource {
-  id: string,
-  title: string,
-  page_url?: string,
-  zip_url?: string 
-};
+  id: string;
+  title: string;
+  page_url?: string;
+  zip_url?: string;
+}
 
 export const DeviceRequestOptions = {
   owner: DEVICE_OWNER,
-  repo: DEVICE_REPO
-}; 
+  repo: DEVICE_REPO,
+};
 
 export const FirmwareLinkRegex = /\(([^)]+)\)/;
