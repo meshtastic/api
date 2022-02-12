@@ -1,14 +1,19 @@
+import { Octokit } from 'octokit';
+
 import { createAppAuth } from '@octokit/auth-app';
-import { Octokit } from '@octokit/rest';
+import { config } from '@tinyhttp/dotenv';
 
 const DEVICE_OWNER = "meshtastic";
 const DEVICE_REPO = "Meshtastic-Device";
+
+config();
 
 export const deviceOctokit = new Octokit({
   userAgent: "meshtastic-api v1",
   // TODO: App auth
   authStrategy: createAppAuth,
   auth: {
+    installationId: process.env.GH_APP_INSTALL_ID,
     appId: process.env.GH_APP_ID,
     privateKey: process.env.GH_APP_PRIVATE_KEY,
     clientId: process.env.GH_APP_CLIENT_ID,

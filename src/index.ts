@@ -2,6 +2,7 @@ import { got } from 'got';
 
 import { App } from '@tinyhttp/app';
 import { cors } from '@tinyhttp/cors';
+import { config } from '@tinyhttp/dotenv';
 import { logger } from '@tinyhttp/logger';
 
 import {
@@ -9,11 +10,11 @@ import {
   deviceOctokit,
   DeviceRequestOptions,
   FirmwareLinkRegex,
-} from './github';
+} from './utils/github';
 import { prisma } from './utils/prisma';
 
 const app = new App();
-
+config();
 app
   .use(logger())
   .use(
