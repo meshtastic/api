@@ -4,7 +4,7 @@ import { createAppAuth } from '@octokit/auth-app';
 import { config } from '@tinyhttp/dotenv';
 
 const DEVICE_OWNER = "meshtastic";
-const DEVICE_REPO = "Meshtastic-Device";
+const DEVICE_REPO = "firmware";
 
 config();
 
