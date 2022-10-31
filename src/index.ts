@@ -10,8 +10,8 @@ import {
   deviceOctokit,
   DeviceRequestOptions,
   FirmwareLinkRegex,
-} from './utils/github';
-import { prisma } from './utils/prisma';
+} from './utils/github.js';
+import { prisma } from './utils/prisma.js';
 
 const app = new App();
 config();
