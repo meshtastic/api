@@ -1,5 +1,3 @@
-[![CLA assistant](https://cla-assistant.io/readme/badge/meshtastic/api)](https://cla-assistant.io/meshtastic/api)
-
 # Meshtastic API
 
 [![CI](https://img.shields.io/github/workflow/status/meshtastic/api/CI?label=actions&logo=github&color=yellow)](https://github.com/meshtastic/api/actions/workflows/ci.yml)
