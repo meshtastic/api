@@ -13,7 +13,7 @@ files.forEach((file) => {
   content = content
     .split("\n")
     .map((s) =>
-      s.replace(/^(import .+? from ["']\..+?)(?<!js)(["'];)$/, "$1.js$2")
+      s.replace(/^(..port .+? from ["']\..+?)(?<!js)(["'];)$/, "$1.js$2")
     )
     .join("\n");
 
