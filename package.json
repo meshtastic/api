@@ -9,7 +9,7 @@
     "prestart": "prisma migrate deploy",
     "generate": "prisma generate",
     "start": "node --loader tsm src/index.ts",
-    "build": "tsc --noEmit"
+    "build": "node ./patch.js && tsc --noEmit"
   },
   "dependencies": {
     "@octokit/auth-app": "^4.0.7",
