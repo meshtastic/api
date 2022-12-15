@@ -4,11 +4,11 @@ specifiers:
   '@octokit/auth-app': ^4.0.7
   '@octokit/rest': ^19.0.5
   '@prisma/client': 4.7.1
-  '@tinyhttp/app': 2.0.25
+  '@tinyhttp/app': 2.0.26
   '@tinyhttp/cors': ^2.0.0
   '@tinyhttp/dotenv': ^2.0.4
   '@tinyhttp/logger': ^1.3.0
-  '@types/node': ^18.11.12
+  '@types/node': ^18.11.15
   got: ^12.5.3
   header-range-parser: 1.1.3
   octokit: ^2.0.10
@@ -21,7 +21,7 @@ dependencies:
   '@octokit/auth-app': 4.0.7
   '@octokit/rest': 19.0.5
   '@prisma/client': 4.7.1_prisma@4.7.1
-  '@tinyhttp/app': 2.0.25
+  '@tinyhttp/app': 2.0.26
   '@tinyhttp/cors': 2.0.0
   '@tinyhttp/dotenv': 2.0.4
   '@tinyhttp/logger': 1.3.0
@@ -34,7 +34,7 @@ dependencies:
   typescript: 4.9.4
 
 devDependencies:
-  '@types/node': 18.11.12
+  '@types/node': 18.11.15
 
 packages:
 
@@ -66,7 +66,7 @@ packages:
       '@octokit/oauth-app': 4.2.0
       '@octokit/plugin-paginate-rest': 5.0.1_@octokit+core@4.1.0
       '@octokit/types': 8.0.0
-      '@octokit/webhooks': 10.3.1
+      '@octokit/webhooks': 10.4.0
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -316,17 +316,17 @@ packages:
     engines: {node: '>= 14'}
     dev: false
 
-  /@octokit/webhooks-types/6.6.0:
-    resolution: {integrity: sha512-czpEwg4UA3hb0G345BVk1zMXWwX0Qdaa4F/z7C3bP6baQ9AWY/VmCYydLU+Pi4z3aOPEJYCvt9zVhZ5CutqBKw==}
+  /@octokit/webhooks-types/6.7.0:
+    resolution: {integrity: sha512-bykm7UkSnxmb2uhSfcLM1Pity/LQ6ZBSdzy9HU0vXjR+2g+tzlmRhXb7Go8oj0TlgO+vDrTivGXju6zkzOGKjA==}
     dev: false
 
-  /@octokit/webhooks/10.3.1:
-    resolution: {integrity: sha512-TSGiz9+IxP8Oh8LVFwhzLYTJ+8T/U6/fC/i1/iB39izyFzoEub3wNHlsfh8A6PUbde70w2pLr/O2ELlyQdrLgg==}
+  /@octokit/webhooks/10.4.0:
+    resolution: {integrity: sha512-BZYBRB8zUm8QJOkpmmg2VWzHq21qVW6vzmZw7gXhoPp/fia1N+HKF/caWyCcKpSE4DYBnPukJ9HtpMcC2GZiRw==}
     engines: {node: '>= 14'}
     dependencies:
       '@octokit/request-error': 3.0.2
       '@octokit/webhooks-methods': 3.0.1
-      '@octokit/webhooks-types': 6.6.0
+      '@octokit/webhooks-types': 6.7.0
       aggregate-error: 3.1.0
     dev: false
 
@@ -422,14 +422,14 @@ packages:
       negotiator: 0.6.3
     dev: false
 
-  /@tinyhttp/app/2.0.25:
-    resolution: {integrity: sha512-1l9ig/bx0RE9hJoEBYwpydvzU6oywOOBP+NL1rF/nmhne/DDNTkfiJq8eXFX1WyQeOkAFyNjWLinFl9uh2i6sA==}
+  /@tinyhttp/app/2.0.26:
+    resolution: {integrity: sha512-RIUcPrfiGCLyEcNYF8ijjSu0Zf5DGc4Cc9OypnpphUfEWx19+3JN6mxxfx9MIRottrK+TgOLcTFzYRc95lp4rw==}
     engines: {node: '>=12.x'}
     dependencies:
       '@tinyhttp/cookie': 2.0.5
       '@tinyhttp/proxy-addr': 2.0.5
       '@tinyhttp/req': 2.0.14
-      '@tinyhttp/res': 2.0.19
+      '@tinyhttp/res': 2.0.20
       '@tinyhttp/router': 2.0.6
       header-range-parser: 1.1.3
       regexparam: 2.0.1
@@ -505,8 +505,8 @@ packages:
       header-range-parser: 1.1.3
     dev: false
 
-  /@tinyhttp/res/2.0.19:
-    resolution: {integrity: sha512-yxgs6c4rYi+9FrMjms9mJ68nxN/Wkxt9oX1bQHcavSts6+TX+UXMjZAA7fXpxF4mzUCeNKu4SfODDAiWpJuOLQ==}
+  /@tinyhttp/res/2.0.20:
+    resolution: {integrity: sha512-OckM02txaSoHifVx+DNTptrPBEoc9aijq9UkvOGIaLh9gsyYK1b6WaoHkostADyBMcPmKDTYmZhVYtqgW9+vvA==}
     engines: {node: '>=12.4.0'}
     dependencies:
       '@tinyhttp/content-disposition': 2.0.7
@@ -562,15 +562,15 @@ packages:
   /@types/jsonwebtoken/8.5.9:
     resolution: {integrity: sha512-272FMnFGzAVMGtu9tkr29hRL6bZj4Zs1KZNeHLnKqAvp06tAIcarTMwOh8/8bz4FmKRcMxZhZNeUAQsNLoiPhg==}
     dependencies:
-      '@types/node': 18.11.12
+      '@types/node': 18.11.15
     dev: false
 
   /@types/lru-cache/5.1.1:
     resolution: {integrity: sha512-ssE3Vlrys7sdIzs5LOxCzTVMsU7i9oa/IaW92wF32JFb3CVczqOkru2xspuKczHEbG3nvmPY7IFqVmGGHdNbYw==}
     dev: false
 
-  /@types/node/18.11.12:
-    resolution: {integrity: sha512-FgD3NtTAKvyMmD44T07zz2fEf+OKwutgBCEVM8GcvMGVGaDktiLNTDvPwC/LUe3PinMW+X6CuLOF2Ui1mAlSXg==}
+  /@types/node/18.11.15:
+    resolution: {integrity: sha512-VkhBbVo2+2oozlkdHXLrb3zjsRkpdnaU2bXmX8Wgle3PUi569eLRaHGlgETQHR7lLL1w7GiG3h9SnePhxNDecw==}
 
   /aggregate-error/3.1.0:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
