@@ -24,7 +24,9 @@ export const FirmwareRoutes = () => {
     } else {
       const releases = (
         await deviceOctokit.rest.repos.listReleases(DeviceRequestOptions)
-      ).data.filter((r) => parseInt(r.tag_name.substring(1, 2)) > 1);
+      ).data
+        .filter((r) => parseInt(r.tag_name.substring(1, 2)) > 1)
+        .filter((r) => !r.name?.includes("(Revoked)"));
       const prs = await deviceOctokit.rest.pulls.list(DeviceRequestOptions);
 
       const prArtifacts = await Promise.all(
