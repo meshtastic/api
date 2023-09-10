@@ -4,6 +4,6 @@ import { deviceHardwareList } from '../utils/resource.js';
 export const resourceRoutes = () => {
   return app
     .get("resource/deviceHardware", async (_, res) => {
-      res.json(deviceHardwareList ?? []);
+      res.json(deviceHardwareList);
     });
 };
