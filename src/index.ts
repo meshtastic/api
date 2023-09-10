@@ -7,6 +7,7 @@ import { logger } from '@tinyhttp/logger';
 
 import { FirmwareRoutes } from './routes/firmware.js';
 import { showCaseRoutes } from './routes/showcase.js';
+import { resourceRoutes } from './routes/resource.js';
 
 export const app = new App();
 config();
@@ -37,5 +38,6 @@ app
  */
 showCaseRoutes();
 FirmwareRoutes();
+resourceRoutes();
 
 app.listen(parseInt(process.env.PORT ?? "4000"));
