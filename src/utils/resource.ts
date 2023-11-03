@@ -4,6 +4,7 @@ export interface DeviceHardware {
   platformioTarget: string;
   architecture: string;
   activelySupported: boolean;
+  displayName: string;
 }
 
 const deviceHardwareList: DeviceHardware[] = [
@@ -13,6 +14,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v2",
     architecture: "esp32",
     activelySupported: false,
+    displayName: "T-LoRa V2",
   },
   {
     hwModel: 2,
@@ -20,6 +22,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v1",
     architecture: "esp32",
     activelySupported: false,
+    displayName: "T-LoRa V1",
   },
   {
     hwModel: 3,
@@ -27,6 +30,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v2-1-1_6",
     architecture: "esp32",
     activelySupported: true,
+    displayName: "T-LoRa V2.1-1.6",
   },
   {
     hwModel: 4,
@@ -34,6 +38,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tbeam",
     architecture: "esp32",
     activelySupported: true,
+    displayName: "T-Beam",
   },
   {
     hwModel: 5,
@@ -41,6 +46,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "heltec-v2_0",
     architecture: "esp32",
     activelySupported: false,
+    displayName: "Heltec V2.0",
   },
   {
     hwModel: 6,
@@ -48,6 +54,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tbeam0_7",
     architecture: "esp32",
     activelySupported: false,
+    displayName: "T-Beam V0.7",
   },
   {
     hwModel: 7,
@@ -55,6 +62,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "t-echo",
     architecture: "nrf52840",
     activelySupported: true,
+    displayName: "T-Echo",
   },
   {
     hwModel: 8,
@@ -62,6 +70,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v1_3",
     architecture: "esp32",
     activelySupported: false,
+    displayName: "T-LoRa V1.1-1.3",
   },
   {
     hwModel: 9,
@@ -69,6 +78,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "rak4631",
     architecture: "nrf52840",
     activelySupported: true,
+    displayName: "RAK4631",
   },
   {
     hwModel: 10,
@@ -76,6 +86,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "heltec-v2_1",
     architecture: "esp32",
     activelySupported: false,
+    displayName: "Heltec V2.1",
   },
   {
     hwModel: 11,
@@ -83,6 +94,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "heltec-v1",
     architecture: "esp32",
     activelySupported: false,
+    displayName: "Heltec V1",
   },
   {
     hwModel: 12,
@@ -90,6 +102,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tbeam-s3-core",
     architecture: "esp32-s3",
     activelySupported: true,
+    displayName: "T-Beam S3 Core",
   },
   {
     hwModel: 13,
@@ -97,6 +110,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "rak11200",
     architecture: "esp32",
     activelySupported: false,
+    displayName: "RAK11200",
   },
   {
     hwModel: 14,
@@ -104,6 +118,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "nano-g1",
     architecture: "esp32",
     activelySupported: true,
+    displayName: "Nano G1",
   },
   {
     hwModel: 15,
@@ -111,6 +126,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v2-1-1_8",
     architecture: "esp32",
     activelySupported: true,
+    displayName: "T-LoRa V2.1-1.8",
   },
   {
     hwModel: 16,
@@ -118,6 +134,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-t3s3-v1",
     architecture: "esp32-s3",
     activelySupported: true,
+    displayName: "T-LoRa T3-S3",
   },
   {
     hwModel: 17,
@@ -125,6 +142,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "nano-g1-explorer",
     architecture: "esp32",
     activelySupported: true,
+    displayName: "Nano G1 Explorer",
   },
   {
     hwModel: 18,
@@ -132,6 +150,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "nano-g2-ultra",
     architecture: "nrf52840",
     activelySupported: true,
+    displayName: "Nano G2 Ultra",
   },
   {
     hwModel: 25,
@@ -139,6 +158,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "station-g1",
     architecture: "esp32",
     activelySupported: true,
+    displayName: "Station G1",
   },
   {
     hwModel: 26,
@@ -146,6 +166,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "rak11310",
     architecture: "rp2040",
     activelySupported: true,
+    displayName: "RAK11310",
   },
   {
     hwModel: 39,
@@ -153,6 +174,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "meshtastic-diy-v1",
     architecture: "esp32",
     activelySupported: true,
+    displayName: "DIY V1",
   },
   {
     hwModel: 41,
@@ -160,6 +182,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "meshtastic-dr-dev",
     architecture: "esp32",
     activelySupported: true,
+    displayName: "DR-DEV",
   },
   {
     hwModel: 42,
@@ -167,6 +190,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "m5stack-core",
     architecture: "esp32",
     activelySupported: true,
+    displayName: "M5 Stack",
   },
   {
     hwModel: 43,
@@ -174,6 +198,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "heltec-v3",
     architecture: "esp32-s3",
     activelySupported: true,
+    displayName: "Heltec V3",
   },
   {
     hwModel: 44,
@@ -181,6 +206,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "heltec-wsl-v3",
     architecture: "esp32-s3",
     activelySupported: true,
+    displayName: "Heltec Wireless Stick Lite V3",
   },
   {
     hwModel: 47,
@@ -188,6 +214,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "pico",
     architecture: "rp2040",
     activelySupported: true,
+    displayName: "Raspberry Pi Pico",
   },
   {
     hwModel: 48,
@@ -195,6 +222,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "heltec-wireless-tracker",
     architecture: "esp32-s3",
     activelySupported: true,
+    displayName: "Heltec Wireless Tracker",
   },
   {
     hwModel: 49,
@@ -202,6 +230,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "heltec-wireless-paper",
     architecture: "esp32-s3",
     activelySupported: true,
+    displayName: "Heltec Wireless Paper",
   },
   {
     hwModel: 50,
@@ -209,6 +238,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "t-deck",
     architecture: "esp32-s3",
     activelySupported: true,
+    displayName: "T-Deck",
   },
   {
     hwModel: 51,
@@ -216,6 +246,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "t-watch-s3",
     architecture: "esp32-s3",
     activelySupported: true,
+    displayName: "T-Watch S3",
   },
   {
     hwModel: 52,
@@ -223,6 +254,7 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "picomputer-s3",
     architecture: "esp32-s3",
     activelySupported: true,
+    displayName: "Pi Computer S3",
   },
   {
     hwModel: 53,
@@ -230,7 +262,8 @@ const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "heltec-ht62-esp32c3-sx1262",
     architecture: "esp32-c3",
     activelySupported: true,
+    displayName: "Heltec HT62",
   },
 ];
 
-export { deviceHardwareList }
+export { deviceHardwareList };
