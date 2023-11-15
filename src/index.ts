@@ -4,7 +4,6 @@ import { config } from "@tinyhttp/dotenv";
 import { logger } from "@tinyhttp/logger";
 
 import { FirmwareRoutes } from "./routes/firmware.js";
-import { showCaseRoutes } from "./routes/showcase.js";
 import { resourceRoutes } from "./routes/resource.js";
 import { UpdaterRoutes } from "./routes/updater.js";
 
@@ -33,7 +32,6 @@ app
 /**
  * register Routes
  */
-showCaseRoutes();
 FirmwareRoutes();
 resourceRoutes();
 UpdaterRoutes();
