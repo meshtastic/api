@@ -1,9 +1,8 @@
 import { app } from "../index.js";
 import { deviceOctokit } from "../utils/github.js";
 
-export enum SupportedApps {
-	MeshtasticDesktopFlasher = "meshtastic-desktop-flasher",
-}
+
+export type SupportedApps ="meshtastic-desktop-flasher";
 
 export const UpdaterRoutes = () => {
 	return app
@@ -11,29 +10,23 @@ export const UpdaterRoutes = () => {
 			res.status(200).send("OK");
 		})
 		.get("/updater/:app/:target/:arch/:currentVersion", async (req, res) => {
-			const { app, target, arch, currentVersion } = req.params as {
-				app: SupportedApps | string;
-				target: string;
-				arch: string;
-				currentVersion: string;
-			};
 
-			let gistId: string | null = null;
+			let gist_id: string | null = null;
 
-			switch (app) {
-				case SupportedApps.MeshtasticDesktopFlasher:
-					gistId = "4bdf1a679f070e74da61c64132aa431d";
+			switch (req.params.app as SupportedApps) {
+				case "meshtastic-desktop-flasher":
+					gist_id = "4bdf1a679f070e74da61c64132aa431d";
 					break;
 				default:
 					return res.status(404).send("Requested application not found");
 			}
 
-			if (!gistId) {
+			if (!gist_id) {
 				return res.status(500).send("Error finding requested application");
 			}
 
 			const gistResponse = await deviceOctokit.rest.gists.get({
-				gist_id: "",
+				gist_id
 			});
 			const manifestsFile = gistResponse.data.files?.["manifests.json"];
 
