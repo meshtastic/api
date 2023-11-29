@@ -177,6 +177,14 @@ const deviceHardwareList: DeviceHardware[] = [
 		displayName: "DIY V1",
 	},
 	{
+		hwModel: 39,
+		hwModelSlug: "HYDRA",
+		platformioTarget: "hydra",
+		architecture: "esp32",
+		activelySupported: true,
+		displayName: "Hydra",
+	},
+	{
 		hwModel: 41,
 		hwModelSlug: "DR_DEV",
 		platformioTarget: "meshtastic-dr-dev",
