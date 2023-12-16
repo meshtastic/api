@@ -16,7 +16,7 @@
 		"@tinyhttp/dotenv": "^2.1.0",
 		"@tinyhttp/logger": "^2.0.0",
 		"biome": "^0.3.3",
-		"octokit": "^3.1.1",
+		"octokit": "^3.1.2",
 		"redis": "^4.6.10",
 		"typescript": "^5.2.2"
 	},
