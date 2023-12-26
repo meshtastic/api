@@ -10,18 +10,18 @@
 		"build": "tsc"
 	},
 	"dependencies": {
-		"@octokit/auth-app": "^6.0.1",
+		"@octokit/auth-app": "^6.0.2",
 		"@tinyhttp/app": "2.2.1",
 		"@tinyhttp/cors": "^2.0.0",
 		"@tinyhttp/dotenv": "^2.1.0",
 		"@tinyhttp/logger": "^2.0.0",
 		"biome": "^0.3.3",
-		"octokit": "^3.1.1",
-		"redis": "^4.6.10",
-		"typescript": "^5.2.2"
+		"octokit": "^3.1.2",
+		"redis": "^4.6.12",
+		"typescript": "^5.3.3"
 	},
 	"devDependencies": {
-		"@types/node": "^20.9.0",
-		"tsx": "^4.1.2"
+		"@types/node": "^20.10.5",
+		"tsx": "^4.7.0"
 	}
 }

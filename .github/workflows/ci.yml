@@ -7,23 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code & submodules
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.1
+        uses: pnpm/action-setup@v2
         with:
           version: latest
 
-      - name: Setup NodeJS
-        uses: actions/setup-node@v3
-        with:
-          node-version: latest
-
       - name: Install Dependencies
         run: pnpm install
-
-      - name: Generate Prisma Client
-        run: pnpm generate
 
       - name: Build Package
         run: pnpm build
