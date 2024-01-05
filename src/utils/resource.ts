@@ -225,6 +225,14 @@ const deviceHardwareList: DeviceHardware[] = [
 		displayName: "Raspberry Pi Pico",
 	},
 	{
+		hwModel: 47,
+		hwModelSlug: "RPI_PICO",
+		platformioTarget: "picow",
+		architecture: "rp2040",
+		activelySupported: true,
+		displayName: "Raspberry Pi Pico W",
+	},
+	{
 		hwModel: 48,
 		hwModelSlug: "HELTEC_WIRELESS_TRACKER",
 		platformioTarget: "heltec-wireless-tracker",
