@@ -13,7 +13,11 @@ app
 	.use(logger())
 	.use(
 		cors({
-			origin: ["https://meshtastic.org", "https://flash.meshtastic.org", "https://flasher.meshtastic.org"],
+			origin: [
+				"https://meshtastic.org",
+				"https://flash.meshtastic.org",
+				"https://flasher.meshtastic.org",
+			],
 		}),
 	)
 	.get("/", (_, res) => {

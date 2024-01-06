@@ -1,8 +1,8 @@
 import { app } from "../index.js";
 import {
 	DeviceFirmwareResource,
-	deviceOctokit,
 	DeviceRequestOptions,
+	deviceOctokit,
 } from "../utils/github.js";
 
 export const GithubRoutes = () => {

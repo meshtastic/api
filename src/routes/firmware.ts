@@ -1,9 +1,9 @@
 import { app } from "../index.js";
 import {
 	DeviceFirmwareResource,
-	deviceOctokit,
 	DeviceRequestOptions,
 	FirmwareLinkRegex,
+	deviceOctokit,
 } from "../utils/github.js";
 import { redis } from "../utils/redis.js";
 
@@ -35,7 +35,7 @@ export const FirmwareRoutes = () => {
 					const comments = await deviceOctokit.request(pr.comments_url);
 					const artifactComments = comments.data.filter(
 						(comment: { user: { login: string } }) =>
-							comment.user.login == "github-actions[bot]",
+							comment.user.login === "github-actions[bot]",
 					);
 
 					if (artifactComments.length > 0) {

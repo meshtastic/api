@@ -1,8 +1,7 @@
 import { app } from "../index.js";
 import { deviceOctokit } from "../utils/github.js";
 
-
-export type SupportedApps ="meshtastic-desktop-flasher";
+export type SupportedApps = "meshtastic-desktop-flasher";
 
 export const UpdaterRoutes = () => {
 	return app
@@ -10,7 +9,6 @@ export const UpdaterRoutes = () => {
 			res.status(200).send("OK");
 		})
 		.get("/updater/:app/:target/:arch/:currentVersion", async (req, res) => {
-
 			// let gist_id: string | null = null;
 
 			// switch (req.params.app as SupportedApps) {
@@ -45,7 +43,9 @@ export const UpdaterRoutes = () => {
 			// }
 
 			// const gistContent = await fetch(rawUrl);
-			const gistContent = await fetch("https://gist.githubusercontent.com/ajmcquilkin/4bdf1a679f070e74da61c64132aa431d/raw/manifests.json")
+			const gistContent = await fetch(
+				"https://gist.githubusercontent.com/ajmcquilkin/4bdf1a679f070e74da61c64132aa431d/raw/manifests.json",
+			);
 			const parsedGistContent = (await gistContent.json()) as object[];
 			const mostRecentManifest = parsedGistContent[0];
 
