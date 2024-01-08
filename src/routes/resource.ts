@@ -1,8 +1,8 @@
 import { app } from "../index.js";
-import { deviceHardwareList } from "../utils/resource.js";
+import { Hardware } from "../utils/index.js";
 
-export const resourceRoutes = () => {
-	return app.get("resource/deviceHardware", async (_, res) => {
-		res.json(deviceHardwareList);
-	});
+export const ResourceRoutes = () => {
+  return app.get("resource/deviceHardware", (_, res) => {
+    res.json(Hardware.deviceHardwareList);
+  });
 };
