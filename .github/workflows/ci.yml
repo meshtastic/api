@@ -3,16 +3,36 @@ name: CI
 on: push
 
 jobs:
-  publish:
+  quality:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - name: Checkout code & submodules
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v1
         with:
           version: latest
+
+      - name: Run Biome
+        run: biome ci .
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'latest'
+          registry-url: 'https://npm.pkg.github.com'
 
       - name: Install Dependencies
         run: pnpm install
