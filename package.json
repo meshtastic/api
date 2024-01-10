@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx src/index.ts",
-    "start": "prisma migrate deploy && node dist/index.js",
+    "start": "prisma migrate deploy && prisma generate && node dist/index.js",
     "build": "tsc"
   },
   "dependencies": {

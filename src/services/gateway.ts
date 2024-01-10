@@ -46,9 +46,9 @@ export class Gateway implements ServiceImpl<typeof GatewayService> {
     }
 
     // while (true) {
-    //   yield* yieldFromEvent(this.events.nodes, (data) => {
-    //     return new NodeStreamResponse({
-    //       nodes: [data],
+    //   yield* yieldFromEvent(this.events.gateway, (data) => {
+    //     return new GatewayStreamResponse({
+    //       gateway: data,
     //     });
     //   });
     // }
