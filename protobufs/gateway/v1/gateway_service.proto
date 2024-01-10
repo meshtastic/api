@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package meshtastic.api.gateway.v1;
+
+import "google/protobuf/empty.proto";
+import "protobufs/gateway/v1/gateway.proto";
+
+service GatewayService {
+  rpc GatewayStream(google.protobuf.Empty) returns (stream GatewayStreamResponse) {}
+}
+
+message GatewayStreamResponse {
+  Gateway gateway = 1;
+}

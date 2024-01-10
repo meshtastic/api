@@ -1,5 +1,5 @@
 import { app } from "../index.js";
-import { GitHub } from "../utils/index.js";
+import { GitHub } from "../lib/index.js";
 
 export const GithubRoutes = () => {
   return app.get("/github/releases", async (_, res) => {

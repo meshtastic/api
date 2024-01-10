@@ -1,5 +1,5 @@
 import { app } from "../index.js";
-import { GitHub, redis } from "../utils/index.js";
+import { GitHub, redis } from "../lib/index.js";
 
 export interface FirmwareReleases {
   releases: {

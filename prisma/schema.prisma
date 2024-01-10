@@ -1,0 +1,35 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_PRIVATE_URL")
+}
+
+model Gateway {
+  id        String   @id
+  latitude  Int?
+  longitude Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  channels Channel[]
+}
+
+model Channel {
+  id        String   @id @default(cuid())
+  name      String
+  encrypted Boolean
+  messages  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  gatewayId String
+  gateway   Gateway @relation(fields: [gatewayId], references: [id])
+
+  @@unique([gatewayId, name], name: "channelIdentifier")
+}
