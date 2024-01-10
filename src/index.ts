@@ -14,7 +14,7 @@ import {
 import { RegisterMqttClient } from "./lib/index.js";
 import { expressConnectMiddleware } from "@connectrpc/connect-express";
 import { GatewayService } from "@buf/meshtastic_api.connectrpc_es/protobufs/gateway/v1/gateway_service_connect.js";
-import { Gateway } from "./services/gateway.js";
+import { Gateway } from "./services/index.js";
 
 export const app = new App();
 config();
