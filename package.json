@@ -7,8 +7,8 @@
   "private": true,
   "scripts": {
     "dev": "tsx src/index.ts",
-    "start": "prisma migrate deploy && prisma generate && node dist/index.js",
-    "build": "tsc"
+    "start": "node dist/index.js",
+    "build": "prisma migrate deploy && prisma generate && tsc"
   },
   "dependencies": {
     "@buf/meshtastic_api.bufbuild_es": "1.6.0-20240110092216-3a147af14302.1",
