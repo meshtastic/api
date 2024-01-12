@@ -2,7 +2,7 @@ import MQTT from "mqtt";
 import { Protobuf } from "@meshtastic/js";
 import { prisma } from "./index.js";
 
-export const mqtt = MQTT.connect(process.env.MQTT_URL as string, {
+const mqtt = MQTT.connect(process.env.MQTT_URL as string, {
   username: process.env.MQTT_USERNAME,
   password: process.env.MQTT_PASSWORD,
 });
@@ -18,8 +18,12 @@ export const RegisterMqttClient = () => {
 
     if (topicParts.length === 2) {
       // Standard channel message
-      const decoded = Protobuf.Mqtt.ServiceEnvelope.fromBinary(payload);
-      queue.push(decoded);
+      try {
+        const decoded = Protobuf.Mqtt.ServiceEnvelope.fromBinary(payload);
+        queue.push(decoded);
+      } catch (error) {
+        console.error(error, topic, payload);
+      }
     } else {
       // Likely stat message
       console.log("Unknown topic", topic);
