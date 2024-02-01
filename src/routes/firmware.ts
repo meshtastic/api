@@ -29,7 +29,7 @@ export const FirmwareRoutes = () => {
 
       const prArtifacts = await Promise.all(
         prs.data.map(async (pr) => {
-          let zip_url: string | undefined;
+          let zipUrl: string | undefined;
           const comments = await GitHub.deviceOctokit.request(pr.comments_url);
           const artifactComments = comments.data.filter(
             (comment: { user: { login: string } }) =>
@@ -41,15 +41,15 @@ export const FirmwareRoutes = () => {
               artifactComments[0].body,
             );
             if (matches && matches.length > 0) {
-              zip_url = matches[1];
+              zipUrl = matches[1];
             }
           }
 
           return <GitHub.DeviceFirmwareResource>{
             id: pr.number.toString(),
             title: pr.title,
-            page_url: pr.html_url,
-            zip_url: zip_url,
+            pageUrl: pr.html_url,
+            zipUrl: zipUrl,
           };
         }),
       );
@@ -62,8 +62,8 @@ export const FirmwareRoutes = () => {
               return <GitHub.DeviceFirmwareResource>{
                 id: release.tag_name,
                 title: release.name,
-                page_url: release.html_url,
-                zip_url: release.assets.find((asset) =>
+                pageUrl: release.html_url,
+                zipUrl: release.assets.find((asset) =>
                   asset.name.startsWith("firmware-"),
                 )?.browser_download_url,
               };
@@ -74,14 +74,14 @@ export const FirmwareRoutes = () => {
               return <GitHub.DeviceFirmwareResource>{
                 id: release.tag_name,
                 title: release.name,
-                page_url: release.html_url,
-                zip_url: release.assets.find((asset) =>
+                pageUrl: release.html_url,
+                zipUrl: release.assets.find((asset) =>
                   asset.name.startsWith("firmware-"),
                 )?.browser_download_url,
               };
             }),
         },
-        pullRequests: prArtifacts.filter((pr) => pr.zip_url),
+        pullRequests: prArtifacts.filter((pr) => pr.zipUrl),
       };
       redis.set("gh-releases", JSON.stringify(firmwareReleases), {
         EX: 120,

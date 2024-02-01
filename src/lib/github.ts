@@ -24,8 +24,8 @@ export const deviceOctokit = new Octokit({
 export interface DeviceFirmwareResource {
   id: string;
   title: string;
-  page_url?: string;
-  zip_url?: string;
+  pageUrl?: string;
+  zipUrl?: string;
 }
 
 export const DeviceRequestOptions = {
