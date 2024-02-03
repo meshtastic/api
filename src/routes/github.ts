@@ -12,8 +12,8 @@ export const GithubRoutes = () => {
         return <GitHub.DeviceFirmwareResource>{
           id: release.tag_name,
           title: release.name,
-          pageUrl: release.html_url,
-          zipUrl: release.assets.find((asset) =>
+          page_url: release.html_url,
+          zip_url: release.assets.find((asset) =>
             asset.name.startsWith("firmware-"),
           )?.browser_download_url,
         };
