@@ -1,6 +1,6 @@
 import MQTT from "mqtt";
 import { Protobuf } from "@meshtastic/js";
-import { prisma } from "./index.js";
+import { prisma, redis } from "./index.js";
 
 const mqtt = MQTT.connect(process.env.MQTT_URL as string, {
   username: process.env.MQTT_USERNAME,
@@ -66,6 +66,17 @@ class MqttQueue {
             channels: [],
           });
         }
+      } else if (data.portnum === Protobuf.Portnums.PortNum.TEXT_MESSAGE_APP) {
+        //cache in redis
+        redis.set(
+          `mqttMessage-${packet.gatewayId}-${packet.channelId}-${packet.packet.id}`,
+          data.toJsonString(),
+          {
+            EX: 60 * 60 * 12, // 12 hours
+          },
+        );
+      } else {
+        //update counter
       }
     }
 

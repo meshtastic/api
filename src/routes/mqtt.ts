@@ -14,8 +14,8 @@ export const MqttRoutes = () => {
         },
       });
 
-      redis.set("gh-releases", JSON.stringify(data), {
-        EX: 10,
+      redis.set("mqttCache", JSON.stringify(data), {
+        EX: 1,
       });
       res.send(data);
     }
