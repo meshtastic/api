@@ -53,6 +53,8 @@ class MqttQueue {
     this.lastWorked = new Date();
   }
 
+  private textDecoder = new TextDecoder();
+
   public push(packet: Protobuf.Mqtt.ServiceEnvelope) {
     if (packet.packet?.payloadVariant.case === "decoded") {
       const data = packet.packet?.payloadVariant.value;
@@ -69,8 +71,14 @@ class MqttQueue {
       } else if (data.portnum === Protobuf.Portnums.PortNum.TEXT_MESSAGE_APP) {
         //cache in redis
         redis.set(
-          `mqttMessage-${packet.gatewayId}-${packet.channelId}-${packet.packet.id}`,
-          data.toJsonString(),
+          `mqttMessage-${packet.gatewayId}-${
+            packet.channelId
+          }-${new Date().getTime()}`,
+          JSON.stringify({
+            from: packet.packet.from,
+            to: packet.packet.to,
+            message: this.textDecoder.decode(data.payload),
+          }),
           {
             EX: 60 * 60 * 12, // 12 hours
           },
