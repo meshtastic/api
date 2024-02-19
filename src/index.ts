@@ -42,6 +42,7 @@ app
           "https://meshtastic.org",
           "https://flash.meshtastic.org",
           "https://flasher.meshtastic.org",
+          "https://map.meshtastic.org",
         ];
 
         // return origin if it is in the whitelist

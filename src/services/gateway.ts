@@ -4,7 +4,7 @@ import { GatewayStreamResponse } from "@buf/meshtastic_api.bufbuild_es/protobufs
 import type { GatewayService } from "@buf/meshtastic_api.connectrpc_es/protobufs/gateway/v1/gateway_service_connect.js";
 import { prisma } from "../lib/index.js";
 import { Timestamp } from "@bufbuild/protobuf";
-import { Channel } from "@prisma/client";
+import type { Channel } from "@prisma/client";
 
 export class Gateway implements ServiceImpl<typeof GatewayService> {
   public async *gatewayStream(): AsyncGenerator<GatewayStreamResponse> {
@@ -22,9 +22,8 @@ export class Gateway implements ServiceImpl<typeof GatewayService> {
     });
 
     for (const gateway of gateways) {
-      console.log("sending gateway", gateway.id);
       //delay for 1 second
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 100));
       yield new GatewayStreamResponse({
         gateway: {
           id: gateway.id,
