@@ -169,6 +169,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "RAK11310",
   },
   {
+    hwModel: 29,
+    hwModelSlug: "CANARYONE",
+    platformioTarget: "canaryone",
+    architecture: "nrf52840",
+    activelySupported: true,
+    displayName: "CanaryOne"
+  },
+  {
     hwModel: 39,
     hwModelSlug: "DIY_V1",
     platformioTarget: "meshtastic-diy-v1",
