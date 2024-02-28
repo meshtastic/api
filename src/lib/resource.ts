@@ -304,4 +304,12 @@ export const deviceHardwareList: DeviceHardware[] = [
     activelySupported: true,
     displayName: "Heltec HT62",
   },
+  {
+    hwModel: 57,
+    hwModelSlug: "HELTEC_WIRELESS_PAPER_V1_0",
+    platformioTarget: "heltec-wireless-paper-v1_0",
+    architecture: "esp32-s3",
+    activelySupported: true,
+    displayName: "Heltec Wireless Paper V1.0",
+  },
 ];
