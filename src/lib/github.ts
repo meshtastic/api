@@ -26,6 +26,7 @@ export interface DeviceFirmwareResource {
   title: string;
   page_url?: string;
   zip_url?: string;
+  release_notes?: string;
 }
 
 export const DeviceRequestOptions = {
