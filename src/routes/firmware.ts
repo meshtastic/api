@@ -18,13 +18,13 @@ export const FirmwareRoutes = () => {
     } else {
       const releases = (
         await GitHub.deviceOctokit.rest.repos.listReleases(
-          GitHub.DeviceRequestOptions,
+          GitHub.DeviceRequestOptions
         )
       ).data
         .filter((r) => Number.parseInt(r.tag_name.substring(1, 2)) > 1)
         .filter((r) => !r.name?.includes("(Revoked)"));
       const prs = await GitHub.deviceOctokit.rest.pulls.list(
-        GitHub.DeviceRequestOptions,
+        GitHub.DeviceRequestOptions
       );
 
       const prArtifacts = await Promise.all(
@@ -33,12 +33,12 @@ export const FirmwareRoutes = () => {
           const comments = await GitHub.deviceOctokit.request(pr.comments_url);
           const artifactComments = comments.data.filter(
             (comment: { user: { login: string } }) =>
-              comment.user.login === "github-actions[bot]",
+              comment.user.login === "github-actions[bot]"
           );
 
           if (artifactComments.length > 0) {
             const matches = GitHub.FirmwareLinkRegex.exec(
-              artifactComments[0].body,
+              artifactComments[0].body
             );
             if (matches && matches.length > 0) {
               zip_url = matches[1];
@@ -51,7 +51,7 @@ export const FirmwareRoutes = () => {
             page_url: pr.html_url,
             zip_url: zip_url,
           };
-        }),
+        })
       );
 
       const firmwareReleases: FirmwareReleases = {
@@ -64,8 +64,9 @@ export const FirmwareRoutes = () => {
                 title: release.name,
                 page_url: release.html_url,
                 zip_url: release.assets.find((asset) =>
-                  asset.name.startsWith("firmware-"),
+                  asset.name.startsWith("firmware-")
                 )?.browser_download_url,
+                release_notes: release.body,
               };
             }),
           alpha: releases
@@ -76,8 +77,9 @@ export const FirmwareRoutes = () => {
                 title: release.name,
                 page_url: release.html_url,
                 zip_url: release.assets.find((asset) =>
-                  asset.name.startsWith("firmware-"),
+                  asset.name.startsWith("firmware-")
                 )?.browser_download_url,
+                release_notes: release.body,
               };
             }),
         },
