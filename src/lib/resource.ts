@@ -320,4 +320,12 @@ export const deviceHardwareList: DeviceHardware[] = [
     activelySupported: true,
     displayName: "Heltec Wireless Paper V1.0",
   },
+  {
+    hwModel: 59,
+    hwModelSlug: "UNPHONE",
+    platformioTarget: "unphone",
+    architecture: "esp32-s3",
+    activelySupported: true,
+    displayName: "unPhone",
+  },
 ];
