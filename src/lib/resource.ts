@@ -174,7 +174,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "canaryone",
     architecture: "nrf52840",
     activelySupported: true,
-    displayName: "CanaryOne"
+    displayName: "CanaryOne",
   },
   {
     hwModel: 30,
@@ -182,7 +182,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "rp2040-lora",
     architecture: "rp2040",
     activelySupported: true,
-    displayName: "RP2040 LoRa"
+    displayName: "RP2040 LoRa",
   },
   {
     hwModel: 31,
