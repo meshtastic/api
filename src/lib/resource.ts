@@ -328,4 +328,28 @@ export const deviceHardwareList: DeviceHardware[] = [
     activelySupported: true,
     displayName: "unPhone",
   },
+  {
+    hwModel: 48,
+    hwModelSlug: "HELTEC_WIRELESS_TRACKER",
+    platformioTarget: "tracksenger",
+    architecture: "esp32-s3",
+    activelySupported: true,
+    displayName: "TrackSenger (small TFT)",
+  },
+  {
+    hwModel: 48,
+    hwModelSlug: "HELTEC_WIRELESS_TRACKER",
+    platformioTarget: "tracksenger-lcd",
+    architecture: "esp32-s3",
+    activelySupported: true,
+    displayName: "TrackSenger (big TFT)",
+  },
+  {
+    hwModel: 48,
+    hwModelSlug: "HELTEC_WIRELESS_TRACKER",
+    platformioTarget: "tracksenger-oled",
+    architecture: "esp32-s3",
+    activelySupported: true,
+    displayName: "TrackSenger (big OLED)",
+  },
 ];
