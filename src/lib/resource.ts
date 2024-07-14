@@ -153,6 +153,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Nano G2 Ultra",
   },
   {
+    hwModel: 21,
+    hwModelSlug: "WIO_WM1110",
+    platformioTarget: "wio-tracker-wm1110",
+    architecture: "nrf52840",
+    activelySupported: true,
+    displayName: "Seeed Wio WM1110 Tracker",
+  },
+  {
     hwModel: 25,
     hwModelSlug: "STATION_G1",
     platformioTarget: "station-g1",
@@ -369,11 +377,11 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "RadioMaster 900 Bandit Nano",
   },
   {
-    hwModel: 21,
-    hwModelSlug: "WIO_WM1110",
-    platformioTarget: "wio-tracker-wm1110",
-    architecture: "nrf52840",
+    hwModel: 67,
+    hwModelSlug: "HELTEC_VISION_MASTER_E213",
+    platformioTarget: "heltec-vision-master-e213",
+    architecture: "esp32-s3",
     activelySupported: true,
-    displayName: "Seeed Wio WM1110 Tracker",
+    displayName: "Heltec Vision Master E213",
   },
 ];
