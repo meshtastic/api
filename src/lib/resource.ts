@@ -390,6 +390,6 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tracker-t1000-e",
     architecture: "nrf52840",
     activelySupported: true,
-    displayName: "Seeed SenseCAP Card Tracker T1000-E",
+    displayName: "Seeed Card Tracker T1000-E",
   },
 ];
