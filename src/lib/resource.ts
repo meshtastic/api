@@ -385,6 +385,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Heltec Vision Master E213",
   },
   {
+    hwModel: 68,
+    hwModelSlug: "HELTEC_VISION_MASTER_E290",
+    platformioTarget: "heltec-vision-master-e290",
+    architecture: "esp32-s3",
+    activelySupported: true,
+    displayName: "Heltec Vision Master E290",
+  },
+  {
     hwModel: 71,
     hwModelSlug: "TRACKER_T1000_E",
     platformioTarget: "tracker-t1000-e",
