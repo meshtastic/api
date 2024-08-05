@@ -14,7 +14,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v2",
     architecture: "esp32",
     activelySupported: false,
-    displayName: "T-LoRa V2",
+    displayName: "LILYGO T-LoRa V2",
   },
   {
     hwModel: 2,
@@ -22,7 +22,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v1",
     architecture: "esp32",
     activelySupported: false,
-    displayName: "T-LoRa V1",
+    displayName: "LILYGO T-LoRa V1",
   },
   {
     hwModel: 3,
@@ -30,7 +30,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v2-1-1_6",
     architecture: "esp32",
     activelySupported: true,
-    displayName: "T-LoRa V2.1-1.6",
+    displayName: "LILYGO T-LoRa V2.1-1.6",
   },
   {
     hwModel: 4,
@@ -38,7 +38,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tbeam",
     architecture: "esp32",
     activelySupported: true,
-    displayName: "T-Beam",
+    displayName: "LILYGO T-Beam",
   },
   {
     hwModel: 5,
@@ -54,7 +54,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tbeam0_7",
     architecture: "esp32",
     activelySupported: false,
-    displayName: "T-Beam V0.7",
+    displayName: "LILYGO T-Beam V0.7",
   },
   {
     hwModel: 7,
@@ -62,7 +62,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "t-echo",
     architecture: "nrf52840",
     activelySupported: true,
-    displayName: "T-Echo",
+    displayName: "LILYGO T-Echo",
   },
   {
     hwModel: 8,
@@ -70,7 +70,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v1_3",
     architecture: "esp32",
     activelySupported: false,
-    displayName: "T-LoRa V1.1-1.3",
+    displayName: "LILYGO T-LoRa V1.1-1.3",
   },
   {
     hwModel: 9,
@@ -78,7 +78,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "rak4631",
     architecture: "nrf52840",
     activelySupported: true,
-    displayName: "RAK4631",
+    displayName: "RAK WisBlock 4361",
   },
   {
     hwModel: 10,
@@ -102,7 +102,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tbeam-s3-core",
     architecture: "esp32-s3",
     activelySupported: true,
-    displayName: "T-Beam S3 Core",
+    displayName: "LILYGO T-Beam S3 Core",
   },
   {
     hwModel: 13,
@@ -110,7 +110,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "rak11200",
     architecture: "esp32",
     activelySupported: false,
-    displayName: "RAK11200",
+    displayName: "RAK WisBlock 11200",
   },
   {
     hwModel: 14,
@@ -126,7 +126,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-v2-1-1_8",
     architecture: "esp32",
     activelySupported: true,
-    displayName: "T-LoRa V2.1-1.8",
+    displayName: "LILYGO T-LoRa V2.1-1.8",
   },
   {
     hwModel: 16,
@@ -134,7 +134,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "tlora-t3s3-v1",
     architecture: "esp32-s3",
     activelySupported: true,
-    displayName: "T-LoRa T3-S3",
+    displayName: "LILYGO T-LoRa T3-S3",
   },
   {
     hwModel: 17,
@@ -174,7 +174,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "rak11310",
     architecture: "rp2040",
     activelySupported: true,
-    displayName: "RAK11310",
+    displayName: "RAK WisBlock 11310",
   },
   {
     hwModel: 29,
@@ -182,7 +182,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "canaryone",
     architecture: "nrf52840",
     activelySupported: true,
-    displayName: "CanaryOne",
+    displayName: "Canary One",
   },
   {
     hwModel: 30,
@@ -294,7 +294,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "t-deck",
     architecture: "esp32-s3",
     activelySupported: true,
-    displayName: "T-Deck",
+    displayName: "LILYGO T-Deck",
   },
   {
     hwModel: 51,
@@ -302,7 +302,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "t-watch-s3",
     architecture: "esp32-s3",
     activelySupported: true,
-    displayName: "T-Watch S3",
+    displayName: "LILYGO T-Watch S3",
   },
   {
     hwModel: 52,
