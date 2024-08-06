@@ -78,7 +78,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "rak4631",
     architecture: "nrf52840",
     activelySupported: true,
-    displayName: "RAK WisBlock 4361",
+    displayName: "RAK WisBlock 4631",
   },
   {
     hwModel: 10,
