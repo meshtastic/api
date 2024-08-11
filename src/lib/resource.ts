@@ -379,7 +379,7 @@ export const deviceHardwareList: DeviceHardware[] = [
   {
     hwModel: 66,
     hwModelSlug: "HELTEC_VISION_MASTER_T190",
-    platformioTarget: "heltec-vision-master-T190",
+    platformioTarget: "heltec-vision-master-t190",
     architecture: "esp32-s3",
     activelySupported: true,
     displayName: "Heltec Vision Master T190",
