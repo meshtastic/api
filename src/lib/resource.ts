@@ -401,6 +401,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Heltec Vision Master E290",
   },
   {
+    hwModel: 69,
+    hwModelSlug: "HELTEC_MESH_NODE_T114",
+    platformioTarget: "heltec-mesh-node-t114",
+    architecture: "nrf52840",
+    activelySupported: true,
+    displayName: "Heltec Mesh Node T114",
+  },
+  {
     hwModel: 71,
     hwModelSlug: "TRACKER_T1000_E",
     platformioTarget: "tracker-t1000-e",
