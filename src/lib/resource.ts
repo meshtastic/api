@@ -409,6 +409,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Heltec Mesh Node T114",
   },
   {
+    hwModel: 70,
+    hwModelSlug: "SENSECAP_INDICATOR",
+    platformioTarget: "seeed-sensecap-indicator",
+    architecture: "esp32-s3",
+    activelySupported: true,
+    displayName: "SenseCAP Indicator",
+  },
+  {
     hwModel: 71,
     hwModelSlug: "TRACKER_T1000_E",
     platformioTarget: "tracker-t1000-e",
