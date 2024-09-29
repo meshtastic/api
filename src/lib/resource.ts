@@ -424,4 +424,12 @@ export const deviceHardwareList: DeviceHardware[] = [
     activelySupported: true,
     displayName: "Seeed Card Tracker T1000-E",
   },
+  {
+    hwModel: 72,
+    hwModelSlug: "Seeed_XIAO_S3",
+    platformioTarget: "seeed-xiao-s3",
+    architecture: "esp32-s3",
+    activelySupported: true,
+    displayName: "Seeed XIAO S3",
+  },
 ];
