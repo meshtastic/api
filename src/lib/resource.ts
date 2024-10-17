@@ -229,7 +229,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "DR_DEV",
     platformioTarget: "meshtastic-dr-dev",
     architecture: "esp32",
-    activelySupported: true,
+    activelySupported: false,
     displayName: "DR-DEV",
   },
   {
