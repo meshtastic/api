@@ -413,7 +413,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "HELTEC_MESH_NODE_T114",
     platformioTarget: "heltec-mesh-node-t114",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     displayName: "Heltec Mesh Node T114",
   },
   {
