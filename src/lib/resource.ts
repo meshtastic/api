@@ -422,7 +422,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "seeed-sensecap-indicator",
     architecture: "esp32-s3",
     activelySupported: true,
-    displayName: "SenseCAP Indicator",
+    displayName: "Seeed SenseCAP Indicator",
   },
   {
     hwModel: 71,
