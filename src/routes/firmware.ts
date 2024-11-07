@@ -10,7 +10,7 @@ export interface FirmwareReleases {
 }
 
 export const FirmwareRoutes = () => {
-  return app.get("/github/firmware/list", async (_, res) => {
+  return app.get("/github/firmware/list", async (req, res) => {
     const releaseCache = await redis.get("gh-releases");
 
     if (releaseCache) {
@@ -54,6 +54,11 @@ export const FirmwareRoutes = () => {
         })
       );
 
+      // Firmware is now separated & suffixed by platform (e.g. firmware-esp32) as of 2.5.4
+      // If we don't find a result (or it's not provided), fallback to the old firmware- prefix
+      // to avoid a breaking change to the API
+      const filteredString = "firmware-" + (req.query.platform ?? "");
+
       const firmwareReleases: FirmwareReleases = {
         releases: {
           stable: releases
@@ -64,6 +69,8 @@ export const FirmwareRoutes = () => {
                 title: release.name,
                 page_url: release.html_url,
                 zip_url: release.assets.find((asset) =>
+                  asset.name.startsWith(filteredString)
+                ) ?? release.assets.find((asset) =>
                   asset.name.startsWith("firmware-")
                 )?.browser_download_url,
                 release_notes: release.body,
