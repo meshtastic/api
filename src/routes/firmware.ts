@@ -54,10 +54,10 @@ export const FirmwareRoutes = () => {
         })
       );
 
-      // Firmware is now separated & suffixed by platform (e.g. firmware-esp32) as of 2.5.4
+      // Firmware is now separated & suffixed by platform (e.g. firmware-esp32) as of 2.5.5
       // If we don't find a result (or it's not provided), fallback to the old firmware- prefix
       // to avoid a breaking change to the API
-      const filteredString = "firmware-" + (req.query.platform ?? "");
+      const filteredString: string = "firmware-" + (req.query.platform ?? "");
 
       const firmwareReleases: FirmwareReleases = {
         releases: {
