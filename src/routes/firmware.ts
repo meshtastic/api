@@ -84,6 +84,8 @@ export const FirmwareRoutes = () => {
                 title: release.name,
                 page_url: release.html_url,
                 zip_url: release.assets.find((asset) =>
+                  asset.name.startsWith(filteredString)
+                ) ?? release.assets.find((asset) =>
                   asset.name.startsWith("firmware-")
                 )?.browser_download_url,
                 release_notes: release.body,
