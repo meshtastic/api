@@ -434,10 +434,10 @@ export const deviceHardwareList: DeviceHardware[] = [
   },
   {
     hwModel: 72,
-    hwModelSlug: "Seeed_XIAO_S3",
+    hwModelSlug: "Seeed XIAO ESP32-S3",
     platformioTarget: "seeed-xiao-s3",
     architecture: "esp32-s3",
     activelySupported: true,
-    displayName: "Seeed XIAO S3",
+    displayName: "Seeed XIAO ESP32-S3",
   },
 ];
