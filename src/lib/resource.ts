@@ -554,7 +554,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     architecture: "esp32-s3",
     activelySupported: true,
     supportLevel: 1,
-    displayName: "Seeed XIAO S3",
+    displayName: "Seeed Xiao ESP32-S3",
     tags: ["Seeed"],
     images: ["seeed-xiao-s3.svg"],
   },
