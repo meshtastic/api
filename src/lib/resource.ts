@@ -177,7 +177,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "LILYGO T-LoRa T3-S3 E-Ink",
     tags: ["LilyGo"],
-    images: ["tlora-t3s3-v1.svg"],
+    images: ["tlora-t3s3-epaper.svg"],
   },
   {
     hwModel: 17,
