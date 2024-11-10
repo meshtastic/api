@@ -156,7 +156,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     activelySupported: true,
     supportLevel: 2,
     displayName: "LILYGO T-LoRa V2.1-1.8",
-    tags: ["LilyGo", "2.4GHz LoRA"],
+    tags: ["LilyGo", "2.4G LoRA"],
     images: ["tlora-v2-1-1_8.svg"],
   },
   {
