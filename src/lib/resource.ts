@@ -412,6 +412,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     activelySupported: true,
     displayName: "Heltec HT62",
+    tags: ["Heltec"],
     images: ["heltec-ht62-esp32c3-sx1262.svg"],
   },
   {
