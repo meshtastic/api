@@ -240,6 +240,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 2,
     displayName: "RAK WisBlock 11310",
     tags: ["RAK"],
+    images: ["rak4631.svg"],
     requiresDfu: true,
   },
   {
