@@ -208,6 +208,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Nano G2 Ultra",
     tags: ["B&Q"],
     requiresDfu: true,
+    images: ["nano-g2-ultra.svg"],
   },
   {
     hwModel: 21,
@@ -275,6 +276,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Station G2",
     tags: ["B&Q"],
     requiresDfu: true,
+    images: ["station-g2.svg"],
   },
   {
     hwModel: 39,
