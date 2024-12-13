@@ -124,7 +124,7 @@ export const deviceHardwareList: DeviceHardware[] = [
   },
   {
     hwModel: 12,
-    hwModelSlug: "TBEAM_S3_CORE",
+    hwModelSlug: "LILYGO_TBEAM_S3_CORE",
     platformioTarget: "tbeam-s3-core",
     architecture: "esp32-s3",
     activelySupported: true,
