@@ -616,6 +616,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "RAK WisMesh Repeater",
     tags: ["RAK"],
+    images: ["rak2560.svg"],
     requiresDfu: true,
   },
   {
