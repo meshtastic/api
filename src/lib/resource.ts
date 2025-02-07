@@ -10,6 +10,7 @@ export interface DeviceHardware {
   tags?: string[];
   requiresDfu?: boolean;
   partitionScheme?: string;
+  hasMui?: boolean;
 }
 
 export const deviceHardwareList: DeviceHardware[] = [
@@ -409,6 +410,8 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     images: ["t-deck.svg"],
     requiresDfu: true,
+    hasMui: true,
+    partitionScheme: "16MB",
   },
   {
     hwModel: 51,
@@ -429,6 +432,8 @@ export const deviceHardwareList: DeviceHardware[] = [
     activelySupported: true,
     supportLevel: 3,
     displayName: "Pi Computer S3",
+    hasMui: true,
+    partitionScheme: "8MB",
   },
   {
     hwModel: 53,
@@ -461,6 +466,8 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 3,
     displayName: "unPhone",
     requiresDfu: true,
+    hasMui: true,
+    partitionScheme: "8MB",
   },
   {
     hwModel: 48,
@@ -570,6 +577,8 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Seeed SenseCAP Indicator",
     tags: ["Seeed"],
     images: ["seeed-sensecap-indicator.svg"],
+    hasMui: true,
+    partitionScheme: "8MB",
   },
   {
     hwModel: 71,
