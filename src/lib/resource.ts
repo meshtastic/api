@@ -11,6 +11,7 @@ export interface DeviceHardware {
   requiresDfu?: boolean;
   partitionScheme?: string;
   hasMui?: boolean;
+  hasInkHud?: boolean;
 }
 
 export const deviceHardwareList: DeviceHardware[] = [
@@ -83,6 +84,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     images: ["t-echo.svg"],
     requiresDfu: true,
+    hasInkHud: true,
   },
   {
     hwModel: 8,
@@ -398,6 +400,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Heltec Wireless Paper",
     tags: ["Heltec"],
     images: ["heltec-wireless-paper.svg"],
+    hasInkHud: true,
   },
   {
     hwModel: 50,
@@ -542,6 +545,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Heltec"],
     images: ["heltec-vision-master-e213.svg"],
     requiresDfu: true,
+    hasInkHud: true,
   },
   {
     hwModel: 68,
@@ -554,6 +558,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Heltec"],
     images: ["heltec-vision-master-e290.svg"],
     requiresDfu: true,
+    hasInkHud: true,
   },
   {
     hwModel: 69,
