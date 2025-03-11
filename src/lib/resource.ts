@@ -656,5 +656,6 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Seeed Xiao NRF52840 Kit",
     tags: ["Seeed"],
     requiresDfu: true,
+    images: ["seeed_xiao_nrf52_kit.svg"]
   }
 ];
