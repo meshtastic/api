@@ -653,7 +653,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     architecture: "nrf52840",
     activelySupported: true,
     supportLevel: 1,
-    displayName: "Seed Xiao NRF52840 Kit",
+    displayName: "Seeed Xiao NRF52840 Kit",
     tags: ["Seeed"],
     requiresDfu: true,
   }
