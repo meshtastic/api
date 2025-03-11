@@ -651,7 +651,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "XIAO_NRF52_KIT",
     platformioTarget: "seeed_xiao_nrf52840_kit",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "Seed Xiao NRF52840 Kit",
     tags: ["Seeed"],
