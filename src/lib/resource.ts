@@ -673,5 +673,27 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Seeed"],
     requiresDfu: true,
     images: ["seeed_xiao_nrf52_kit.svg"]
-  }
+  },
+  { 
+    hwModel: 89,
+    hwModelSlug: "THINKNODE_M1",
+    platformioTarget: "thinknode_m1",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "ThinkNode M1",
+    tags: ["Elecrow"],
+    requiresDfu: true,
+  },
+  {
+    hwModel: 90,
+    hwModelSlug: "THINKNODE_M2",
+    platformioTarget: "thinknode_m2",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "ThinkNode M2",
+    tags: ["Elecrow"],
+    requiresDfu: false,
+  } 
 ];
