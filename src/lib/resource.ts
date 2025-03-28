@@ -434,7 +434,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "LILYGO T-Watch S3",
     tags: ["LilyGo"],
     images: ["t-watch-s3.svg"],
-    partitionScheme: "16MB",
+    partitionScheme: "8MB",
   },
   {
     hwModel: 52,
