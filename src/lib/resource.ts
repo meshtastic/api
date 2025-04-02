@@ -684,6 +684,8 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "ThinkNode M1",
     tags: ["Elecrow"],
     requiresDfu: true,
+    images: ["thinknode_m1.svg"],
+    hasInkHud: true,
   },
   {
     hwModel: 90,
@@ -695,5 +697,6 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "ThinkNode M2",
     tags: ["Elecrow"],
     requiresDfu: false,
-  } 
+    images: ["thinknode_m2.svg"],
+  }
 ];
