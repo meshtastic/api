@@ -192,6 +192,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     images: ["tlora-t3s3-epaper.svg"],
     requiresDfu: true,
+    hasInkHud: true,
   },
   {
     hwModel: 17,
