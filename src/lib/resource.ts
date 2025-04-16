@@ -698,5 +698,17 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Elecrow"],
     requiresDfu: false,
     images: ["thinknode_m2.svg"],
-  }
+  },
+  { 
+    hwModel: 94,
+    hwModelSlug: "HELTEC_MESH_POCKET",
+    platformioTarget: "heltec_mesh_pocket",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Heltec MeshPocket",
+    tags: ["Heltec"],
+    requiresDfu: true,
+  },
+
 ];
