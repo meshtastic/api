@@ -717,7 +717,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "SEEED_SOLAR_NODE",
     platformioTarget: "seeed_solar_node",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "SenseCAP Solar Node",
     tags: ["Seeed"],
