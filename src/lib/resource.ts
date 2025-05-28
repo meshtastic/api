@@ -709,6 +709,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Heltec MeshPocket",
     tags: ["Heltec"],
+    images: ["heltec_mesh_pocket.svg"],
     requiresDfu: true,
   },
   { 
@@ -720,6 +721,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "SenseCAP Solar Node",
     tags: ["Seeed"],
+    images: ["seeed_solar.svg"],
     requiresDfu: true,
   },
   { 
@@ -731,6 +733,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Seeed Wio Tracker L1",
     tags: ["Seeed"],
+    images: ["wio_tracker_l1.svg", "wio_tracker_l1_case.svg"],
     requiresDfu: true,
   },
 ];
