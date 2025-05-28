@@ -729,7 +729,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     architecture: "nrf52840",
     activelySupported: false,
     supportLevel: 1,
-    displayName: " Seeed Wio Tracker L1",
+    displayName: "Seeed Wio Tracker L1",
     tags: ["Seeed"],
     requiresDfu: true,
   },
