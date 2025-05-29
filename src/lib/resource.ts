@@ -719,7 +719,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     architecture: "nrf52840",
     activelySupported: true,
     supportLevel: 1,
-    displayName: "SenseCAP Solar Node",
+    displayName: "Seeed SenseCAP Solar Node",
     tags: ["Seeed"],
     images: ["seeed_solar.svg"],
     requiresDfu: true,
