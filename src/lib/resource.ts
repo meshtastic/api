@@ -729,7 +729,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "SEEED_WIO_TRACKER_L1",
     platformioTarget: "seeed_wio_tracker_L1",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "Seeed Wio Tracker L1",
     tags: ["Seeed"],
