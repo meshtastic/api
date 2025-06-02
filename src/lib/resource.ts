@@ -733,7 +733,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Seeed Wio Tracker L1",
     tags: ["Seeed"],
-    images: ["wio_tracker_l1.svg", "wio_tracker_l1_case.svg"],
+    images: ["wio_tracker_l1_case.svg"],
     requiresDfu: true,
   },
 ];
