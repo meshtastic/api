@@ -747,6 +747,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Elecrow"],
     requiresDfu: true,
     images: ["crowpanel_5_0.svg", "crowpanel_7_0.svg"],
+    partitionScheme: "16MB",
     hasMui: true,
   },
   {
@@ -760,6 +761,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Elecrow"],
     requiresDfu: true,
     images: ["crowpanel_2_4.svg", "crowpanel_2_8.svg"],
+    partitionScheme: "16MB",
     hasMui: true,
   },
   {
@@ -773,6 +775,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Elecrow"],
     requiresDfu: true,
     images: ["crowpanel_3_5.svg"],
+    partitionScheme: "16MB",
     hasMui: true
   }
 ];
