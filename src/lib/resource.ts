@@ -705,7 +705,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "HELTEC_MESH_POCKET",
     platformioTarget: "heltec_mesh_pocket",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "Heltec MeshPocket",
     tags: ["Heltec"],
