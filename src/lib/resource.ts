@@ -711,6 +711,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Heltec"],
     images: ["heltec_mesh_pocket.svg"],
     requiresDfu: true,
+    hasInkHud: true,
   },
   { 
     hwModel: 95,
