@@ -737,6 +737,18 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["wio_tracker_l1_case.svg"],
     requiresDfu: true,
   },
+    { 
+    hwModel: 100,
+    hwModelSlug: "SEEED_WIO_TRACKER_L1_EINK",
+    platformioTarget: "seeed_wio_tracker_L1_eink",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Seeed Wio Tracker L1 E-Ink",
+    tags: ["Seeed"],
+    requiresDfu: true,
+    hasInkHud: true,
+  },
   {
     hwModel: 97,
     hwModelSlug: "CROWPANEL",
