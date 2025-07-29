@@ -12,6 +12,7 @@ export interface DeviceHardware {
   partitionScheme?: string;
   hasMui?: boolean;
   hasInkHud?: boolean;
+  url?: string; // Override URL for the device (for actively supported devices only)
 }
 
 export const deviceHardwareList: DeviceHardware[] = [
