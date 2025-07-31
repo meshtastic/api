@@ -10,7 +10,7 @@ export interface FirmwareReleases {
 }
 
 export const FirmwareRoutes = () => {
-  return app.get("/github/firmware/list", async (req, res) => {
+  return app.get("/github/firmware/list", async (_req, res) => {
     const releaseCache = await redis.get("gh-releases");
 
     if (releaseCache) {
@@ -18,30 +18,30 @@ export const FirmwareRoutes = () => {
     } else {
       const releases = (
         await GitHub.deviceOctokit.rest.repos.listReleases(
-          GitHub.DeviceRequestOptions
+          GitHub.DeviceRequestOptions,
         )
       ).data
         .filter((r) => Number.parseInt(r.tag_name.substring(1, 2)) > 1)
         .filter((r) => !r.name?.includes("(Revoked)"));
       const prs = await GitHub.deviceOctokit.rest.pulls.list(
-        GitHub.DeviceRequestOptions
+        GitHub.DeviceRequestOptions,
       );
 
       const prArtifacts = await Promise.all(
         prs.data.map(async (pr) => {
-          let zip_url: string | undefined;
+          let zipUrl: string | undefined;
           const comments = await GitHub.deviceOctokit.request(pr.comments_url);
           const artifactComments = comments.data.filter(
             (comment: { user: { login: string } }) =>
-              comment.user.login === "github-actions[bot]"
+              comment.user.login === "github-actions[bot]",
           );
 
           if (artifactComments.length > 0) {
             const matches = GitHub.FirmwareLinkRegex.exec(
-              artifactComments[0].body
+              artifactComments[0].body,
             );
             if (matches && matches.length > 0) {
-              zip_url = matches[1];
+              zipUrl = matches[1];
             }
           }
 
@@ -49,15 +49,15 @@ export const FirmwareRoutes = () => {
             id: pr.number.toString(),
             title: pr.title,
             page_url: pr.html_url,
-            zip_url: zip_url,
+            zip_url: zipUrl,
           };
-        })
+        }),
       );
 
       // Firmware is now separated & suffixed by platform (e.g. firmware-esp32) as of 2.5.5
       // If we don't find a result (or it's not provided), fallback to the old firmware- prefix
       // to avoid a breaking change to the API
-      const filteredString: string = "firmware-" + (req.query.platform ?? "");
+      const filteredString: string = `firmware-$req.query.platform·??·""`;
 
       const firmwareReleases: FirmwareReleases = {
         releases: {
@@ -68,11 +68,14 @@ export const FirmwareRoutes = () => {
                 id: release.tag_name,
                 title: release.name,
                 page_url: release.html_url,
-                zip_url: (release.assets.find((asset) =>
-                  asset.name.startsWith(filteredString)
-                ) ?? release.assets.find((asset) =>
-                  asset.name.startsWith("firmware-")
-                ))?.browser_download_url,
+                zip_url: (
+                  release.assets.find((asset) =>
+                    asset.name.startsWith(filteredString),
+                  ) ??
+                  release.assets.find((asset) =>
+                    asset.name.startsWith("firmware-"),
+                  )
+                )?.browser_download_url,
                 release_notes: release.body,
               };
             }),
@@ -83,11 +86,14 @@ export const FirmwareRoutes = () => {
                 id: release.tag_name,
                 title: release.name,
                 page_url: release.html_url,
-                zip_url: (release.assets.find((asset) =>
-                  asset.name.startsWith(filteredString)
-                ) ?? release.assets.find((asset) =>
-                  asset.name.startsWith("firmware-")
-                ))?.browser_download_url,
+                zip_url: (
+                  release.assets.find((asset) =>
+                    asset.name.startsWith(filteredString),
+                  ) ??
+                  release.assets.find((asset) =>
+                    asset.name.startsWith("firmware-"),
+                  )
+                )?.browser_download_url,
                 release_notes: release.body,
               };
             }),

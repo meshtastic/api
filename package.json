@@ -34,7 +34,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.5.3",
+    "@biomejs/biome": "2.0.6",
     "@buf/meshtastic_protobufs.bufbuild_es": "1.7.2-20240216123215-6b07c41c68c9.1",
     "@types/node": "^20.11.19",
     "prisma": "^5.9.1",

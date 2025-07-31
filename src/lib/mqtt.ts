@@ -1,5 +1,5 @@
-import MQTT from "mqtt";
 import { Protobuf } from "@meshtastic/js";
+import MQTT from "mqtt";
 import { prisma, redis } from "./index.js";
 
 const mqtt = MQTT.connect(process.env.MQTT_URL as string, {
