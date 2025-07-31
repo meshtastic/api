@@ -1,7 +1,6 @@
-import { Octokit } from "octokit";
-
 import { createAppAuth } from "@octokit/auth-app";
 import { config } from "@tinyhttp/dotenv";
+import { Octokit } from "octokit";
 
 const DEVICE_OWNER = "meshtastic";
 const DEVICE_REPO = "firmware";
