@@ -20,7 +20,10 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "all": true
+      "all": true,
+      "style": {
+        "useNamingConvention": "off"
+      }
     }
   }
 }

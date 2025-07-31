@@ -22,10 +22,13 @@ export const RegisterMqttClient = () => {
         const decoded = Protobuf.Mqtt.ServiceEnvelope.fromBinary(payload);
         queue.push(decoded);
       } catch (error) {
+        // biome-ignore lint/suspicious/noConsole: fix soon
         console.error(error, topic, payload);
       }
     } else {
       // Likely stat message
+      // biome-ignore lint/suspicious/noConsoleLog: fix soon
+      // biome-ignore lint/suspicious/noConsole: fix soon
       console.log("Unknown topic", topic);
     }
   });
@@ -135,6 +138,8 @@ class MqttQueue {
 
     for (const gateway of toProcess) {
       for (const channel of gateway.channels) {
+        // biome-ignore lint/suspicious/noConsoleLog: fix soon
+        // biome-ignore lint/suspicious/noConsole: fix soon
         console.log(
           "Queue:",
           this.queue.length,
