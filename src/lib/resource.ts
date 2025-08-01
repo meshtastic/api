@@ -630,6 +630,18 @@ export const deviceHardwareList: DeviceHardware[] = [
     partitionScheme: "8MB",
   },
   {
+    hwModel: 105,
+    hwModelSlug: "WISMESH_TAG",
+    platformioTarget: "rak_wismeshtag",
+    architecture: "nrf52840",
+    activelySupported: true,
+    supportLevel: 1,
+    displayName: "RAK WisMesh Tag",
+    tags: ["RAK"],
+    images: ["rak_wismesh_tag.svg"],
+    requiresDfu: true,
+  },
+  {
     hwModel: 84,
     hwModelSlug: "WISMESH_TAP",
     platformioTarget: "rak_wismeshtap",
