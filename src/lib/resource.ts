@@ -687,9 +687,9 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Seeed Xiao NRF52840 Kit",
     tags: ["Seeed"],
     requiresDfu: true,
-    images: ["seeed_xiao_nrf52_kit.svg"]
+    images: ["seeed_xiao_nrf52_kit.svg"],
   },
-  { 
+  {
     hwModel: 89,
     hwModelSlug: "THINKNODE_M1",
     platformioTarget: "thinknode_m1",
@@ -727,7 +727,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     requiresDfu: true,
     hasInkHud: true,
   },
-  { 
+  {
     hwModel: 95,
     hwModelSlug: "SEEED_SOLAR_NODE",
     platformioTarget: "seeed_solar_node",
@@ -739,7 +739,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["seeed_solar.svg"],
     requiresDfu: true,
   },
-  { 
+  {
     hwModel: 99,
     hwModelSlug: "SEEED_WIO_TRACKER_L1",
     platformioTarget: "seeed_wio_tracker_L1",
@@ -751,7 +751,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["wio_tracker_l1_case.svg"],
     requiresDfu: true,
   },
-    { 
+  {
     hwModel: 100,
     hwModelSlug: "SEEED_WIO_TRACKER_L1_EINK",
     platformioTarget: "seeed_wio_tracker_L1_eink",
@@ -803,6 +803,6 @@ export const deviceHardwareList: DeviceHardware[] = [
     requiresDfu: true,
     images: ["crowpanel_3_5.svg"],
     partitionScheme: "16MB",
-    hasMui: true
-  }
+    hasMui: true,
+  },
 ];
