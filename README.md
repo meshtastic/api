@@ -13,3 +13,7 @@ API backend used for meshtastic.org and associated tools.
 
 ![Alt](https://repobeats.axiom.co/api/embed/42de1569e61bc8171266ba5e0cc1dab2e0a3986b.svg "Repobeats analytics image")
 
+## Code Quality
+
+This repository uses [Biome](https://biomejs.dev/guides/getting-started/), with a `biome ci` command in the CI pipeline. 
+

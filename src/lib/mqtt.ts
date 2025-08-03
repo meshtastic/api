@@ -71,9 +71,7 @@ class MqttQueue {
       } else if (data.portnum === Protobuf.Portnums.PortNum.TEXT_MESSAGE_APP) {
         //cache in redis
         redis.set(
-          `mqttMessage-${packet.gatewayId}-${
-            packet.channelId
-          }-${new Date().getTime()}`,
+          `mqttMessage-${packet.gatewayId}-${packet.channelId}-${Date().now()}`,
           JSON.stringify({
             from: packet.packet.from,
             to: packet.packet.to,
