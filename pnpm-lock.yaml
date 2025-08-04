@@ -13,7 +13,7 @@ importers:
         version: 1.7.2-20240110092216-3a147af14302.1(@bufbuild/protobuf@1.7.2)
       '@buf/meshtastic_api.connectrpc_es':
         specifier: 1.3.0-20240110092216-3a147af14302.1
-        version: 1.3.0-20240110092216-3a147af14302.1(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0)
+        version: 1.3.0-20240110092216-3a147af14302.1(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0(@bufbuild/protobuf@1.7.2))
       '@bufbuild/protobuf':
         specifier: ^1.7.2
         version: 1.7.2
@@ -22,10 +22,10 @@ importers:
         version: 1.3.0(@bufbuild/protobuf@1.7.2)
       '@connectrpc/connect-express':
         specifier: ^1.3.0
-        version: 1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect-node@1.3.0)(@connectrpc/connect@1.3.0)
+        version: 1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect-node@1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0(@bufbuild/protobuf@1.7.2)))(@connectrpc/connect@1.3.0(@bufbuild/protobuf@1.7.2))
       '@meshtastic/js':
         specifier: 2.2.23-0
-        version: 2.2.23-0
+        version: 2.2.23-0(buffer@6.0.3)
       '@octokit/auth-app':
         specifier: ^6.0.3
         version: 6.0.3
@@ -73,8 +73,8 @@ importers:
         version: 5.3.3
     devDependencies:
       '@biomejs/biome':
-        specifier: ^1.5.3
-        version: 1.5.3
+        specifier: ^2.1.3
+        version: 2.1.3
       '@buf/meshtastic_protobufs.bufbuild_es':
         specifier: 1.7.2-20240216123215-6b07c41c68c9.1
         version: 1.7.2-20240216123215-6b07c41c68c9.1(@bufbuild/protobuf@1.7.2)
@@ -94,56 +94,56 @@ packages:
     resolution: {integrity: sha512-0CX6F+BI2s9dkUqr08KFrAIZgNFj75rdBU/DjCyYLIaV/quFjkk6T+EJ2LkZHyZTbEV4L5p97mNkUsHl2wLFAw==}
     engines: {node: '>=6.9.0'}
 
-  '@biomejs/biome@1.5.3':
-    resolution: {integrity: sha512-yvZCa/g3akwTaAQ7PCwPWDCkZs3Qa5ONg/fgOUT9e6wAWsPftCjLQFPXBeGxPK30yZSSpgEmRCfpGTmVbUjGgg==}
-    engines: {node: '>=14.*'}
+  '@biomejs/biome@2.1.3':
+    resolution: {integrity: sha512-KE/tegvJIxTkl7gJbGWSgun7G6X/n2M6C35COT6ctYrAy7SiPyNvi6JtoQERVK/VRbttZfgGq96j2bFmhmnH4w==}
+    engines: {node: '>=14.21.3'}
     hasBin: true
 
-  '@biomejs/cli-darwin-arm64@1.5.3':
-    resolution: {integrity: sha512-ImU7mh1HghEDyqNmxEZBoMPr8SxekkZuYcs+gynKlNW+TALQs7swkERiBLkG9NR0K1B3/2uVzlvYowXrmlW8hw==}
-    engines: {node: '>=14.*'}
+  '@biomejs/cli-darwin-arm64@2.1.3':
+    resolution: {integrity: sha512-LFLkSWRoSGS1wVUD/BE6Nlt2dSn0ulH3XImzg2O/36BoToJHKXjSxzPEMAqT9QvwVtk7/9AQhZpTneERU9qaXA==}
+    engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [darwin]
 
-  '@biomejs/cli-darwin-x64@1.5.3':
-    resolution: {integrity: sha512-vCdASqYnlpq/swErH7FD6nrFz0czFtK4k/iLgj0/+VmZVjineFPgevOb+Sr9vz0tk0GfdQO60bSpI74zU8M9Dw==}
-    engines: {node: '>=14.*'}
+  '@biomejs/cli-darwin-x64@2.1.3':
+    resolution: {integrity: sha512-Q/4OTw8P9No9QeowyxswcWdm0n2MsdCwWcc5NcKQQvzwPjwuPdf8dpPPf4r+x0RWKBtl1FLiAUtJvBlri6DnYw==}
+    engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [darwin]
 
-  '@biomejs/cli-linux-arm64-musl@1.5.3':
-    resolution: {integrity: sha512-DYuMizUYUBYfS0IHGjDrOP1RGipqWfMGEvNEJ398zdtmCKLXaUvTimiox5dvx4X15mBK5M2m8wgWUgOP1giUpQ==}
-    engines: {node: '>=14.*'}
+  '@biomejs/cli-linux-arm64-musl@2.1.3':
+    resolution: {integrity: sha512-KXouFSBnoxAWZYDQrnNRzZBbt5s9UJkIm40hdvSL9mBxSSoxRFQJbtg1hP3aa8A2SnXyQHxQfpiVeJlczZt76w==}
+    engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-arm64@1.5.3':
-    resolution: {integrity: sha512-cupBQv0sNF1OKqBfx7EDWMSsKwRrBUZfjXawT4s6hKV6ALq7p0QzWlxr/sDmbKMLOaLQtw2Qgu/77N9rm+f9Rg==}
-    engines: {node: '>=14.*'}
+  '@biomejs/cli-linux-arm64@2.1.3':
+    resolution: {integrity: sha512-2hS6LgylRqMFmAZCOFwYrf77QMdUwJp49oe8PX/O8+P2yKZMSpyQTf3Eo5ewnsMFUEmYbPOskafdV1ds1MZMJA==}
+    engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64-musl@1.5.3':
-    resolution: {integrity: sha512-UUHiAnlDqr2Y/LpvshBFhUYMWkl2/Jn+bi3U6jKuav0qWbbBKU/ByHgR4+NBxpKBYoCtWxhnmatfH1bpPIuZMw==}
-    engines: {node: '>=14.*'}
+  '@biomejs/cli-linux-x64-musl@2.1.3':
+    resolution: {integrity: sha512-KaLAxnROouzIWtl6a0Y88r/4hW5oDUJTIqQorOTVQITaKQsKjZX4XCUmHIhdEk8zMnaiLZzRTAwk1yIAl+mIew==}
+    engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64@1.5.3':
-    resolution: {integrity: sha512-YQrSArQvcv4FYsk7Q91Yv4uuu5F8hJyORVcv3zsjCLGkjIjx2RhjYLpTL733SNL7v33GmOlZY0eFR1ko38tuUw==}
-    engines: {node: '>=14.*'}
+  '@biomejs/cli-linux-x64@2.1.3':
+    resolution: {integrity: sha512-NxlSCBhLvQtWGagEztfAZ4WcE1AkMTntZV65ZvR+J9jp06+EtOYEBPQndA70ZGhHbEDG57bR6uNvqkd1WrEYVA==}
+    engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-win32-arm64@1.5.3':
-    resolution: {integrity: sha512-HxatYH7vf/kX9nrD+pDYuV2GI9GV8EFo6cfKkahAecTuZLPxryHx1WEfJthp5eNsE0+09STGkKIKjirP0ufaZA==}
-    engines: {node: '>=14.*'}
+  '@biomejs/cli-win32-arm64@2.1.3':
+    resolution: {integrity: sha512-V9CUZCtWH4u0YwyCYbQ3W5F4ZGPWp2C2TYcsiWFNNyRfmOW1j/TY/jAurl33SaRjgZPO5UUhGyr9m6BN9t84NQ==}
+    engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [win32]
 
-  '@biomejs/cli-win32-x64@1.5.3':
-    resolution: {integrity: sha512-fMvbSouZEASU7mZH8SIJSANDm5OqsjgtVXlbUqxwed6BP7uuHRSs396Aqwh2+VoW8fwTpp6ybIUoC9FrzB0kyA==}
-    engines: {node: '>=14.*'}
+  '@biomejs/cli-win32-x64@2.1.3':
+    resolution: {integrity: sha512-dxy599q6lgp8ANPpR8sDMscwdp9oOumEsVXuVCVT9N2vAho8uYXlCz53JhxX6LtJOXaE73qzgkGQ7QqvFlMC0g==}
+    engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
 
@@ -995,39 +995,39 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.1
 
-  '@biomejs/biome@1.5.3':
+  '@biomejs/biome@2.1.3':
     optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 1.5.3
-      '@biomejs/cli-darwin-x64': 1.5.3
-      '@biomejs/cli-linux-arm64': 1.5.3
-      '@biomejs/cli-linux-arm64-musl': 1.5.3
-      '@biomejs/cli-linux-x64': 1.5.3
-      '@biomejs/cli-linux-x64-musl': 1.5.3
-      '@biomejs/cli-win32-arm64': 1.5.3
-      '@biomejs/cli-win32-x64': 1.5.3
+      '@biomejs/cli-darwin-arm64': 2.1.3
+      '@biomejs/cli-darwin-x64': 2.1.3
+      '@biomejs/cli-linux-arm64': 2.1.3
+      '@biomejs/cli-linux-arm64-musl': 2.1.3
+      '@biomejs/cli-linux-x64': 2.1.3
+      '@biomejs/cli-linux-x64-musl': 2.1.3
+      '@biomejs/cli-win32-arm64': 2.1.3
+      '@biomejs/cli-win32-x64': 2.1.3
 
-  '@biomejs/cli-darwin-arm64@1.5.3':
+  '@biomejs/cli-darwin-arm64@2.1.3':
     optional: true
 
-  '@biomejs/cli-darwin-x64@1.5.3':
+  '@biomejs/cli-darwin-x64@2.1.3':
     optional: true
 
-  '@biomejs/cli-linux-arm64-musl@1.5.3':
+  '@biomejs/cli-linux-arm64-musl@2.1.3':
     optional: true
 
-  '@biomejs/cli-linux-arm64@1.5.3':
+  '@biomejs/cli-linux-arm64@2.1.3':
     optional: true
 
-  '@biomejs/cli-linux-x64-musl@1.5.3':
+  '@biomejs/cli-linux-x64-musl@2.1.3':
     optional: true
 
-  '@biomejs/cli-linux-x64@1.5.3':
+  '@biomejs/cli-linux-x64@2.1.3':
     optional: true
 
-  '@biomejs/cli-win32-arm64@1.5.3':
+  '@biomejs/cli-win32-arm64@2.1.3':
     optional: true
 
-  '@biomejs/cli-win32-x64@1.5.3':
+  '@biomejs/cli-win32-x64@2.1.3':
     optional: true
 
   '@buf/meshtastic_api.bufbuild_es@1.6.0-20240110092216-3a147af14302.1(@bufbuild/protobuf@1.7.2)':
@@ -1038,7 +1038,7 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 1.7.2
 
-  '@buf/meshtastic_api.connectrpc_es@1.3.0-20240110092216-3a147af14302.1(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0)':
+  '@buf/meshtastic_api.connectrpc_es@1.3.0-20240110092216-3a147af14302.1(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0(@bufbuild/protobuf@1.7.2))':
     dependencies:
       '@buf/meshtastic_api.bufbuild_es': 1.6.0-20240110092216-3a147af14302.1(@bufbuild/protobuf@1.7.2)
       '@connectrpc/connect': 1.3.0(@bufbuild/protobuf@1.7.2)
@@ -1051,14 +1051,14 @@ snapshots:
 
   '@bufbuild/protobuf@1.7.2': {}
 
-  '@connectrpc/connect-express@1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect-node@1.3.0)(@connectrpc/connect@1.3.0)':
+  '@connectrpc/connect-express@1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect-node@1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0(@bufbuild/protobuf@1.7.2)))(@connectrpc/connect@1.3.0(@bufbuild/protobuf@1.7.2))':
     dependencies:
       '@bufbuild/protobuf': 1.7.2
       '@connectrpc/connect': 1.3.0(@bufbuild/protobuf@1.7.2)
-      '@connectrpc/connect-node': 1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0)
+      '@connectrpc/connect-node': 1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0(@bufbuild/protobuf@1.7.2))
       '@types/express': 4.17.21
 
-  '@connectrpc/connect-node@1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0)':
+  '@connectrpc/connect-node@1.3.0(@bufbuild/protobuf@1.7.2)(@connectrpc/connect@1.3.0(@bufbuild/protobuf@1.7.2))':
     dependencies:
       '@bufbuild/protobuf': 1.7.2
       '@connectrpc/connect': 1.3.0(@bufbuild/protobuf@1.7.2)
@@ -1139,9 +1139,9 @@ snapshots:
 
   '@fastify/busboy@2.1.0': {}
 
-  '@meshtastic/js@2.2.23-0':
+  '@meshtastic/js@2.2.23-0(buffer@6.0.3)':
     dependencies:
-      crc: 4.3.2
+      crc: 4.3.2(buffer@6.0.3)
       sub-events: 1.9.0
       tslog: 4.9.2
     transitivePeerDependencies:
@@ -1302,7 +1302,7 @@ snapshots:
       aggregate-error: 3.1.0
 
   '@prisma/client@5.9.1(prisma@5.9.1)':
-    dependencies:
+    optionalDependencies:
       prisma: 5.9.1
 
   '@prisma/debug@5.9.1': {}
@@ -1554,7 +1554,9 @@ snapshots:
       readable-stream: 3.6.2
       typedarray: 0.0.6
 
-  crc@4.3.2: {}
+  crc@4.3.2(buffer@6.0.3):
+    optionalDependencies:
+      buffer: 6.0.3
 
   dayjs@1.11.10: {}
 
