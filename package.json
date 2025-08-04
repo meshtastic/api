@@ -18,7 +18,7 @@
     "@connectrpc/connect-express": "^1.3.0",
     "@meshtastic/js": "2.2.23-0",
     "@octokit/auth-app": "^6.0.3",
-    "@prisma/client": "5.9.1",
+    "@prisma/client": "5.22.0",
     "@tinyhttp/app": "2.2.3",
     "@tinyhttp/cors": "^2.0.0",
     "@tinyhttp/dotenv": "^2.1.1",
@@ -37,7 +37,7 @@
     "@biomejs/biome": "^2.1.3",
     "@buf/meshtastic_protobufs.bufbuild_es": "1.7.2-20240216123215-6b07c41c68c9.1",
     "@types/node": "^20.11.19",
-    "prisma": "^5.9.1",
+    "prisma": "^5.22.0",
     "tsx": "^4.7.1"
   }
 }
