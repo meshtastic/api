@@ -4,7 +4,7 @@ import { GitHub } from "../lib/index.js";
 export const GithubRoutes = () => {
   return app.get("/github/releases", async (_, res) => {
     const releases = await GitHub.deviceOctokit.rest.repos.listReleases(
-      GitHub.DeviceRequestOptions,
+      GitHub.DeviceRequestOptions
     );
 
     res.send(
@@ -14,11 +14,11 @@ export const GithubRoutes = () => {
           title: release.name,
           page_url: release.html_url,
           zip_url: release.assets.find((asset) =>
-            asset.name.startsWith("firmware-"),
+            asset.name.startsWith("firmware-")
           )?.browser_download_url,
           release_notes: release.body,
         };
-      }),
+      })
     );
   });
 };

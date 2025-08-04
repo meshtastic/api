@@ -1,18 +1,19 @@
-import { GatewayService } from "@buf/meshtastic_api.connectrpc_es/protobufs/gateway/v1/gateway_service_connect.js";
-import { expressConnectMiddleware } from "@connectrpc/connect-express";
 import { App } from "@tinyhttp/app";
 import { cors } from "@tinyhttp/cors";
 import { config } from "@tinyhttp/dotenv";
-import { favicon } from "@tinyhttp/favicon";
 import { logger } from "@tinyhttp/logger";
-import { RegisterMqttClient } from "./lib/index.js";
+import { favicon } from "@tinyhttp/favicon";
+
 import {
   FirmwareRoutes,
   GithubRoutes,
-  MqttRoutes,
   ResourceRoutes,
   UpdaterRoutes,
+  MqttRoutes,
 } from "./routes/index.js";
+import { RegisterMqttClient } from "./lib/index.js";
+import { expressConnectMiddleware } from "@connectrpc/connect-express";
+import { GatewayService } from "@buf/meshtastic_api.connectrpc_es/protobufs/gateway/v1/gateway_service_connect.js";
 import { Gateway } from "./services/index.js";
 
 export const app = new App();
