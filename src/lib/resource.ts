@@ -224,7 +224,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "wio-tracker-wm1110",
     architecture: "nrf52840",
     activelySupported: true,
-    supportLevel: 1,
+    supportLevel: 3,
     displayName: "Seeed Wio WM1110 Tracker",
     tags: ["Seeed"],
     images: ["wio-tracker-wm1110.svg"],
