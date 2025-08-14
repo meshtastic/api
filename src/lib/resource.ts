@@ -711,7 +711,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "ThinkNode M5",
     tags: ["Elecrow"],
-    requiresDfu: true,
+    requiresDfu: false,
     images: ["thinknode_m1.svg"],
     hasInkHud: true,
   },
