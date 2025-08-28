@@ -823,7 +823,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "T_DECK_PRO",
     platformioTarget: "t-deck-pro",
     architecture: "esp32-s3",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "LILYGO T-Deck Pro",
     tags: ["LilyGo"],
