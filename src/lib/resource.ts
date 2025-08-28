@@ -859,4 +859,17 @@ export const deviceHardwareList: DeviceHardware[] = [
     requiresDfu: true,
     images: ["heltec-mesh-solar.svg"],
   },
+  {
+    hwModel: 109,
+    hwModelSlug: "T_ECHO_LITE",
+    platformioTarget: "t-echo-lite",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "LILYGO T-Echo Lite",
+    tags: ["LilyGo"],
+    requiresDfu: true,
+    hasInkHud: false,
+    images: ["techo_lite.svg"]
+  },
 ];
