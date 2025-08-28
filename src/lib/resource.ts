@@ -844,6 +844,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     requiresDfu: true,
     hasMui: false,
     partitionScheme: "16MB",
+    images: ["lilygo-tlora-pager.svg"],
   },
   {
     hwModel: 108,
@@ -855,5 +856,6 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Heltec MeshSolar",
     tags: ["Heltec"],
     requiresDfu: true,
+    images: ["heltec-mesh-solar.svg"],
   },
 ];
