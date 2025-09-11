@@ -838,7 +838,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "T_LORA_PAGER",
     platformioTarget: "tlora-pager",
     architecture: "esp32-s3",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "LILYGO T-LoRa Pager",
     tags: ["LilyGo"],
