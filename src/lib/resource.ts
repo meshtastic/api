@@ -872,4 +872,15 @@ export const deviceHardwareList: DeviceHardware[] = [
     hasInkHud: false,
     images: ["techo_lite.svg"]
   },
+  {
+    hwModel: 111,
+    hwModelSlug: "M5STACK_C6L",
+    platformioTarget: "m5stack-unitc6l",
+    architecture: "esp32-c6",
+    supportLevel: 1,
+    activelySupported: false,
+    displayName: "M5Stack Unit C6L",
+    tags: ["M5Stack"],
+    images: ["place_holder.svg"],
+  },
 ];
