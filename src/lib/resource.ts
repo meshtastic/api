@@ -883,4 +883,17 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["M5Stack"],
     images: ["place_holder.svg"],
   },
+  {
+    hwModel: 110,
+    hwModelSlug: "HELTEC_V4",
+    platformioTarget: "heltec-v4",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Heltec V4",
+    tags: ["Heltec"],
+    requiresDfu: true,
+    hasMui: false,
+    partitionScheme: "16MB",
+  },
 ];
