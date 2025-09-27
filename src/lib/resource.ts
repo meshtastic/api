@@ -778,6 +778,17 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["wio_tracker_l1_eink.svg"],
   },
   {
+    hwModel: 96,
+    hwModelSlug: "NOMADSTAR_METEOR_PRO",
+    platformioTarget: "rak4631_nomadstar_meteor_pro",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "NomadStar Meteor Pro",
+    tags: ["NomadStar"],
+    requiresDfu: true,
+  },
+  {
     hwModel: 97,
     hwModelSlug: "CROWPANEL",
     platformioTarget: "elecrow-adv1-43-50-70-tft",
@@ -896,5 +907,18 @@ export const deviceHardwareList: DeviceHardware[] = [
     hasMui: false,
     partitionScheme: "16MB",
     images: ["heltec_v4.svg"]
+  },
+  {
+    hwModel: 106,
+    hwModelSlug: "RAK3312",
+    platformioTarget: "rak3312",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "RAK3312",
+    tags: ["RAK"],
+    requiresDfu: false,
+    hasMui: false,
+    partitionScheme: "16MB",
   },
 ];
