@@ -782,11 +782,12 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "NOMADSTAR_METEOR_PRO",
     platformioTarget: "rak4631_nomadstar_meteor_pro",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "NomadStar Meteor Pro",
     tags: ["NomadStar"],
     requiresDfu: true,
+    images: ["meteor_pro.svg"]
   },
   {
     hwModel: 97,
@@ -913,12 +914,13 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "RAK3312",
     platformioTarget: "rak3312",
     architecture: "esp32-s3",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "RAK3312",
     tags: ["RAK"],
     requiresDfu: false,
     hasMui: false,
     partitionScheme: "16MB",
+    images: ["rak_3312.svg"]
   },
 ];
