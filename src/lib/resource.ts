@@ -836,7 +836,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "MUZI_R1_NEO",
     platformioTarget: "r1-neo",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "muzi R1 Neo",
     tags: ["muzi"],
