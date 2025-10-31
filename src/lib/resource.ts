@@ -935,4 +935,15 @@ export const deviceHardwareList: DeviceHardware[] = [
     partitionScheme: "16MB",
     images: ["rak_3312.svg"]
   },
+  {
+    hwModel: 115,
+    hwModelSlug: "THINKNODE_M3",
+    platformioTarget: "thinknode_m3",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "ThinkNode M3",
+    tags: ["Elecrow"],
+    requiresDfu: true,
+  },
 ];
