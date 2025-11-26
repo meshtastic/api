@@ -13,6 +13,8 @@ export interface DeviceHardware {
   hasMui?: boolean;
   hasInkHud?: boolean;
   url?: string; // Override URL for the device (for actively supported devices only)
+  key?: string; // Optional key to differentiate multiple entries for the same hwModel
+  variant?: string; // Optional variant to differentiate multiple entries for the same hwModel
 }
 
 export const deviceHardwareList: DeviceHardware[] = [
@@ -739,6 +741,23 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["heltec_mesh_pocket.svg"],
     requiresDfu: true,
     hasInkHud: true,
+    key: "HELTEC_MESH_POCKET",
+    variant: "10000mAh",
+  },
+  {
+    hwModel: 94,
+    hwModelSlug: "HELTEC_MESH_POCKET",
+    platformioTarget: "heltec-mesh-pocket-5000",
+    architecture: "nrf52840",
+    activelySupported: true,
+    supportLevel: 1,
+    displayName: "Heltec MeshPocket",
+    tags: ["Heltec"],
+    images: ["heltec_mesh_pocket.svg"],
+    requiresDfu: true,
+    hasInkHud: true,
+    key: "HELTEC_MESH_POCKET",
+    variant: "5000mAh",
   },
   {
     hwModel: 95,
