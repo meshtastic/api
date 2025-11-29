@@ -967,7 +967,7 @@ export const deviceHardwareList: DeviceHardware[] = [
   },
   {
     hwModel: 116,
-    hwModelSlug: "RAK_WISMESH_TAP_V2",
+    hwModelSlug: "WISMESH_TAP_V2",
     platformioTarget: "rak_wismesh_tap_v2",
     architecture: "esp32-s3",
     activelySupported: false,
