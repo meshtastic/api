@@ -965,4 +965,17 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Elecrow"],
     requiresDfu: true,
   },
+  {
+    hwModel: 116,
+    hwModelSlug: "RAK_WISMESH_TAP_V2",
+    platformioTarget: "rak_wismesh_tap_v2",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "RAK WisMesh Tap V2",
+    tags: ["RAK"],
+    hasMui: true,
+    partitionScheme: "8MB",
+    images: ["rak-wismesh-tap-v2.svg"],
+  },
 ];
