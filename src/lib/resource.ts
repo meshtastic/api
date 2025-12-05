@@ -734,11 +734,11 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "MUZI_BASE",
     platformioTarget: "muzi-base",
     architecture: "nrf52840",
-    activelySupported: true,
+    activelySupported: false,
     supportLevel: 1,
     displayName: "muzi base",
     tags: ["muzi"],
-    requiresDfu: false,
+    requiresDfu: true,
     images: ["muzi_base.svg"]
   },
   {
