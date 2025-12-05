@@ -738,7 +738,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "muzi base",
     tags: ["muzi"],
-    requiresDfu: true,
+    requiresDfu: false,
     images: ["muzi_base.svg"]
   },
   {
