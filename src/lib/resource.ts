@@ -730,6 +730,18 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["thinknode_m2.svg"],
   },
   {
+    hwModel: 93,
+    hwModelSlug: "MUZI_BASE",
+    platformioTarget: "muzi-base",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "muzi base",
+    tags: ["muzi"],
+    requiresDfu: true,
+    images: ["muzi_base.svg"]
+  },
+  {
     hwModel: 94,
     hwModelSlug: "HELTEC_MESH_POCKET",
     platformioTarget: "heltec-mesh-pocket-10000",
