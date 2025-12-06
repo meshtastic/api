@@ -971,11 +971,12 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "THINKNODE_M3",
     platformioTarget: "thinknode_m3",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "ThinkNode M3",
     tags: ["Elecrow"],
     requiresDfu: true,
+    images: ["thinknode_m3.svg"]
   },
   {
     hwModel: 116,
