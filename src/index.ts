@@ -1,23 +1,16 @@
-import { GatewayService } from "@buf/meshtastic_api.connectrpc_es/protobufs/gateway/v1/gateway_service_connect.js";
-import { expressConnectMiddleware } from "@connectrpc/connect-express";
 import { App } from "@tinyhttp/app";
 import { cors } from "@tinyhttp/cors";
 import { config } from "@tinyhttp/dotenv";
 import { favicon } from "@tinyhttp/favicon";
 import { logger } from "@tinyhttp/logger";
-import { RegisterMqttClient } from "./lib/index.js";
 import {
   FirmwareRoutes,
   GithubRoutes,
-  MqttRoutes,
   ResourceRoutes,
-  UpdaterRoutes,
 } from "./routes/index.js";
-import { Gateway } from "./services/index.js";
 
 export const app = new App();
 config();
-RegisterMqttClient();
 app
   .use(logger())
   .use(favicon("static/favicon.ico"))
@@ -63,15 +56,6 @@ app
       res.setHeader("content-type", "application/octet-stream");
       res.send(data.body);
     });
-  })
-  .use(async (req, res, next) => {
-    return expressConnectMiddleware({
-      routes: (router) => {
-        router.service(GatewayService, new Gateway());
-      },
-      connect: true,
-      // @ts-ignore
-    })(req, res, next);
   });
 
 /**
@@ -80,7 +64,5 @@ app
 FirmwareRoutes();
 GithubRoutes();
 ResourceRoutes();
-UpdaterRoutes();
-MqttRoutes();
 
 app.listen(Number.parseInt(process.env.PORT ?? "4000"));
