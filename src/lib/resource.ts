@@ -991,4 +991,28 @@ export const deviceHardwareList: DeviceHardware[] = [
     partitionScheme: "8MB",
     images: ["rak-wismesh-tap-v2.svg"],
   },
+  {
+    hwModel: 119,
+    hwModelSlug: "THINKNODE_M4",
+    platformioTarget: "thinknode_m4",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "ThinkNode M4",
+    tags: ["Elecrow"],
+    requiresDfu: true,
+    images: ["thinknode_m4.svg"]
+  },
+  {
+    hwModel: 120,
+    hwModelSlug: "THINKNODE_M6",
+    platformioTarget: "thinknode_m6",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "ThinkNode M6",
+    tags: ["Elecrow"],
+    requiresDfu: true,
+    images: ["thinknode_m6.svg"]
+  },
 ];
