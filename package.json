@@ -25,7 +25,6 @@
     "@tinyhttp/favicon": "^3.0.0",
     "@tinyhttp/logger": "^2.0.0",
     "add": "^2.0.6",
-    "mqtt": "^5.3.5",
     "octokit": "^3.1.2",
     "pnpm": "^8.15.3",
     "redis": "^4.6.13",

@@ -818,7 +818,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "NomadStar Meteor Pro",
     tags: ["NomadStar"],
     requiresDfu: true,
-    images: ["meteor_pro.svg"]
+    images: ["meteor_pro.svg"],
   },
   {
     hwModel: 97,
@@ -872,7 +872,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "muzi R1 Neo",
     tags: ["muzi"],
     requiresDfu: true,
-    images: ["muzi_r1_neo.svg"]
+    images: ["muzi_r1_neo.svg"],
   },
   {
     hwModel: 102,
@@ -925,7 +925,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     requiresDfu: true,
     hasInkHud: false,
-    images: ["techo_lite.svg"]
+    images: ["techo_lite.svg"],
   },
   {
     hwModel: 111,
@@ -950,7 +950,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     requiresDfu: true,
     hasMui: false,
     partitionScheme: "16MB",
-    images: ["heltec_v4.svg"]
+    images: ["heltec_v4.svg"],
   },
   {
     hwModel: 106,
@@ -964,7 +964,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     requiresDfu: false,
     hasMui: false,
     partitionScheme: "16MB",
-    images: ["rak_3312.svg"]
+    images: ["rak_3312.svg"],
   },
   {
     hwModel: 115,
