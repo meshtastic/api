@@ -992,6 +992,18 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["rak-wismesh-tap-v2.svg"],
   },
   {
+    hwModel: 117,
+    hwModelSlug: "RAK3401",
+    platformioTarget: "rak3401-1watt",
+    architecture: "nrf52840",
+    activelySupported: true,
+    supportLevel: 1,
+    displayName: "RAK3401 1W",
+    tags: ["RAK"],
+    requiresDfu: true,
+    images: ["rak3401.svg"],
+  },
+  {
     hwModel: 119,
     hwModelSlug: "THINKNODE_M4",
     platformioTarget: "thinknode_m4",
