@@ -749,7 +749,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     architecture: "nrf52840",
     activelySupported: true,
     supportLevel: 1,
-    displayName: "muzi BASE",
+    displayName: "muzi BASE DUO/UNO",
     tags: ["muzi"],
     requiresDfu: true,
     images: ["muzi_base.svg"]
