@@ -295,7 +295,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "t-echo-plus",
     architecture: "nrf52840",
     supportLevel: 1,
-    activelySupported: false,
+    activelySupported: true,
     displayName: "LILYGO T-Echo Plus",
     tags: ["LilyGo"],
     images: ["t-echo_plus.svg"],
