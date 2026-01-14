@@ -42,6 +42,7 @@ app
           "https://flash.meshtastic.org",
           "https://flasher.meshtastic.org",
           "https://map.meshtastic.org",
+          "https://web-flasher-git-facelift-meshtastic.vercel.app",
         ];
 
         // return origin if it is in the whitelist
