@@ -1045,7 +1045,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "TBEAM_1_WATT",
     platformioTarget: "t-beam-1w",
     architecture: "esp32-s3",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "LilyGo T-Beam 1W",
     tags: ["LilyGo"],
