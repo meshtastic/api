@@ -752,7 +752,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "muzi BASE DUO/UNO",
     tags: ["muzi"],
     requiresDfu: true,
-    images: ["muzi_base.svg"]
+    images: ["muzi_base.svg"],
   },
   {
     hwModel: 94,
@@ -831,7 +831,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "NomadStar Meteor Pro",
     tags: ["NomadStar"],
     requiresDfu: true,
-    images: ["meteor_pro.svg"]
+    images: ["meteor_pro.svg"],
   },
   {
     hwModel: 97,
@@ -885,7 +885,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "muzi R1 Neo",
     tags: ["muzi"],
     requiresDfu: true,
-    images: ["muzi_r1_neo.svg"]
+    images: ["muzi_r1_neo.svg"],
   },
   {
     hwModel: 102,
@@ -938,7 +938,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     requiresDfu: true,
     hasInkHud: false,
-    images: ["techo_lite.svg"]
+    images: ["techo_lite.svg"],
   },
   {
     hwModel: 111,
@@ -963,7 +963,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     requiresDfu: true,
     hasMui: false,
     partitionScheme: "16MB",
-    images: ["heltec_v4.svg"]
+    images: ["heltec_v4.svg"],
   },
   {
     hwModel: 106,
@@ -977,7 +977,19 @@ export const deviceHardwareList: DeviceHardware[] = [
     requiresDfu: false,
     hasMui: false,
     partitionScheme: "16MB",
-    images: ["rak_3312.svg"]
+    images: ["rak_3312.svg"],
+  },
+  {
+    hwModel: 113,
+    hwModelSlug: "HELTEC_WIRELESS_TRACKER_V2",
+    platformioTarget: "heltec-wireless-tracker-v2",
+    architecture: "esp32s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Heltec Wireless Tracker V2",
+    tags: ["Heltec"],
+    images: ["heltec_wireless_tracker_v2.svg"],
+    partitionScheme: "8MB",
   },
   {
     hwModel: 115,
@@ -989,7 +1001,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "ThinkNode M3",
     tags: ["Elecrow"],
     requiresDfu: true,
-    images: ["thinknode_m3.svg"]
+    images: ["thinknode_m3.svg"],
   },
   {
     hwModel: 116,
@@ -1026,7 +1038,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "ThinkNode M4",
     tags: ["Elecrow"],
     requiresDfu: true,
-    images: ["thinknode_m4.svg"]
+    images: ["thinknode_m4.svg"],
   },
   {
     hwModel: 120,
@@ -1038,7 +1050,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "ThinkNode M6",
     tags: ["Elecrow"],
     requiresDfu: true,
-    images: ["thinknode_m6.svg"]
+    images: ["thinknode_m6.svg"],
   },
   {
     hwModel: 122,
