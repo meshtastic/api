@@ -1008,7 +1008,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "WISMESH_TAP_V2",
     platformioTarget: "rak_wismesh_tap_v2",
     architecture: "esp32-s3",
-    activelySupported: true,
+    activelySupported: false,
     supportLevel: 1,
     displayName: "RAK WisMesh Tap V2",
     tags: ["RAK"],
