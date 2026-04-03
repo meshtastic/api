@@ -986,7 +986,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     architecture: "esp32-s3",
     activelySupported: false,
     supportLevel: 1,
-    displayName: "Cardputer Adv",
+    displayName: "Cardputer Mesh Kit",
     tags: ["M5Stack"],
     images: ["m5stack_cardputer.svg"],
     partitionScheme: "8MB",
