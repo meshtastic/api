@@ -983,7 +983,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModel: 112,
     hwModelSlug: "M5STACK_CARDPUTER_ADV",
     platformioTarget: "m5stack-cardputer-adv",
-    architecture: "esp32s3",
+    architecture: "esp32-s3",
     activelySupported: false,
     supportLevel: 1,
     displayName: "Cardputer Adv",
