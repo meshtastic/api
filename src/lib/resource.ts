@@ -995,7 +995,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModel: 113,
     hwModelSlug: "HELTEC_WIRELESS_TRACKER_V2",
     platformioTarget: "heltec-wireless-tracker-v2",
-    architecture: "esp32s3",
+    architecture: "esp32-s3",
     activelySupported: false,
     supportLevel: 1,
     displayName: "Heltec Wireless Tracker V2",
