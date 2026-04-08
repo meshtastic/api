@@ -961,7 +961,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Heltec V4",
     tags: ["Heltec"],
     requiresDfu: true,
-    hasMui: false,
+    hasMui: true,
     partitionScheme: "16MB",
     images: ["heltec_v4.svg"],
   },
