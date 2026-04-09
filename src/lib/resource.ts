@@ -1088,7 +1088,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     hasMui: false,
     partitionScheme: "8MB",
-    images: ["t5s3-epaper-pro.svg"],
+    images: ["t5s3_epaper.svg"],
   },
   {
     hwModel: 125,
