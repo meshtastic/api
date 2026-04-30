@@ -984,7 +984,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "M5STACK_CARDPUTER_ADV",
     platformioTarget: "m5stack-cardputer-adv",
     architecture: "esp32-s3",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "Cardputer Mesh Kit",
     tags: ["M5Stack"],
