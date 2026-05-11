@@ -24,4 +24,3 @@ API backend used for meshtastic.org and associated tools.
 - To run the type checker, use `pnpm biome check`, or to fix files automatically, use `pnpm biome check --write`.
 
 
-
