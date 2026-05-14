@@ -1102,4 +1102,15 @@ export const deviceHardwareList: DeviceHardware[] = [
     hasMui: false,
     images: ["mini-epaper-s3.svg"],
   },
+  {
+    hwModel: 127,
+    hwModelSlug: "HELTEC_MESH_NODE_T096",
+    platformioTarget: "heltec-mesh-node-t096",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Heltec Mesh Node 096",
+    tags: ["Heltec"],
+    images: ["heltec-mesh-node-t096.svg"],
+  },
 ];
