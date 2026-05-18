@@ -23,4 +23,3 @@ API backend used for meshtastic.org and associated tools.
 - To run the formatter, use `pnpm biome format`, or to fix files automatically, use `pnpm biome format --write`.
 - To run the type checker, use `pnpm biome check`, or to fix files automatically, use `pnpm biome check --write`.
 
-
