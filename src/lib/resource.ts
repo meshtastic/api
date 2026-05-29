@@ -1041,6 +1041,16 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["rak3401.svg"],
   },
   {
+    hwModel: 118,
+    hwModelSlug: "RAK6421",
+    platformioTarget: "native",
+    architecture: "portduino",
+    activelySupported: true,
+    supportLevel: 1,
+    displayName: "RAK6421 Hat+",
+    tags: ["RAK"],
+  },
+  {
     hwModel: 119,
     hwModelSlug: "THINKNODE_M4",
     platformioTarget: "thinknode_m4",
@@ -1063,6 +1073,16 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Elecrow"],
     requiresDfu: true,
     images: ["thinknode_m6.svg"],
+  },
+  {
+    hwModel: 121,
+    hwModelSlug: "MESHSTICK_1262",
+    platformioTarget: "native",
+    architecture: "portduino",
+    activelySupported: true,
+    supportLevel: 1,
+    displayName: "Elecrow Meshstick 1262",
+    tags: ["Elecrow"],
   },
   {
     hwModel: 122,
