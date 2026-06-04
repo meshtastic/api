@@ -1133,4 +1133,15 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Heltec"],
     images: ["heltec-t096.svg"],
   },
+  {
+    hwModel: 129,
+    hwModelSlug: "THINKNODE_M7",
+    platformioTarget: "thinknode_m7",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "ThinkNode M7",
+    tags: ["Elecrow"],
+    requiresDfu: false,
+  },
 ];
