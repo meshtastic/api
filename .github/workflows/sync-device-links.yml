@@ -1,0 +1,45 @@
+name: Sync device links
+
+# Pulls the device-link catalog from msh.to's public /api/urls into data/deviceLinks.json,
+# which the api serves from /resource/deviceLinks. Keeps the data in-repo (reviewable diffs,
+# no runtime dependency on msh.to) and fresh without a code change.
+
+on:
+  schedule:
+    - cron: "17 * * * *" # hourly (at :17 to avoid top-of-hour congestion)
+  workflow_dispatch:
+
+concurrency:
+  group: sync-device-links
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch catalog from msh.to
+        run: |
+          set -euo pipefail
+          curl -fsSL https://msh.to/api/urls -o /tmp/catalog.json
+          # Sanity-check the shape before writing, so a bad/empty response never lands.
+          jq -e 'has("Routes") and (.Routes | type == "array") and (.Routes | length > 0)' /tmp/catalog.json >/dev/null
+          mkdir -p data
+          jq '.' /tmp/catalog.json > data/deviceLinks.json   # pretty-print for clean diffs
+
+      - name: Commit if changed
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/deviceLinks.json; then
+            echo "Catalog unchanged — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/deviceLinks.json
+          git commit -m "chore: sync device links from msh.to [skip ci]"
+          git push

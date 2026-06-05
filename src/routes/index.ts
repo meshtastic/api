@@ -1,3 +1,4 @@
+export { DeviceLinksRoutes } from "./deviceLinks.js";
 export { FirmwareRoutes } from "./firmware.js";
 export { GithubRoutes } from "./github.js";
 export { MqttRoutes } from "./mqtt.js";
