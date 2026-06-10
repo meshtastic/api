@@ -1049,6 +1049,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "RAK6421 Hat+",
     tags: ["RAK"],
+    images: ["meshtasticd_tux.svg"],
   },
   {
     hwModel: 119,
@@ -1083,6 +1084,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Elecrow Meshstick 1262",
     tags: ["Elecrow"],
+    images: ["meshtasticd_tux.svg"],
   },
   {
     hwModel: 122,
