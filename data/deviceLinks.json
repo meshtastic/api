@@ -2,74 +2,62 @@
   "Routes": [
     {
       "ShortCode": "github",
-      "OriginalUrl": "https://github.com/meshtastic",
       "Description": "Meshtastic GitHub Organization",
       "Type": "Internal"
     },
     {
       "ShortCode": "youtube",
-      "OriginalUrl": "https://www.youtube.com/meshtastic",
       "Description": "Meshtastic YouTube Channel",
       "Type": "Internal"
     },
     {
       "ShortCode": "reddit",
-      "OriginalUrl": "https://www.reddit.com/r/meshtastic",
       "Description": "Meshtastic Reddit Community",
       "Type": "Internal"
     },
     {
       "ShortCode": "docs",
-      "OriginalUrl": "https://meshtastic.org/docs/",
       "Description": "Meshtastic Documentation",
       "Type": "Internal"
     },
     {
       "ShortCode": "discord",
-      "OriginalUrl": "https://discord.gg/meshtastic",
       "Description": "Meshtastic Discord Server",
       "Type": "Internal"
     },
     {
       "ShortCode": "web",
-      "OriginalUrl": "https://client.meshtastic.org/",
       "Description": "Meshtastic Web Client",
       "Type": "Internal"
     },
     {
       "ShortCode": "flash",
-      "OriginalUrl": "https://flasher.meshtastic.org/",
       "Description": "Meshtastic Web Flasher",
       "Type": "Internal"
     },
     {
       "ShortCode": "firmware",
-      "OriginalUrl": "https://github.com/meshtastic/firmware",
       "Description": "Meshtastic Firmware Repository",
       "Type": "Internal"
     },
     {
       "ShortCode": "android",
-      "OriginalUrl": "https://play.google.com/store/apps/details?id=com.geeksville.mesh",
       "Description": "Meshtastic Android App",
       "Type": "Internal"
     },
     {
       "ShortCode": "ios",
-      "OriginalUrl": "https://apple.co/3Auysep",
       "Description": "Meshtastic iOS App",
       "Type": "Internal"
     },
     {
       "ShortCode": "rak-collection",
-      "OriginalUrl": "https://store.rakwireless.com/collections/meshtastic?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAKwireless Meshtastic Collection",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "rak4631",
-      "OriginalUrl": "https://store.rakwireless.com/products/wisblock-meshtastic-starter-kit?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh RAK4631 Starter Kit",
       "Type": "Vendor",
       "Targets": [
@@ -78,7 +66,6 @@
     },
     {
       "ShortCode": "rak3312",
-      "OriginalUrl": "https://store.rakwireless.com/products/meshtastic-starter-kit-esp32-s3-lora-sx1262?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh ESP32-S3 Starter Kit",
       "Type": "Vendor",
       "Targets": [
@@ -87,7 +74,6 @@
     },
     {
       "ShortCode": "rak3401-1watt",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-1w-booster-starter-kit?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh RAK3401 1W Starter Kit",
       "Type": "Vendor",
       "Targets": [
@@ -96,7 +82,6 @@
     },
     {
       "ShortCode": "rak_wismeshtap",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-tap?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK WisMesh Tap",
       "Type": "Vendor",
       "Targets": [
@@ -105,7 +90,6 @@
     },
     {
       "ShortCode": "rak_wismeshtag",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-tag-meshtastic-gps-lora-tracker-ip66?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK WisMesh Tag",
       "Type": "Vendor",
       "Targets": [
@@ -114,7 +98,6 @@
     },
     {
       "ShortCode": "rokland-wismesh-tag",
-      "OriginalUrl": "https://store.rokland.com/products/wismesh-tag-from-rakwireless-mokosmart-meshtastic-compatible-card-sized-node-us915-mhz",
       "Description": "Rokland WisMesh Tag",
       "Type": "Marketplace",
       "Targets": [
@@ -123,7 +106,6 @@
     },
     {
       "ShortCode": "hexaspot-wismesh-tag",
-      "OriginalUrl": "https://hexaspot.com/collections/meshtastic-products/products/wismesh-tag",
       "Description": "Hexaspot WisMesh Tag",
       "Type": "Marketplace",
       "Targets": [
@@ -132,7 +114,6 @@
     },
     {
       "ShortCode": "aliexpress-wismesh-tag",
-      "OriginalUrl": "https://www.aliexpress.com/item/1005009754254701.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "Aliexpress RAK WisMesh Tag",
       "Type": "Marketplace",
       "Targets": [
@@ -141,14 +122,12 @@
     },
     {
       "ShortCode": "rak19007",
-      "OriginalUrl": "https://store.rakwireless.com/products/rak19007-wisblock-base-board-2nd-gen?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAKwireless RAK19007 WisBlock Base Board 2nd Gen",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "tbeam-s3-core",
-      "OriginalUrl": "https://lilygo.cc/products/t-beam-supreme-meshtastic",
       "Description": "T-Beam Supreme",
       "Type": "Vendor",
       "Targets": [
@@ -157,7 +136,6 @@
     },
     {
       "ShortCode": "t-echo",
-      "OriginalUrl": "https://lilygo.cc/products/t-echo-meshtastic",
       "Description": "T-Echo",
       "Type": "Vendor",
       "Targets": [
@@ -166,7 +144,6 @@
     },
     {
       "ShortCode": "t-watch-s3",
-      "OriginalUrl": "https://lilygo.cc/products/t-watch-s3",
       "Description": "T-Watch S3",
       "Type": "Vendor",
       "Targets": [
@@ -175,7 +152,6 @@
     },
     {
       "ShortCode": "t-deck",
-      "OriginalUrl": "https://lilygo.cc/products/t-deck-meshtastic",
       "Description": "T-Deck",
       "Type": "Vendor",
       "Targets": [
@@ -184,7 +160,6 @@
     },
     {
       "ShortCode": "tlora-t3s3-v1",
-      "OriginalUrl": "https://lilygo.cc/products/t3-s3-meshtastic",
       "Description": "T3S3",
       "Type": "Vendor",
       "Targets": [
@@ -193,7 +168,6 @@
     },
     {
       "ShortCode": "heltec-mesh-node-t114",
-      "OriginalUrl": "https://heltec.org/project/mesh-node-t114/",
       "Description": "Mesh Node T114",
       "Type": "Vendor",
       "Targets": [
@@ -202,7 +176,6 @@
     },
     {
       "ShortCode": "heltec-vision-master-e213",
-      "OriginalUrl": "https://heltec.org/project/vision-master-e213/",
       "Description": "Vision Master E213",
       "Type": "Vendor",
       "Targets": [
@@ -211,7 +184,6 @@
     },
     {
       "ShortCode": "heltec-vision-master-e290",
-      "OriginalUrl": "https://heltec.org/project/vision-master-e290/",
       "Description": "Vision Master E290",
       "Type": "Vendor",
       "Targets": [
@@ -220,7 +192,6 @@
     },
     {
       "ShortCode": "heltec-vision-master-t190",
-      "OriginalUrl": "https://heltec.org/project/vision-master-t190/",
       "Description": "Vision Master T190",
       "Type": "Vendor",
       "Targets": [
@@ -229,7 +200,6 @@
     },
     {
       "ShortCode": "heltec-wireless-tracker",
-      "OriginalUrl": "https://heltec.org/project/wireless-tracker/",
       "Description": "Wireless Tracker",
       "Type": "Vendor",
       "Targets": [
@@ -238,7 +208,6 @@
     },
     {
       "ShortCode": "heltec-wireless-tracker-v2",
-      "OriginalUrl": "https://heltec.org/project/wireless-tracker-v2/",
       "Description": "Wireless Tracker V2",
       "Type": "Vendor",
       "Targets": [
@@ -247,7 +216,6 @@
     },
     {
       "ShortCode": "heltec-wireless-paper",
-      "OriginalUrl": "https://heltec.org/project/wireless-paper/",
       "Description": "Wireless Paper",
       "Type": "Vendor",
       "Targets": [
@@ -256,7 +224,6 @@
     },
     {
       "ShortCode": "heltec-ht62-esp32c3-sx1262",
-      "OriginalUrl": "https://heltec.org/project/ht-ct62/",
       "Description": "HT-CT62",
       "Type": "Vendor",
       "Targets": [
@@ -265,7 +232,6 @@
     },
     {
       "ShortCode": "wio-tracker-wm1110",
-      "OriginalUrl": "https://www.seeedstudio.com/Wio-Tracker-1110-Dev-Kit-for-Meshtastic.html",
       "Description": "Wio Tracker WM1110 Dev Kit",
       "Type": "Vendor",
       "Targets": [
@@ -274,7 +240,6 @@
     },
     {
       "ShortCode": "tracker-t1000-e",
-      "OriginalUrl": "https://www.seeedstudio.com/SenseCAP-Card-Tracker-T1000-E-for-Meshtastic-p-5913.html",
       "Description": "SenseCAP Card Tracker T1000-E",
       "Type": "Vendor",
       "Targets": [
@@ -283,7 +248,6 @@
     },
     {
       "ShortCode": "tracker-t1000-e-aliexpress",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256807287978389.html",
       "Description": "SenseCAP Card Tracker T1000-E Aliexpress",
       "Type": "Marketplace",
       "Targets": [
@@ -292,7 +256,6 @@
     },
     {
       "ShortCode": "tracker-t1000-e-amazon",
-      "OriginalUrl": "https://www.amazon.com/dp/B0DJ6KGXKB",
       "Description": "SenseCAP Card Tracker T1000-E Amazon",
       "Type": "Marketplace",
       "Targets": [
@@ -301,7 +264,6 @@
     },
     {
       "ShortCode": "seeed-sensecap-indicator",
-      "OriginalUrl": "https://www.seeedstudio.com/SenseCAP-Indicator-D1L-for-Meshtastic-p-6304.html",
       "Description": "SenseCAP Indicator",
       "Type": "Vendor",
       "Targets": [
@@ -310,7 +272,6 @@
     },
     {
       "ShortCode": "station-g2",
-      "OriginalUrl": "https://shop.uniteng.com/product/meshtastic-mesh-device-station-edition/",
       "Description": "Station G2",
       "Type": "Vendor",
       "Targets": [
@@ -319,7 +280,6 @@
     },
     {
       "ShortCode": "rak2560",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-meshtastic-solar-repeater?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Repeater",
       "Type": "Vendor",
       "Targets": [
@@ -328,7 +288,6 @@
     },
     {
       "ShortCode": "heltec-v3",
-      "OriginalUrl": "https://heltec.org/project/wifi-lora-32-v3/",
       "Description": "LoRa32 V3",
       "Type": "Vendor",
       "Targets": [
@@ -337,7 +296,6 @@
     },
     {
       "ShortCode": "heltec-wsl-v3",
-      "OriginalUrl": "https://heltec.org/project/wireless-stick-lite-v2/",
       "Description": "WSL V3",
       "Type": "Vendor",
       "Targets": [
@@ -346,7 +304,6 @@
     },
     {
       "ShortCode": "heltec-v4",
-      "OriginalUrl": "https://heltec.org/project/wifi-lora-32-v4/",
       "Description": "LoRa32 V4",
       "Type": "Vendor",
       "Targets": [
@@ -355,7 +312,6 @@
     },
     {
       "ShortCode": "seeed-xiao-s3",
-      "OriginalUrl": "https://www.seeedstudio.com/Wio-SX1262-with-XIAO-ESP32S3-p-5982.html",
       "Description": "XIAO ESP32-S3 + Wio-SX1262 Kit",
       "Type": "Vendor",
       "Targets": [
@@ -364,7 +320,6 @@
     },
     {
       "ShortCode": "tlora-t3s3-epaper",
-      "OriginalUrl": "https://lilygo.cc/products/t3-s3-meshtastic",
       "Description": "T3S3",
       "Type": "Vendor",
       "Targets": [
@@ -373,7 +328,6 @@
     },
     {
       "ShortCode": "ht-ct62",
-      "OriginalUrl": "https://heltec.org/project/ht-ct62/",
       "Description": "HT-CT62",
       "Type": "Vendor",
       "Targets": [
@@ -382,7 +336,6 @@
     },
     {
       "ShortCode": "seeed_xiao_nrf52840_kit",
-      "OriginalUrl": "https://www.seeedstudio.com/XIAO-nRF52840-Wio-SX1262-Kit-for-Meshtastic-p-6400.html",
       "Description": "XIAO nRF52840 & Wio-SX1262 Kit",
       "Type": "Vendor",
       "Targets": [
@@ -391,7 +344,6 @@
     },
     {
       "ShortCode": "seeed_xiao_nrf52840_kit_aliexpress",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256808574469954.html",
       "Description": "XIAO nRF52840 & Wio-SX1262 Kit Aliexpress",
       "Type": "Marketplace",
       "Targets": [
@@ -400,7 +352,6 @@
     },
     {
       "ShortCode": "thinknode_m1",
-      "OriginalUrl": "https://www.elecrow.com/thinknode-m1-meshtastic-lora-signal-transceiver-powered-by-nrf52840-with-154-screen-support-gps.html",
       "Description": "ThinkNode M1",
       "Type": "Vendor",
       "Targets": [
@@ -409,7 +360,6 @@
     },
     {
       "ShortCode": "thinknode_m2",
-      "OriginalUrl": "https://www.elecrow.com/thinknode-m2-meshtastic-lora-signal-transceiver-powered-by-esp32-s3-with-1-3-oled-display.html",
       "Description": "ThinkNode M2",
       "Type": "Vendor",
       "Targets": [
@@ -418,7 +368,6 @@
     },
     {
       "ShortCode": "thinknode_m3",
-      "OriginalUrl": "https://www.elecrow.com/thinknode-m3-meshtastic-tracker-with-gps-wifi-ble-function-for-indoor-and-outdoor-positioning.html",
       "Description": "ThinkNode M3",
       "Type": "Vendor",
       "Targets": [
@@ -427,7 +376,6 @@
     },
     {
       "ShortCode": "thinknode_m5",
-      "OriginalUrl": "https://www.elecrow.com/thinknode-m5-meshtastic-lora-signal-transceiver-esp32-s3-1-54-screen-gps-function.html",
       "Description": "ThinkNode M5",
       "Type": "Vendor",
       "Targets": [
@@ -436,7 +384,6 @@
     },
     {
       "ShortCode": "thinknode_m4",
-      "OriginalUrl": "https://www.elecrow.com/thinknode-m4-power-bank-lora-device-with-meshtastic-lora-tracker-function-powered-by-nrf52840.html",
       "Description": "ThinkNode M4",
       "Type": "Vendor",
       "Targets": [
@@ -445,7 +392,6 @@
     },
     {
       "ShortCode": "thinknode_m6",
-      "OriginalUrl": "https://www.elecrow.com/thinknode-m6-outdoor-solar-power-for-meshtastic-powered-by-nrf52840-supports-gps.html",
       "Description": "ThinkNode M6",
       "Type": "Vendor",
       "Targets": [
@@ -454,7 +400,6 @@
     },
     {
       "ShortCode": "heltec-mesh-pocket-10000",
-      "OriginalUrl": "https://heltec.org/project/meshpocket/",
       "Description": "MeshPocket",
       "Type": "Vendor",
       "Targets": [
@@ -463,7 +408,6 @@
     },
     {
       "ShortCode": "seeed_solar_node",
-      "OriginalUrl": "https://www.seeedstudio.com/SenseCAP-Solar-Node-P1-Pro-for-Meshtastic-LoRa-p-6412.html",
       "Description": "SenseCAP Solar Node P1 Pro",
       "Type": "Vendor",
       "Targets": [
@@ -472,7 +416,6 @@
     },
     {
       "ShortCode": "seeed_solar_node_aliexpress",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256808731224053.html",
       "Description": "SenseCAP Solar Node P1 Pro Aliexpress",
       "Type": "Marketplace",
       "Targets": [
@@ -481,7 +424,6 @@
     },
     {
       "ShortCode": "seeed_solar_node_amazon",
-      "OriginalUrl": "https://www.amazon.com/dp/B0FMDHBWX8",
       "Description": "SenseCAP Solar Node P1 Pro Amazon",
       "Type": "Marketplace",
       "Targets": [
@@ -490,7 +432,6 @@
     },
     {
       "ShortCode": "elecrow-adv-35-tft",
-      "OriginalUrl": "https://www.elecrow.com/crowpanel-advance-3-5-hmi-esp32-ai-display-for-meshtastic-320x240-ips-artificial-intelligent-screen.html",
       "Description": "CrowPanel 3.5",
       "Type": "Vendor",
       "Targets": [
@@ -499,7 +440,6 @@
     },
     {
       "ShortCode": "elecrow-adv1-43-50-70-tft",
-      "OriginalUrl": "https://www.elecrow.com/crowpanel-advance-4-3-hmi-ai-screen-for-meshtastic-esp32-800x480-ips-touch-artificial-intelligent-display-2.html",
       "Description": "CrowPanel 4.3",
       "Type": "Vendor",
       "Targets": [
@@ -508,7 +448,6 @@
     },
     {
       "ShortCode": "elecrow-adv-24-28-tft",
-      "OriginalUrl": "https://www.elecrow.com/crowpanel-advance-2-4-hmi-ai-display-for-meshtastic-esp32-320x240-ips-artificial-intelligent-touchscreen.html",
       "Description": "CrowPanel 2.4",
       "Type": "Vendor",
       "Targets": [
@@ -517,7 +456,6 @@
     },
     {
       "ShortCode": "elecrow-adv-28-tft",
-      "OriginalUrl": "https://www.elecrow.com/crowpanel-advance-2-8-hmi-ai-display-for-meshtastic-esp32-320x240-artificial-ips-intelligent-touchscreen.html",
       "Description": "CrowPanel 2.8",
       "Type": "Vendor",
       "Targets": [
@@ -526,7 +464,6 @@
     },
     {
       "ShortCode": "elecrow-adv1-50-tft",
-      "OriginalUrl": "https://www.elecrow.com/crowpanel-advance-5inch-hmi-esp32-ai-display-800x480-ips-artificial-intelligent-touch-screen-support-meshtastic.html",
       "Description": "CrowPanel 5.0",
       "Type": "Vendor",
       "Targets": [
@@ -535,7 +472,6 @@
     },
     {
       "ShortCode": "elecrow-adv1-70-tft",
-      "OriginalUrl": "https://www.elecrow.com/crowpanel-advance-7-0-hmi-esp32-ai-display-800x480-artificial-intelligent-ips-touch-screen-for-meshtastic.html",
       "Description": "CrowPanel 7.0",
       "Type": "Vendor",
       "Targets": [
@@ -544,7 +480,6 @@
     },
     {
       "ShortCode": "seeed_wio_tracker_L1",
-      "OriginalUrl": "https://www.seeedstudio.com/Wio-Tracker-L1-Pro-p-6454.html",
       "Description": "Wio Tracker L1",
       "Type": "Vendor",
       "Targets": [
@@ -553,7 +488,6 @@
     },
     {
       "ShortCode": "seeed_wio_tracker_L1_aliexpress",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256809394050623.html",
       "Description": "Wio Tracker L1 Aliexpress",
       "Type": "Marketplace",
       "Targets": [
@@ -562,7 +496,6 @@
     },
     {
       "ShortCode": "seeed_wio_tracker_L1_amazon",
-      "OriginalUrl": "https://www.amazon.com/dp/B0FNCS5ST1",
       "Description": "Wio Tracker L1 Amazon",
       "Type": "Marketplace",
       "Targets": [
@@ -571,7 +504,6 @@
     },
     {
       "ShortCode": "nano-g2-ultra",
-      "OriginalUrl": "https://shop.uniteng.com/product/meshtastic-mesh-device-nano-g2-ultra/",
       "Description": "Nano G2 Ultra",
       "Type": "Vendor",
       "Targets": [
@@ -580,7 +512,6 @@
     },
     {
       "ShortCode": "rak11310",
-      "OriginalUrl": "https://store.rakwireless.com/products/wisblock-rp2040-starter-kit-for-meshtastic?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK11310",
       "Type": "Vendor",
       "Targets": [
@@ -589,7 +520,6 @@
     },
     {
       "ShortCode": "rokland-rak11310",
-      "OriginalUrl": "https://store.rakwireless.com/products/wisblock-rp2040-starter-kit-for-meshtastic?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "Rokland RAKwireless RAK11310 WisBlock RP2040 Core Module",
       "Type": "Vendor",
       "Targets": [
@@ -598,7 +528,6 @@
     },
     {
       "ShortCode": "station-g2-tindie",
-      "OriginalUrl": "https://www.tindie.com/products/neilhao/meshtastic-mesh-device-station-g2/",
       "Description": "Station G2 Tindie Listing",
       "Type": "Marketplace",
       "Targets": [
@@ -607,7 +536,6 @@
     },
     {
       "ShortCode": "nano-g2-ultra-tindie",
-      "OriginalUrl": "https://www.tindie.com/products/neilhao/meshtastic-mesh-device-nano-g2-ultra/",
       "Description": "Nano G2 Ultra Tindie Listing",
       "Type": "Marketplace",
       "Targets": [
@@ -616,7 +544,6 @@
     },
     {
       "ShortCode": "t-deck-plus",
-      "OriginalUrl": "https://lilygo.cc/products/t-deck-plus-meshtastic",
       "Description": "T-Deck Plus",
       "Type": "Vendor",
       "Targets": [
@@ -625,13 +552,11 @@
     },
     {
       "ShortCode": "rokland-meshtastic-starter-kit",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-wisblock-meshtastic-starter-kit",
       "Description": "Rokland Meshtastic Starter Kit",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "rokland-t-deck-base",
-      "OriginalUrl": "https://store.rokland.com/products/lilygo-t-deck-portable-microcontroller-programmer-lora-915-mhz-h642?variant=41000826372179",
       "Description": "Rokland T-Deck Base",
       "Type": "Marketplace",
       "Targets": [
@@ -640,7 +565,6 @@
     },
     {
       "ShortCode": "rokland-t-deck-complete",
-      "OriginalUrl": "https://store.rokland.com/products/lilygo-t-deck-portable-microcontroller-programmer-lora-915-mhz-h642?variant=42122265690195",
       "Description": "Rokland T-Deck Complete",
       "Type": "Marketplace",
       "Targets": [
@@ -649,7 +573,6 @@
     },
     {
       "ShortCode": "rokland-t-deck-plus",
-      "OriginalUrl": "https://store.rokland.com/products/lilygo-t-deck-portable-microcontroller-programmer-lora-915-mhz-h642?variant=42283977834579",
       "Description": "Rokland T-Deck Plus",
       "Type": "Marketplace",
       "Targets": [
@@ -658,7 +581,6 @@
     },
     {
       "ShortCode": "rokland-t-echo",
-      "OriginalUrl": "https://store.rokland.com/products/lilygo-ttgo-meshtastic-t-echo-white-lora-sx1262-wireless-module-915mhz-nrf52840-gps-for-arduino?ref=8Bb2mUO5i-jKwt",
       "Description": "Rokland T-Echo",
       "Type": "Marketplace",
       "Targets": [
@@ -667,7 +589,6 @@
     },
     {
       "ShortCode": "rokland-t-echo-bme280",
-      "OriginalUrl": "https://store.rokland.com/products/lilygo-ttgo-meshtastic-t-echo-white-bme280-lora-sx1262-wireless-module-915mhz-nrf52840-gps-rtc-nfc-for-arduino?ref=8Bb2mUO5i-jKwt",
       "Description": "Rokland T-Echo with BME280",
       "Type": "Marketplace",
       "Targets": [
@@ -676,21 +597,18 @@
     },
     {
       "ShortCode": "rokland-rak19007",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-wisblock-base-board-2nd-gen-rak19007-ver-b-pid-110082",
       "Description": "Rokland RAKwireless RAK19007 WisBlock Base Board 2nd Gen",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "hexaspot-rak19007",
-      "OriginalUrl": "https://hexaspot.com/collections/rakwireless-wisblock-base/products/rakwireless-rak19007-wisblock-base-board-2nd-gen",
       "Description": "Hexaspot RAKwireless RAK19007 WisBlock Base Board 2nd Gen",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rokland-starter-kit",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-wisblock-meshtastic-starter-kit",
       "Description": "Rokland RAKwireless 4631 Starter Kit",
       "Type": "Marketplace",
       "Targets": [
@@ -699,7 +617,6 @@
     },
     {
       "ShortCode": "hexaspot-starter-kit",
-      "OriginalUrl": "https://hexaspot.com/collections/wisblock-kits/products/wisblock-starter-kit-wisblock-basic-kit",
       "Description": "Hexaspot RAKwireless 4631 Starter Kit",
       "Type": "Marketplace",
       "Targets": [
@@ -708,252 +625,215 @@
     },
     {
       "ShortCode": "aliexpress-rak1921",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256801470591730.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK1921 OLED Display (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak1921",
-      "OriginalUrl": "https://store.rakwireless.com/products/rak1921-oled-display-panel?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK1921 OLED Display (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "rokland-rak1921",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-wisblock-oled-display-rak1921-pid-110004",
       "Description": "Rokland RAK1921 WisBlock OLED Display",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "muzi-rak1921",
-      "OriginalUrl": "https://muzi.works/products/rak-oled-display-ssd1306",
       "Description": "Muzi Works RAK1921 OLED Display SSD1306",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak14000",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256803245280485.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK14000 E-Ink Display (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak14000",
-      "OriginalUrl": "https://store.rakwireless.com/products/wisblock-epd-module-rak14000?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK14000 E-Ink Display (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "rokland-rak14000",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-wisblock-epd-module-rak14000-pid-110024",
       "Description": "Rokland RAK14000 WisBlock E-Ink Display",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak12500",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256802312416216.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK12500 (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak12500",
-      "OriginalUrl": "https://store.rakwireless.com/products/wisblock-gnss-location-module-rak12500?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK12500 (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "rak13300",
-      "OriginalUrl": "https://store.rakwireless.com/products/rak13300-wisblock-lpwan?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK13300 LPWAN Module (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak13002",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256802904688489.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK13002 IO Module (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak13002",
-      "OriginalUrl": "https://store.rakwireless.com/products/adapter-module-rak13002?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK13002 IO Module (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "rokland-rak13002",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-rak13002-wisblock-io-adapter-module",
       "Description": "Rokland RAK13002 WisBlock IO Adapter Module",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "muzi-rak13002",
-      "OriginalUrl": "https://muzi.works/products/rak-io-module",
       "Description": "Muzi Works RAK13002 IO Module",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak6421",
-      "OriginalUrl": "https://store.rakwireless.com/products/meshtastic-raspberry-pi-hat-rak6421?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Pi Hat RAK6421 (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak18001",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256802312587439.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK18001 RAK Buzzer (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak18001",
-      "OriginalUrl": "https://store.rakwireless.com/products/wisblock-buzzer-module-rak18001?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK18001 RAK Buzzer (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak1901",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256801444571922.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK1901 Temperature and Humidity Sensor (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak1901",
-      "OriginalUrl": "https://store.rakwireless.com/products/rak1901-shtc3-temperature-humidity-sensor?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK1901 Temperature and Humidity Sensor (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak1902",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256801445721072.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK-1902 Barometric Pressure Sensor (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak1902",
-      "OriginalUrl": "https://store.rakwireless.com/products/rak1902-kps22hb-barometric-pressure-sensor?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK-1902 Barometric Pressure Sensor (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak1906",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256801453209668.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK1906 Environment Sensor (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak1906",
-      "OriginalUrl": "https://store.rakwireless.com/products/rak1906-bme680-environment-sensor?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK1906 Environment Sensor (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak12002",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256803919249064.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK12002 WisBlock RTC Module (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak12002",
-      "OriginalUrl": "https://store.rakwireless.com/products/rtc-module-rak12002?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK12002 WisBlock RTC Module (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "rokland-rak12002",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-rak12002-rtc-module-micro-crystal-rv-3028-c7-pid-100032",
       "Description": "Rokland RAK12002 RTC Module Micro Crystal RV-3028-C7",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-wismesh-pocket-v2",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256808087883682.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Pocket V2 (AliExpress)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "rokland-wismesh-pocket-v2",
-      "OriginalUrl": "https://store.rokland.com/products/wismesh-pocket",
       "Description": "WisMesh Pocket V2 (Rokland)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "hexaspot-wismesh-pocket-v2",
-      "OriginalUrl": "https://hexaspot.com/collections/meshtastic-products/products/wismesh-pocket-v2-ready-to-use-meshtastic-device",
       "Description": "WisMesh Pocket V2 (Hexaspot)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "wismesh-pocket-v2",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-pocket?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Pocket V2 (RAK Store)",
       "Type": "Vendor"
     },
     {
       "ShortCode": "aliexpress-wismesh-pocket-mini",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256807998160830.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Pocket Mini (Rokland)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "rokland-wismesh-pocket-mini",
-      "OriginalUrl": "https://store.rokland.com/products/rakwireless-wismesh-pocket-mini-all-in-one-meshtastic-handheld-915-mhz-radio-with-lora-antenna",
       "Description": "WisMesh Pocket Mini (Rokland)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "wismesh-pocket-mini",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-pocket-mini?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Pocket Mini (RAK Store)",
       "Type": "Vendor"
     },
     {
       "ShortCode": "aliexpress-rak19026",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256808063797462.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Baseboard (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rokland-rak19026",
-      "OriginalUrl": "https://store.rokland.com/products/rakwireless-wismesh-baseboard-rak19026-oled-mounted-gnss-motion-sensor-pid-115125",
       "Description": "WisMesh Baseboard (Rokland)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak19026",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-baseboard-rak19026?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Baseboard (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-wismesh-tap",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256808097004202.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK WisMesh Tap (AliExpress)",
       "Type": "Marketplace",
       "Targets": [
@@ -962,25 +842,21 @@
     },
     {
       "ShortCode": "aliexpress-board-one",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256802139951068.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK WisMesh Board ONE (AliExpress)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "board-one",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-board-one-meshtastic-node?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK WisMesh Board ONE (RAK Store)",
       "Type": "Vendor"
     },
     {
       "ShortCode": "rokland-board-one",
-      "OriginalUrl": "https://store.rokland.com/products/rakwireless-wismesh-b1-board",
       "Description": "Rokland WisMesh Board ONE (US915 MHz)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "wismesh-repeater",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-meshtastic-solar-repeater?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Repeater (RAK Store)",
       "Type": "Vendor",
       "Targets": [
@@ -989,95 +865,80 @@
     },
     {
       "ShortCode": "aliexpress-wismesh-repeater",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256808393658502.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Repeater (AliExpress)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "aliexpress-wismesh-repeater-mini",
-      "OriginalUrl": "https://www.aliexpress.com/item/2251832722300348.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Repeater Mini (AliExpress)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "hexaspot-wismesh-repeater-mini",
-      "OriginalUrl": "https://hexaspot.com/collections/meshtastic-products/products/wismesh-repeater-mini",
       "Description": "WisMesh Repeater Mini (Hexaspot)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "wismesh-repeater-mini",
-      "OriginalUrl": "https://store.rakwireless.com/products/wishmesh-meshtastic-solar-repeater-mini?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Repeater Mini (RAK Store)",
       "Type": "Vendor"
     },
     {
       "ShortCode": "aliexpress-wismesh-ethernet-gateway",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256801470547683.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Ethernet MQTT Gateway (AliExpress)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "wismesh-ethernet-gateway",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-ethernet-gateway?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Ethernet MQTT Gateway (RAK Store)",
       "Type": "Vendor"
     },
     {
       "ShortCode": "aliexpress-wismesh-wifi-gateway",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256802139923708.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh WiFi MQTT Gateway (AliExpress)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "wismesh-wifi-gateway",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-wifi-gateway?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh WiFi MQTT Gateway (RAK Store)",
       "Type": "Vendor"
     },
     {
       "ShortCode": "aliexpress-board-one-pocket",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256802139951068.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK WisMesh Board ONE Pocket (AliExpress)",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "board-one-pocket",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-board-one-pocket-meshtastic-node?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK WisMesh Board ONE Pocket (RAK Store)",
       "Type": "Vendor"
     },
     {
       "ShortCode": "aliexpress-wismesh-unify-enclosure",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256808182747014.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Unify Enclosure (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "wismesh-unify-enclosure",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-unify-enclosure?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Unify Enclosure (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-wismesh-antenna",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256808177346156.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Antenna (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "wismesh-antenna",
-      "OriginalUrl": "https://store.rakwireless.com/products/wismesh-antenna?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh Antenna (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "muzi-rak4631",
-      "OriginalUrl": "https://muzi.works/products/rak-wisblock-meshtastic-starter-kit-us915",
       "Description": "Muzi RAK4631 Starter Kit",
       "Type": "Marketplace",
       "Targets": [
@@ -1086,14 +947,12 @@
     },
     {
       "ShortCode": "aliexpress-rak19007",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256803957557617.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK19007 (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-starter-kit",
-      "OriginalUrl": "https://www.aliexpress.com/item/1005006901039995.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "WisMesh RAK4631 Starter Kit (AliExpress)",
       "Type": "Marketplace",
       "Targets": [
@@ -1102,63 +961,54 @@
     },
     {
       "ShortCode": "rak19003",
-      "OriginalUrl": "https://store.rakwireless.com/products/wisblock-base-board-rak19003?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK19003 (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak19003",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256803225234826.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK19003 (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rak19001",
-      "OriginalUrl": "https://store.rakwireless.com/products/rak19001-wisblock-dual-io-base-board?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK19001 WisBlock Dual IO Base Board (RAK Store)",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-rak19001",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256803962043191.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK19001 WisBlock Dual IO Base Board (AliExpress)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rokland-19003",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-wisblock-mini-base-board-rak19003-ver-b-pid-306024",
       "Description": "Rokland WisBlock Mini Base Board RAK19003 (Ver B)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "hexaspot-19003",
-      "OriginalUrl": "https://hexaspot.com/collections/rakwireless-wisblock-base/products/rakwireless-rak19003-wisblock-mini-base-board",
       "Description": "Hexaspot WisBlock Mini Base Board RAK19003 (Ver B)",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rokland-19001",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-wisblock-dual-io-base-board-rak19001-pid-110081",
       "Description": "Rokland WisBlock Dual IO Base Board RAK19001",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "hexaspot-19001",
-      "OriginalUrl": "https://hexaspot.com/collections/rakwireless-wisblock-base/products/rakwireless-rak19001-wisblock-dual-io-base-board",
       "Description": "Hexaspot WisBlock Dual IO Base Board RAK19001",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rokland-4631",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-rak4631-nordic-nrf52840-ble-core-module-for-lorawan-with-lora-sx1262",
       "Description": "Rokland RAK4631 Nordic nRF52840 BLE Core Module for LoRaWAN with LoRa SX1262",
       "Type": "Marketplace",
       "Targets": [
@@ -1167,7 +1017,6 @@
     },
     {
       "ShortCode": "hexaspot-4631",
-      "OriginalUrl": "https://hexaspot.com/collections/wisblock-kits/products/wisblock-meshtastic-starter-kit-eu868-the-basic-rak4631-meshtastic-kit-for-lora",
       "Description": "Hexaspot RAK4631 Nordic nRF52840 BLE Core Module for LoRaWAN with LoRa SX1262",
       "Type": "Marketplace",
       "Targets": [
@@ -1176,7 +1025,6 @@
     },
     {
       "ShortCode": "aliexpress-rak4631",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256801470104151.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK4631 Nordic nRF52840 BLE Core Module (AliExpress)",
       "Type": "Marketplace",
       "Targets": [
@@ -1185,7 +1033,6 @@
     },
     {
       "ShortCode": "rakwireless-4631",
-      "OriginalUrl": "https://store.rakwireless.com/products/rak4631-lpwan-node?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK4631 Nordic nRF52840 BLE Core Module",
       "Type": "Vendor",
       "Targets": [
@@ -1194,7 +1041,6 @@
     },
     {
       "ShortCode": "rakwireless-rak11310",
-      "OriginalUrl": "https://store.rakwireless.com/products/rak11310-wisblock-lpwan-module?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK11310 RP2040 Core Module)",
       "Type": "Vendor",
       "Targets": [
@@ -1203,7 +1049,6 @@
     },
     {
       "ShortCode": "rakwireless-rak3312",
-      "OriginalUrl": "https://store.rakwireless.com/products/wisblock-core-module-rak3312-lora-wifi-ble",
       "Description": "RAK3312 ESP32-S3 Core Module",
       "Type": "Vendor",
       "Targets": [
@@ -1212,7 +1057,6 @@
     },
     {
       "ShortCode": "hexaspot-rak3312",
-      "OriginalUrl": "https://hexaspot.com/collections/rakwireless-wisblock/products/espressif-esp32-s3-wifi-ble-dual-core-module-for-lorawan%C2%AE-with-lora-sx1262",
       "Description": "Hexaspot RAK3312 ESP32-S3 Core Module",
       "Type": "Marketplace",
       "Targets": [
@@ -1221,7 +1065,6 @@
     },
     {
       "ShortCode": "rokland-rak3312",
-      "OriginalUrl": "https://store.rokland.com/products/rak3312-espressif-esp32-s3-wifi-ble-dual-core-module-for-lorawan-with-lora-sx1262-116208",
       "Description": "Rokland RAK3312 ESP32-S3 Core Module",
       "Type": "Marketplace",
       "Targets": [
@@ -1230,7 +1073,6 @@
     },
     {
       "ShortCode": "rokland-rak3312-starter-kit",
-      "OriginalUrl": "https://store.rokland.com/products/wismesh-rak3312-starter-kit-with-meshtastic-firmware",
       "Description": "Rokland RAK3312 ESP32-S3 Starter Kit",
       "Type": "Marketplace",
       "Targets": [
@@ -1239,7 +1081,6 @@
     },
     {
       "ShortCode": "aliexpress-rak11310",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256803225175784.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAK11310 RP2040 Core Module (AliExpress)",
       "Type": "Marketplace",
       "Targets": [
@@ -1248,28 +1089,24 @@
     },
     {
       "ShortCode": "rokland-1901",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-rak1901-temperature-and-humidity-sensor-sensirion-shtc3-pid-100001",
       "Description": "Rokland RAK1901 Temperature and Humidity Sensor",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rokland-1902",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-rak1902-barometric-pressure-sensor-stmicroelectronics-lps22hb-100010-2-pack",
       "Description": "Rokland RAK1902 Barometric Pressure Sensor",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "rokland-1906",
-      "OriginalUrl": "https://store.rokland.com/products/rak-wireless-rak1906-wisblock-environment-sensor-bosch-bme680",
       "Description": "Rokland RAK1906 WisBlock Environment Sensor",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "aliexpress-wismesh-tap",
-      "OriginalUrl": "https://www.aliexpress.com/item/3256808097004202.html?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAKwireless WisMesh Tap (AliExpress)",
       "Type": "Marketplace",
       "Targets": [
@@ -1278,7 +1115,6 @@
     },
     {
       "ShortCode": "rokland-wismesh-tap",
-      "OriginalUrl": "https://store.rokland.com/products/rakwireless-wismesh-tap-touchscreen-915-mhz-handheld-or-mountable-unit-lora-gps",
       "Description": "RAKwireless WisMesh Tap (Rokland)",
       "Type": "Marketplace",
       "Targets": [
@@ -1287,14 +1123,12 @@
     },
     {
       "ShortCode": "rakdap1",
-      "OriginalUrl": "https://store.rakwireless.com/products/daplink-tool?utm_source=website_partner&utm_medium=referral&utm_campaign=meshtastic_rak_collab",
       "Description": "RAKwireless RAKDAP1 Debug and Flash Tool",
       "Type": "Vendor",
       "Targets": []
     },
     {
       "ShortCode": "rokland-heltec-wsl-v3",
-      "OriginalUrl": "https://store.rokland.com/collections/heltec-products/products/heltec-wireless-stick-litev3-902-928-mhz/",
       "Description": "Rokland WSL V3",
       "Type": "Marketplace",
       "Targets": [
@@ -1303,7 +1137,6 @@
     },
     {
       "ShortCode": "aliexpress-heltec-wsl-v3",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256807466584635.htm",
       "Description": "Aliexpress WSL V3",
       "Type": "Marketplace",
       "Targets": [
@@ -1312,7 +1145,6 @@
     },
     {
       "ShortCode": "rokland-heltec-wireless-tracker",
-      "OriginalUrl": "https://store.rokland.com/collections/heltec-products/products/heltec-wireless-tracker-v1-1-wi-fi-lora-bt-gnss/",
       "Description": "Rokland Wireless Tracker",
       "Type": "Marketplace",
       "Targets": [
@@ -1321,7 +1153,6 @@
     },
     {
       "ShortCode": "aliexpress-heltec-wireless-tracker",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256805495189423.html",
       "Description": "Aliexpress Wireless Tracker",
       "Type": "Marketplace",
       "Targets": [
@@ -1330,7 +1161,6 @@
     },
     {
       "ShortCode": "aliexpress-heltec-wireless-paper",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256805461611876.html",
       "Description": "Aliexpress Wireless Paper",
       "Type": "Marketplace",
       "Targets": [
@@ -1339,7 +1169,6 @@
     },
     {
       "ShortCode": "rokland-heltec-wireless-paper",
-      "OriginalUrl": "https://store.rokland.com/collections/heltec-products/products/heltec-wireless-paper-wi-fi-lora-bt/",
       "Description": "Rokland Wireless Paper",
       "Type": "Marketplace",
       "Targets": [
@@ -1348,7 +1177,6 @@
     },
     {
       "ShortCode": "muzi-heltec-mesh-node-t114",
-      "OriginalUrl": "https://muzi.works/products/heltec-mesh-node-t114/",
       "Description": "MuziWorks Mesh Node T114",
       "Type": "Marketplace",
       "Targets": [
@@ -1357,7 +1185,6 @@
     },
     {
       "ShortCode": "aliexpress-heltec-mesh-node-t114",
-      "OriginalUrl": "https://www.aliexpress.com/item/1005007460963705.html",
       "Description": "Aliexpress Mesh Node T114",
       "Type": "Marketplace",
       "Targets": [
@@ -1366,7 +1193,6 @@
     },
     {
       "ShortCode": "aliexpress-heltec-vision-master-e213",
-      "OriginalUrl": "https://www.aliexpress.com/item/1005007209756502.html",
       "Description": "Aliexpress Vision Master E213",
       "Type": "Marketplace",
       "Targets": [
@@ -1375,7 +1201,6 @@
     },
     {
       "ShortCode": "aliexpress-heltec-vision-master-e290",
-      "OriginalUrl": "https://www.aliexpress.com/item/1005007234361986.html",
       "Description": "Aliexpress Vision Master E290",
       "Type": "Marketplace",
       "Targets": [
@@ -1384,7 +1209,6 @@
     },
     {
       "ShortCode": "aliexpress-heltec-vision-master-t190",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256807135629435.html",
       "Description": "Aliexpress Vision Master T190",
       "Type": "Marketplace",
       "Targets": [
@@ -1393,7 +1217,6 @@
     },
     {
       "ShortCode": "seeed-wio-tracker-l1-oled",
-      "OriginalUrl": "https://www.seeedstudio.com/Wio-Tracker-L1-p-6453.html",
       "Description": "Wio Tracker L1 (with OLED)",
       "Type": "Vendor",
       "Targets": [
@@ -1402,7 +1225,6 @@
     },
     {
       "ShortCode": "seeed-wio-tracker-l1-oled_aliexpress",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256809320083189.html",
       "Description": "Wio Tracker L1 (with OLED)",
       "Type": "Marketplace",
       "Targets": [
@@ -1411,7 +1233,6 @@
     },
     {
       "ShortCode": "seeed_wio_tracker_L1_eink",
-      "OriginalUrl": "https://www.seeedstudio.com/Wio-Tracker-L1-E-ink-p-6456.html",
       "Description": "Wio Tracker L1 (with E-Ink)",
       "Type": "Vendor",
       "Targets": [
@@ -1420,7 +1241,6 @@
     },
     {
       "ShortCode": "seeed_wio_tracker_L1_eink_amazon",
-      "OriginalUrl": "https://www.amazon.com/dp/B0FJWT5FYW",
       "Description": "Wio Tracker L1 (with E-Ink) Amazon",
       "Type": "Marketplace",
       "Targets": [
@@ -1429,31 +1249,26 @@
     },
     {
       "ShortCode": "seeed-wio-tracker-l1-lite",
-      "OriginalUrl": "https://www.seeedstudio.com/Wio-Tracker-L1-Lite-p-6455.html",
       "Description": "Wio Tracker L1 Lite (no display)",
       "Type": "Vendor"
     },
     {
       "ShortCode": "seeed_solar_node_p1",
-      "OriginalUrl": "https://www.seeedstudio.com/SenseCAP-Solar-Node-P1-for-Meshtastic-LoRa-p-6425.html",
       "Description": "SenseCAP Solar Node P1",
       "Type": "Vendor"
     },
     {
       "ShortCode": "seeed_solar_node_p1_aliexpress",
-      "OriginalUrl": "https://www.aliexpress.us/item/3256808731224053.html",
       "Description": "SenseCAP Solar Node P1 Aliexpress",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "android-closed-test",
-      "OriginalUrl": "https://forms.gle/3dZCSTQWRbMSHkPd6",
       "Description": "Android Closed Test Form",
       "Type": "Internal"
     },
     {
       "ShortCode": "t-deck-pro",
-      "OriginalUrl": "https://lilygo.cc/products/t-deck-pro-meshtastic",
       "Description": "LilyGo T-Deck Pro",
       "Type": "Vendor",
       "Targets": [
@@ -1462,7 +1277,6 @@
     },
     {
       "ShortCode": "rak4631_nomadstar_meteor_pro",
-      "OriginalUrl": "https://nomadstar.ch/meteor-pro/",
       "Description": "NomadStar Meteor Pro",
       "Type": "Vendor",
       "Targets": [
@@ -1471,13 +1285,11 @@
     },
     {
       "ShortCode": "muziworks",
-      "OriginalUrl": "https://muzi.works/",
       "Description": "muzi WORKS Homepage",
       "Type": "Internal"
     },
     {
       "ShortCode": "r1-neo",
-      "OriginalUrl": "https://muzi.works/products/r1-neo-complete-meshtastic-device",
       "Description": "muzi WORKS R1 Neo",
       "Type": "Vendor",
       "Targets": [
@@ -1486,7 +1298,6 @@
     },
     {
       "ShortCode": "muzi-base",
-      "OriginalUrl": "https://muzi.works/pages/base",
       "Description": "muzi WORKS Base System",
       "Type": "Vendor",
       "Targets": [
@@ -1495,7 +1306,6 @@
     },
     {
       "ShortCode": "muzi-base-uno",
-      "OriginalUrl": "https://muzi.works/products/base-uno",
       "Description": "muzi WORKS Base Uno",
       "Type": "Vendor",
       "Targets": [
@@ -1504,7 +1314,6 @@
     },
     {
       "ShortCode": "muzi-base-duo",
-      "OriginalUrl": "https://muzi.works/products/base-duo",
       "Description": "muzi WORKS Base Duo",
       "Type": "Vendor",
       "Targets": [
@@ -1513,7 +1322,6 @@
     },
     {
       "ShortCode": "muzi-base-super-io",
-      "OriginalUrl": "https://muzi.works/products/super-io",
       "Description": "muzi WORKS Base Super IO",
       "Type": "Vendor",
       "Targets": [
@@ -1522,19 +1330,16 @@
     },
     {
       "ShortCode": "ttc-tickets",
-      "OriginalUrl": "https://www.thethingsconference.com/partner-invitations/recgog1edgosiv3b8",
       "Description": "The Things Conference Tickets",
       "Type": "Internal"
     },
     {
       "ShortCode": "rokland-atlavox-makers-market",
-      "OriginalUrl": "https://store.rokland.com/products/atlavox-beacon-solar-meshtastic-node-w-n-female-antenna",
       "Description": "Rokland Atlavox Makers Market",
       "Type": "Marketplace"
     },
     {
       "ShortCode": "rokland-tlora-pager",
-      "OriginalUrl": "https://store.rokland.com/products/lilygo-t-lora-pager-us-915-mhz-lora-esp32-s3-handheld-aiot-programmable-development-device-k257-01",
       "Description": "Rokland T-Lora Pager",
       "Type": "Marketplace",
       "Targets": [
@@ -1543,7 +1348,6 @@
     },
     {
       "ShortCode": "tlora-pager",
-      "OriginalUrl": "https://lilygo.cc/products/t-lora-pager-meshtastic",
       "Description": "T-Lora Pager",
       "Type": "Vendor",
       "Targets": [
@@ -1552,20 +1356,17 @@
     },
     {
       "ShortCode": "hexaspot",
-      "OriginalUrl": "https://hexaspot.com/collections/meshtastic-products",
       "Description": "Hexaspot Meshtastic Products",
       "Type": "Marketplace",
       "Targets": []
     },
     {
       "ShortCode": "ew26",
-      "OriginalUrl": "https://meshtastic.com/ew26",
       "Description": "embeddedworld26 event page",
       "Type": "Internal"
     },
     {
       "ShortCode": "hexaspot-heltec-v3",
-      "OriginalUrl": "https://hexaspot.com/collections/meshtastic-products/products/heltec-wifi-lora-32-v3",
       "Description": "Heltec V3 (Hexaspot)",
       "Type": "Marketplace",
       "Targets": [
@@ -1574,7 +1375,6 @@
     },
     {
       "ShortCode": "hexaspot-heltec-v4",
-      "OriginalUrl": "https://hexaspot.com/collections/meshtastic-products/products/heltec-wifi-lora-32-v4",
       "Description": "Heltec V4 (Hexaspot)",
       "Type": "Marketplace",
       "Targets": [
@@ -1583,7 +1383,6 @@
     },
     {
       "ShortCode": "hexaspot-wireless-tracker-v2",
-      "OriginalUrl": "https://hexaspot.com/collections/meshtastic-products/products/heltec-wireless-tracker-v2",
       "Description": "Heltec Wireless Tracker V2 (Hexaspot)",
       "Type": "Marketplace",
       "Targets": [

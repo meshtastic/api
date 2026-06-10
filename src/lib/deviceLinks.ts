@@ -11,7 +11,6 @@ const SOURCE = "https://msh.to/api/urls";
 // Shape of the synced catalog (PascalCase, mirrors msh.to's urls.json / /api/urls).
 interface Route {
   ShortCode: string;
-  OriginalUrl: string;
   Description?: string;
   Type?: string;
   Targets?: string[];
@@ -29,7 +28,6 @@ interface Catalog {
 export interface DeviceLink {
   shortCode: string;
   url: string;
-  originalUrl: string;
   description?: string;
   type: "internal" | "vendor" | "marketplace";
   targets: string[] | null; // null = untriaged, [] = intentionally device-agnostic
@@ -82,7 +80,6 @@ const resolve = (): DeviceLinksResponse => {
     return {
       shortCode: r.ShortCode,
       url: `https://msh.to/${r.ShortCode}`,
-      originalUrl: r.OriginalUrl,
       description: r.Description,
       type,
       targets,
