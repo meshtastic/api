@@ -1146,4 +1146,17 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Elecrow"],
     requiresDfu: false,
   },
+  {
+    hwModel: 134,
+    hwModelSlug: "STATION_G3",
+    platformioTarget: "station-g3",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Station G3",
+    tags: ["B&Q"],
+    images: ["station-g3.svg"],
+    requiresDfu: true,
+    partitionScheme: "16MB",
+  },
 ];
