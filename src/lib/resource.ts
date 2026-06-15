@@ -1168,5 +1168,6 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "LilyGo T-Lora C6",
     tags: ["LilyGo"],
+    images: ["tlora-c6.svg"]
   },
 ];
