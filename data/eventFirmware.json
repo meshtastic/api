@@ -11,7 +11,7 @@
       "eventEnd": "2026-05-17",
       "timeZone": "America/New_York",
       "location": "Xenia, Ohio, USA",
-      "iconUrl": null,
+      "iconUrl": "https://api.meshtastic.org/resource/eventFirmware/hamvention.png",
       "accentColor": "#BF1E2E",
       "links": [
         { "label": "Event Website", "url": "https://hamvention.org" }

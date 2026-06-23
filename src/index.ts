@@ -8,6 +8,7 @@ import { logger } from "@tinyhttp/logger";
 import { RegisterMqttClient } from "./lib/index.js";
 import {
   DeviceLinksRoutes,
+  EventFirmwareIconRoutes,
   EventFirmwareRoutes,
   FirmwareRoutes,
   GithubRoutes,
@@ -85,6 +86,7 @@ GithubRoutes();
 ResourceRoutes();
 DeviceLinksRoutes();
 EventFirmwareRoutes();
+EventFirmwareIconRoutes();
 UpdaterRoutes();
 MqttRoutes();
 
