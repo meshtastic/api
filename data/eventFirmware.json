@@ -40,7 +40,7 @@
       "timeZone": "America/Los_Angeles",
       "location": "Las Vegas, Nevada, USA",
       "iconUrl": null,
-      "accentColor": "#C0392B",
+      "accentColor": "#0D294A",
       "links": [
         { "label": "Event Website", "url": "https://defcon.org" }
       ]
@@ -54,7 +54,7 @@
       "timeZone": "America/Los_Angeles",
       "location": "Black Rock City, Nevada, USA",
       "iconUrl": null,
-      "accentColor": "#E8552D",
+      "accentColor": "#EC8819",
       "links": [
         { "label": "Event Website", "url": "https://burningman.org" }
       ]
