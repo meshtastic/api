@@ -1170,4 +1170,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     images: ["tlora-c6.svg"],
   },
+  {
+    hwModel: 136,
+    hwModelSlug: "T_ECHO_CARD",
+    platformioTarget: "t-echo-card",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "LilyGo T-Echo-Card",
+    tags: ["LilyGo"],
+  },
 ];
