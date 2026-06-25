@@ -1170,4 +1170,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     images: ["tlora-c6.svg"],
   },
+  {
+    hwModel: 133,
+    hwModelSlug: "HELTEC_MESH_NODE_T1",
+    platformioTarget: "heltec-mesh-node-t1",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Heltec Mesh Node T1",
+    tags: ["Heltec"],
+  },
 ];
