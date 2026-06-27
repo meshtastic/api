@@ -1145,6 +1145,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "ThinkNode M7",
     tags: ["Elecrow"],
     requiresDfu: false,
+    images: ["thinknode_m7.svg"],
   },
   {
     hwModel: 134,
