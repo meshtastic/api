@@ -2,6 +2,10 @@ import type { Request } from "@tinyhttp/app";
 import { app } from "../index.js";
 import { getEventFirmware } from "../lib/eventFirmware.js";
 
+// Icons hosted by this API's own icon route — the only iconUrls we re-origin.
+const HOSTED_ICON_ORIGIN = "https://api.meshtastic.org";
+const HOSTED_ICON_PREFIX = "/resource/eventFirmware/";
+
 const firstHeader = (value?: string | string[]): string | undefined =>
   (Array.isArray(value) ? value[0] : value)?.split(",")[0]?.trim();
 
@@ -27,14 +31,24 @@ export const EventFirmwareRoutes = () =>
       // iconUrls are left untouched. The cached payload is never mutated.
       const editions = data.editions.map((edition) => {
         if (!edition.iconUrl) return edition;
+        let parsed: URL;
         try {
-          return {
-            ...edition,
-            iconUrl: origin + new URL(edition.iconUrl).pathname,
-          };
+          parsed = new URL(edition.iconUrl);
         } catch {
           return edition;
         }
+        // Only rewrite icons we host on this server's icon route; leave external
+        // (e.g. third-party CDN) URLs untouched.
+        if (
+          parsed.origin !== HOSTED_ICON_ORIGIN ||
+          !parsed.pathname.startsWith(HOSTED_ICON_PREFIX)
+        ) {
+          return edition;
+        }
+        return {
+          ...edition,
+          iconUrl: `${origin}${parsed.pathname}${parsed.search}${parsed.hash}`,
+        };
       });
       res.json({ ...data, editions });
     } catch (err) {
