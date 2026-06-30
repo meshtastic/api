@@ -1,24 +1,33 @@
 import { readFileSync } from "node:fs";
 import { app } from "../index.js";
 
-// Hamvention is the only event edition with bundled art today (the others' iconUrl is null).
-// Served under resource/ alongside the metadata, mirroring how data/ files map to resource/* routes.
-// ponytail: one fixed route for the one icon we host; generalize to a :slug param when more editions ship art.
-const ICON_PATH = new URL(
-  "../../static/eventFirmware/hamvention.png",
-  import.meta.url,
-);
+// Event edition icons, served under resource/ alongside the metadata (mirroring
+// how data/ files map to resource/* routes). The manifest's iconUrl points here
+// per edition; only editions with bundled art resolve (hamvention.png today),
+// the rest 404 until original art ships. The :slug is constrained to
+// [a-z0-9-] so it can never escape the static/eventFirmware/ directory.
+const ICON_DIR = new URL("../../static/eventFirmware/", import.meta.url);
+const SLUG_RE = /^([a-z0-9-]+)\.png$/;
 
-let icon: Buffer | null = null;
+// Cache each icon buffer by slug on first request — files only change on redeploy.
+const cache = new Map<string, Buffer>();
 
 export const EventFirmwareIconRoutes = () =>
-  app.get("resource/eventFirmware/hamvention.png", (_req, res) => {
+  app.get("resource/eventFirmware/:file", (req, res) => {
+    const match = SLUG_RE.exec(req.params.file ?? "");
+    if (!match) return res.sendStatus(404);
+    const slug = match[1];
+
     try {
-      if (!icon) icon = readFileSync(ICON_PATH);
+      let icon = cache.get(slug);
+      if (!icon) {
+        icon = readFileSync(new URL(`${slug}.png`, ICON_DIR));
+        cache.set(slug, icon);
+      }
       res.setHeader("Content-Type", "image/png");
-      res.send(icon);
+      return res.send(icon);
     } catch (err) {
       console.error("eventFirmwareIcon", err);
-      res.sendStatus(404);
+      return res.sendStatus(404);
     }
   });
