@@ -27,7 +27,13 @@ export const EventFirmwareIconRoutes = () =>
       res.setHeader("Content-Type", "image/png");
       return res.send(icon);
     } catch (err) {
+      // A missing icon is a genuine 404; permission/I/O errors mean the icon
+      // should exist and storage is unhealthy — surface those as 502, don't
+      // hide them behind a cacheable 404.
+      if ((err as NodeJS.ErrnoException).code === "ENOENT") {
+        return res.sendStatus(404);
+      }
       console.error("eventFirmwareIcon", err);
-      return res.sendStatus(404);
+      return res.sendStatus(502);
     }
   });
