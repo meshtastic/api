@@ -1140,7 +1140,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "THINKNODE_M7",
     platformioTarget: "thinknode_m7",
     architecture: "esp32-s3",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "ThinkNode M7",
     tags: ["Elecrow"],
