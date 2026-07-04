@@ -1388,6 +1388,14 @@
       "Targets": [
         "heltec-wireless-tracker-v2"
       ]
+    },
+    {
+      "ShortCode": "thinknode_m7",
+      "Description": "ThinkNode M7",
+      "Type": "Vendor",
+      "Targets": [
+        "thinknode_m7"
+      ]
     }
   ],
   "Marketplaces": {
