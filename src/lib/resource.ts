@@ -1049,7 +1049,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "RAK6421 Hat+",
     tags: ["RAK"],
-    images: ["meshtasticd_tux.svg"],
+    images: ["rak6421.svg", "meshtasticd_tux.svg"],
   },
   {
     hwModel: 119,
