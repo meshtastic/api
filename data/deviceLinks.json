@@ -1396,6 +1396,14 @@
       "Targets": [
         "thinknode_m7"
       ]
+    },
+    {
+      "ShortCode": "heltec-mesh-node-t1",
+      "Description": "MeshNode T1",
+      "Type": "Vendor",
+      "Targets": [
+        "heltec-mesh-node-t1"
+      ]
     }
   ],
   "Marketplaces": {
