@@ -7,6 +7,7 @@ import { favicon } from "@tinyhttp/favicon";
 import { logger } from "@tinyhttp/logger";
 import { RegisterMqttClient } from "./lib/index.js";
 import {
+  CommunityMeshRoutes,
   DeviceLinksRoutes,
   EventFirmwareIconRoutes,
   EventFirmwareRoutes,
@@ -82,6 +83,7 @@ app
  * register Routes
  */
 FirmwareRoutes();
+CommunityMeshRoutes(app);
 GithubRoutes();
 ResourceRoutes();
 DeviceLinksRoutes();

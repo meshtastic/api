@@ -1,3 +1,4 @@
+export { CommunityMeshRoutes } from "./communityMeshes.js";
 export { DeviceLinksRoutes } from "./deviceLinks.js";
 export { EventFirmwareRoutes } from "./eventFirmware.js";
 export { EventFirmwareIconRoutes } from "./eventFirmwareIcon.js";

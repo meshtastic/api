@@ -1,7 +1,8 @@
-import Ajv2020 from "ajv/dist/2020.js";
-import assert from "node:assert/strict";
+import { Ajv2020 } from "ajv/dist/2020.js";
+import { strict as assert } from "node:assert";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { loadCommunityMeshes } from "../src/lib/communityMeshes.js";
 
 const fixture = (name: string): unknown =>
   JSON.parse(
@@ -29,4 +30,14 @@ test("rejects a licensed profile with an encrypted channel", () => {
 
 test("rejects a profile that defines both a preset and custom modem fields", () => {
   assert.equal(validate(fixture("invalid-modem-union.json")), false);
+});
+
+test("rejects a schema-valid record with an invalid PSK encoding", () => {
+  assert.throws(
+    () =>
+      loadCommunityMeshes(
+        new URL("./fixtures/communityMeshes/invalid-semantic/", import.meta.url),
+      ),
+    /invalid PSK/,
+  );
 });
