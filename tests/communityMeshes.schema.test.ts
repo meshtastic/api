@@ -39,9 +39,9 @@ const withRecords = (
 ): void => {
   const directory = mkdtempSync(join(tmpdir(), "community-mesh-test-"));
   try {
-    records.forEach((record, index) =>
-      writeFileSync(join(directory, `${index}.json`), JSON.stringify(record)),
-    );
+    records.forEach((record, index) => {
+      writeFileSync(join(directory, `${index}.json`), JSON.stringify(record));
+    });
     callback(pathToFileURL(`${directory}/`));
   } finally {
     rmSync(directory, { force: true, recursive: true });
