@@ -1,10 +1,10 @@
-import { Ajv2020 } from "ajv/dist/2020.js";
 import { strict as assert } from "node:assert";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { pathToFileURL } from "node:url";
 import test from "node:test";
+import { pathToFileURL } from "node:url";
+import { Ajv2020 } from "ajv/dist/2020.js";
 import { loadCommunityMeshes } from "../src/lib/communityMeshes.js";
 
 const fixture = (name: string): unknown =>

@@ -1,6 +1,6 @@
-import { App } from "@tinyhttp/app";
 import { strict as assert } from "node:assert";
 import test from "node:test";
+import { App } from "@tinyhttp/app";
 import { CommunityMeshRoutes } from "../src/routes/communityMeshes.js";
 import { withServer } from "./helpers/http.js";
 

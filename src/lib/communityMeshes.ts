@@ -1,7 +1,7 @@
-import { Ajv2020 } from "ajv/dist/2020.js";
-import type { AnySchema } from "ajv/dist/types/index.js";
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
+import { Ajv2020 } from "ajv/dist/2020.js";
+import type { AnySchema } from "ajv/dist/types/index.js";
 
 const DATA_DIRECTORY = new URL("../../data/communityMeshes/", import.meta.url);
 const SCHEMA_PATH = new URL(
