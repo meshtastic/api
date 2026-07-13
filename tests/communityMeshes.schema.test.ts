@@ -52,6 +52,20 @@ test("accepts a public custom-modem profile with public MQTT", () => {
   assert.equal(validate(fixture("valid-public-custom.json")), true);
 });
 
+test("loaded registry records are deeply immutable", () => {
+  withRecords([fixture("valid-public-custom.json")], (directory) => {
+    const communities = loadCommunityMeshes(directory);
+    const community = communities[0];
+    const coverage = community.coverage as { coordinates: number[][][] };
+
+    assert.equal(Object.isFrozen(communities), true);
+    assert.equal(Object.isFrozen(community), true);
+    assert.equal(Object.isFrozen(coverage), true);
+    assert.equal(Object.isFrozen(coverage.coordinates), true);
+    assert.equal(Object.isFrozen(coverage.coordinates[0][0]), true);
+  });
+});
+
 test("rejects a licensed profile with an encrypted channel", () => {
   assert.equal(validate(fixture("invalid-licensed-psk.json")), false);
 });

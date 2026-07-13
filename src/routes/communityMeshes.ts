@@ -1,19 +1,31 @@
 import type { App } from "@tinyhttp/app";
 import {
   getCommunityMesh,
-  getCommunityMeshes,
   getCommunityMeshSchema,
   registryEtag,
+  registryJson,
 } from "../lib/communityMeshes.js";
+
+const ifNoneMatchMatches = (
+  header: string | undefined,
+  etag: string,
+): boolean => {
+  if (!header) return false;
+  const validators = header.match(/(?:W\/)?"[^"]*"|\*/g) ?? [];
+  return validators.some(
+    (validator) => validator === "*" || validator.replace(/^W\//, "") === etag,
+  );
+};
 
 export const CommunityMeshRoutes = (app: App): void => {
   app.get("/v1/community-meshes", (req, res) => {
     res.setHeader("Cache-Control", "public, max-age=3600");
     res.setHeader("ETag", registryEtag);
-    if (req.headers["if-none-match"] === registryEtag) {
+    if (ifNoneMatchMatches(req.headers["if-none-match"], registryEtag)) {
       return res.status(304).end();
     }
-    return res.json(getCommunityMeshes());
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    return res.send(registryJson);
   });
 
   app.get("/v1/community-meshes/schema", (_req, res) => {

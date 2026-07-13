@@ -26,6 +26,16 @@ export interface CommunityMeshesResponse {
 const schema = JSON.parse(readFileSync(SCHEMA_PATH, "utf8")) as AnySchema;
 const validate = new Ajv2020({ allErrors: true }).compile(schema);
 
+const deepFreeze = <T>(value: T): T => {
+  if (value && typeof value === "object" && !Object.isFrozen(value)) {
+    Object.freeze(value);
+    for (const nested of Object.values(value as Record<string, unknown>)) {
+      deepFreeze(nested);
+    }
+  }
+  return value;
+};
+
 const validPsk = (psk: unknown): boolean => {
   if (psk === null) return true;
   if (typeof psk !== "string") return false;
@@ -123,11 +133,11 @@ export const loadCommunityMeshes = (
       throw new Error(`duplicate community id: ${communities[index].id}`);
     }
   }
-  return communities;
+  return deepFreeze(communities);
 };
 
 const communities = loadCommunityMeshes();
-const response: CommunityMeshesResponse = Object.freeze({
+const response: CommunityMeshesResponse = deepFreeze({
   apiVersion: "v1",
   schemaVersion: 1,
   generatedAt: new Date().toISOString(),
@@ -135,8 +145,10 @@ const response: CommunityMeshesResponse = Object.freeze({
   communities,
 });
 
+export const registryJson = JSON.stringify(response, null, 2);
+
 export const registryEtag = `"${createHash("sha256")
-  .update(JSON.stringify(communities))
+  .update(registryJson)
   .digest("base64url")}"`;
 
 export const getCommunityMeshes = (): CommunityMeshesResponse => response;
