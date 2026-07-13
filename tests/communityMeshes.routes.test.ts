@@ -21,3 +21,38 @@ test("community registry returns a location-independent response", async () => {
     ]);
   });
 });
+
+test("registry uses ETags for cache revalidation", async () => {
+  const app = new App();
+  CommunityMeshRoutes(app);
+
+  await withServer(app, async (origin) => {
+    const first = await fetch(`${origin}/v1/community-meshes`);
+    const etag = first.headers.get("etag");
+    assert.ok(etag);
+
+    const second = await fetch(`${origin}/v1/community-meshes`, {
+      headers: { "If-None-Match": etag },
+    });
+    assert.equal(second.status, 304);
+    assert.equal(second.headers.get("etag"), etag);
+  });
+});
+
+test("serves the schema and returns 404 for an unknown community", async () => {
+  const app = new App();
+  CommunityMeshRoutes(app);
+
+  await withServer(app, async (origin) => {
+    const schema = await fetch(`${origin}/v1/community-meshes/schema`);
+    assert.equal(schema.status, 200);
+    assert.equal(
+      ((await schema.json()) as { $id: string }).$id,
+      "https://api.meshtastic.org/v1/community-meshes/schema",
+    );
+
+    const missing = await fetch(`${origin}/v1/community-meshes/not-found`);
+    assert.equal(missing.status, 404);
+    assert.deepEqual(await missing.json(), { error: "community_not_found" });
+  });
+});

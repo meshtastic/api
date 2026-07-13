@@ -42,6 +42,7 @@ app
 
         const whitelist = [
           "http://localhost:3000",
+          "https://client.meshtastic.org",
           "https://meshtastic.org",
           "https://flash.meshtastic.org",
           "https://flasher.meshtastic.org",
