@@ -1,5 +1,5 @@
-import type { App } from "@tinyhttp/app";
 import type { AddressInfo } from "node:net";
+import type { App } from "@tinyhttp/app";
 
 export const withServer = async (
   app: App,

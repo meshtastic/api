@@ -3,35 +3,54 @@
   "id": "test-community",
   "name": "Test Community",
   "description": "A test-only community record.",
-  "coverage": { "type": "Polygon", "coordinates": [[[0, 0], [0, 1], [1, 1], [0, 0]]] },
+  "coverage": {
+    "type": "Polygon",
+    "coordinates": [[[0, 0], [0, 1], [1, 1], [0, 0]]]
+  },
   "links": [{ "kind": "website", "url": "https://example.org" }],
-  "meshProfiles": [{
-    "id": "custom",
-    "name": "Custom",
-    "description": "Custom radio test profile.",
-    "radio": {
-      "region": "US",
-      "modem": { "kind": "custom", "bandwidthKhz": 250, "spreadFactor": 11, "codingRate": 8 },
-      "frequencySlot": 12,
-      "frequencyOffsetHz": 0,
-      "maxHops": 3,
-      "txPowerDbm": 0,
-      "ignoreMqtt": false,
-      "sx126xRxBoostedGain": false
-    },
-    "primaryChannel": { "name": "Test", "pskBase64": "AQ==", "uplinkEnabled": true, "downlinkEnabled": true },
-    "mqtt": {
-      "serverAddress": "mqtt.example.org",
-      "username": "public",
-      "password": "public-password",
-      "tlsEnabled": true,
-      "encryptionEnabled": true,
-      "jsonEnabled": false,
-      "rootTopic": "msh/US/Test",
-      "proxyToClientEnabled": true,
-      "mapReportingEnabled": false,
-      "mapReportingIntervalSeconds": 3600
-    },
-    "requirements": { "minimumFirmware": "2.7.0", "positionIntervalMaxSeconds": 900, "telemetryIntervalMaxSeconds": 1800 }
-  }]
+  "meshProfiles": [
+    {
+      "id": "custom",
+      "name": "Custom",
+      "description": "Custom radio test profile.",
+      "radio": {
+        "region": "US",
+        "modem": {
+          "kind": "custom",
+          "bandwidthKhz": 250,
+          "spreadFactor": 11,
+          "codingRate": 8
+        },
+        "frequencySlot": 12,
+        "frequencyOffsetHz": 0,
+        "maxHops": 3,
+        "txPowerDbm": 0,
+        "ignoreMqtt": false,
+        "sx126xRxBoostedGain": false
+      },
+      "primaryChannel": {
+        "name": "Test",
+        "pskBase64": "AQ==",
+        "uplinkEnabled": true,
+        "downlinkEnabled": true
+      },
+      "mqtt": {
+        "serverAddress": "mqtt.example.org",
+        "username": "public",
+        "password": "public-password",
+        "tlsEnabled": true,
+        "encryptionEnabled": true,
+        "jsonEnabled": false,
+        "rootTopic": "msh/US/Test",
+        "proxyToClientEnabled": true,
+        "mapReportingEnabled": false,
+        "mapReportingIntervalSeconds": 3600
+      },
+      "requirements": {
+        "minimumFirmware": "2.7.0",
+        "positionIntervalMaxSeconds": 900,
+        "telemetryIntervalMaxSeconds": 1800
+      }
+    }
+  ]
 }

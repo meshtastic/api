@@ -3,13 +3,36 @@
   "id": "bad-modem",
   "name": "Bad Modem",
   "description": "Invalid mixed modem profile.",
-  "coverage": { "type": "Polygon", "coordinates": [[[0, 0], [0, 1], [1, 1], [0, 0]]] },
+  "coverage": {
+    "type": "Polygon",
+    "coordinates": [[[0, 0], [0, 1], [1, 1], [0, 0]]]
+  },
   "links": [{ "kind": "website", "url": "https://example.org" }],
-  "meshProfiles": [{
-    "id": "mixed",
-    "name": "Mixed",
-    "description": "Mixed modem profile.",
-    "radio": { "region": "US", "modem": { "kind": "preset", "preset": "LONG_FAST", "bandwidthKhz": 250 }, "frequencySlot": 1, "frequencyOffsetHz": 0, "maxHops": 3, "txPowerDbm": 0, "ignoreMqtt": false, "sx126xRxBoostedGain": false },
-    "primaryChannel": { "name": "Mixed", "pskBase64": "AQ==", "uplinkEnabled": false, "downlinkEnabled": false }
-  }]
+  "meshProfiles": [
+    {
+      "id": "mixed",
+      "name": "Mixed",
+      "description": "Mixed modem profile.",
+      "radio": {
+        "region": "US",
+        "modem": {
+          "kind": "preset",
+          "preset": "LONG_FAST",
+          "bandwidthKhz": 250
+        },
+        "frequencySlot": 1,
+        "frequencyOffsetHz": 0,
+        "maxHops": 3,
+        "txPowerDbm": 0,
+        "ignoreMqtt": false,
+        "sx126xRxBoostedGain": false
+      },
+      "primaryChannel": {
+        "name": "Mixed",
+        "pskBase64": "AQ==",
+        "uplinkEnabled": false,
+        "downlinkEnabled": false
+      }
+    }
+  ]
 }
