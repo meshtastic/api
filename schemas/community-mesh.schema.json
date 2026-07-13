@@ -2,26 +2,99 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://api.meshtastic.org/v1/community-meshes/schema",
   "type": "object",
-  "required": ["schemaVersion", "id", "name", "description", "coverage", "links", "meshProfiles"],
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "description",
+    "coverage",
+    "links",
+    "meshProfiles"
+  ],
   "properties": {
     "schemaVersion": { "const": 1 },
     "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
     "name": { "type": "string", "minLength": 1 },
     "description": { "type": "string", "minLength": 1 },
     "coverage": { "$ref": "#/$defs/coverage" },
-    "links": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/link" } },
-    "meshProfiles": { "type": "array", "minItems": 1, "maxItems": 3, "items": { "$ref": "#/$defs/profile" } }
+    "links": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/link" }
+    },
+    "meshProfiles": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/profile" }
+    }
   },
   "additionalProperties": false,
   "$defs": {
     "coverage": {
       "oneOf": [
-        { "type": "object", "required": ["type", "coordinates"], "properties": { "type": { "const": "Polygon" }, "coordinates": { "$ref": "#/$defs/polygon" } }, "additionalProperties": false },
-        { "type": "object", "required": ["type", "coordinates"], "properties": { "type": { "const": "MultiPolygon" }, "coordinates": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/polygon" } } }, "additionalProperties": false }
+        {
+          "type": "object",
+          "required": ["type", "coordinates"],
+          "properties": {
+            "type": { "const": "Polygon" },
+            "coordinates": { "$ref": "#/$defs/polygon" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type", "coordinates"],
+          "properties": {
+            "type": { "const": "MultiPolygon" },
+            "coordinates": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "#/$defs/polygon" }
+            }
+          },
+          "additionalProperties": false
+        }
       ]
     },
-    "polygon": { "type": "array", "minItems": 1, "items": { "type": "array", "minItems": 4, "items": { "type": "array", "minItems": 2, "maxItems": 2, "prefixItems": [{ "type": "number", "minimum": -180, "maximum": 180 }, { "type": "number", "minimum": -90, "maximum": 90 }], "items": false } } },
-    "link": { "type": "object", "required": ["kind", "url"], "properties": { "kind": { "enum": ["website", "discord", "matrix", "telegram", "facebook", "instagram", "github", "other"] }, "url": { "type": "string", "pattern": "^https://" } }, "additionalProperties": false },
+    "polygon": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "array",
+        "minItems": 4,
+        "items": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            { "type": "number", "minimum": -180, "maximum": 180 },
+            { "type": "number", "minimum": -90, "maximum": 90 }
+          ],
+          "items": false
+        }
+      }
+    },
+    "link": {
+      "type": "object",
+      "required": ["kind", "url"],
+      "properties": {
+        "kind": {
+          "enum": [
+            "website",
+            "discord",
+            "matrix",
+            "telegram",
+            "facebook",
+            "instagram",
+            "github",
+            "other"
+          ]
+        },
+        "url": { "type": "string", "pattern": "^https://" }
+      },
+      "additionalProperties": false
+    },
     "profile": {
       "type": "object",
       "required": ["id", "name", "description", "radio", "primaryChannel"],
@@ -31,10 +104,19 @@
         "description": { "type": "string", "minLength": 1 },
         "radio": { "$ref": "#/$defs/radio" },
         "primaryChannel": { "$ref": "#/$defs/channel" },
-        "optionalChannels": { "type": "array", "maxItems": 7, "items": { "$ref": "#/$defs/channel" } },
+        "optionalChannels": {
+          "type": "array",
+          "maxItems": 7,
+          "items": { "$ref": "#/$defs/channel" }
+        },
         "mqtt": { "$ref": "#/$defs/mqtt" },
         "requirements": { "$ref": "#/$defs/requirements" },
-        "licensed": { "type": "object", "required": ["required"], "properties": { "required": { "const": true } }, "additionalProperties": false }
+        "licensed": {
+          "type": "object",
+          "required": ["required"],
+          "properties": { "required": { "const": true } },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false,
       "allOf": [
@@ -42,8 +124,17 @@
           "if": { "required": ["licensed"] },
           "then": {
             "properties": {
-              "primaryChannel": { "type": "object", "properties": { "pskBase64": { "const": null } } },
-              "optionalChannels": { "type": "array", "items": { "type": "object", "properties": { "pskBase64": { "const": null } } } }
+              "primaryChannel": {
+                "type": "object",
+                "properties": { "pskBase64": { "const": null } }
+              },
+              "optionalChannels": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": { "pskBase64": { "const": null } }
+                }
+              }
             }
           }
         }
@@ -51,12 +142,59 @@
     },
     "radio": {
       "type": "object",
-      "required": ["region", "modem", "frequencySlot", "frequencyOffsetHz", "maxHops", "txPowerDbm", "ignoreMqtt", "sx126xRxBoostedGain"],
+      "required": [
+        "region",
+        "modem",
+        "frequencySlot",
+        "frequencyOffsetHz",
+        "maxHops",
+        "txPowerDbm",
+        "ignoreMqtt",
+        "sx126xRxBoostedGain"
+      ],
       "properties": {
-        "region": { "enum": ["US", "EU_433", "EU_868", "CN", "JP", "ANZ", "ANZ_433", "KR", "TW", "RU", "IN", "NZ_865", "TH", "LORA_24", "UA_433", "UA_868", "MY_433", "MY_919", "SG_923", "KZ_433", "KZ_863", "BR_902", "PH_433", "PH_868", "PH_915", "NP_865"] },
-        "modem": { "oneOf": [{ "$ref": "#/$defs/presetModem" }, { "$ref": "#/$defs/customModem" }] },
+        "region": {
+          "enum": [
+            "US",
+            "EU_433",
+            "EU_868",
+            "CN",
+            "JP",
+            "ANZ",
+            "ANZ_433",
+            "KR",
+            "TW",
+            "RU",
+            "IN",
+            "NZ_865",
+            "TH",
+            "LORA_24",
+            "UA_433",
+            "UA_868",
+            "MY_433",
+            "MY_919",
+            "SG_923",
+            "KZ_433",
+            "KZ_863",
+            "BR_902",
+            "PH_433",
+            "PH_868",
+            "PH_915",
+            "NP_865"
+          ]
+        },
+        "modem": {
+          "oneOf": [
+            { "$ref": "#/$defs/presetModem" },
+            { "$ref": "#/$defs/customModem" }
+          ]
+        },
         "frequencySlot": { "type": "integer", "minimum": 0 },
-        "frequencyOffsetHz": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+        "frequencyOffsetHz": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000
+        },
         "overrideFrequencyMHz": { "type": "number", "exclusiveMinimum": 0 },
         "maxHops": { "type": "integer", "minimum": 1, "maximum": 7 },
         "txPowerDbm": { "type": "integer", "minimum": 0, "maximum": 30 },
@@ -65,10 +203,86 @@
       },
       "additionalProperties": false
     },
-    "presetModem": { "type": "object", "required": ["kind", "preset"], "properties": { "kind": { "const": "preset" }, "preset": { "enum": ["SHORT_TURBO", "SHORT_FAST", "SHORT_SLOW", "MEDIUM_FAST", "MEDIUM_SLOW", "LONG_FAST", "LONG_MODERATE", "LONG_SLOW", "VERY_LONG_SLOW"] } }, "additionalProperties": false },
-    "customModem": { "type": "object", "required": ["kind", "bandwidthKhz", "spreadFactor", "codingRate"], "properties": { "kind": { "const": "custom" }, "bandwidthKhz": { "enum": [31, 62, 125, 200, 250, 400, 500, 800, 1600] }, "spreadFactor": { "type": "integer", "minimum": 5, "maximum": 12 }, "codingRate": { "type": "integer", "minimum": 5, "maximum": 8 } }, "additionalProperties": false },
-    "channel": { "type": "object", "required": ["name", "pskBase64", "uplinkEnabled", "downlinkEnabled"], "properties": { "name": { "type": "string", "minLength": 1, "maxLength": 12 }, "pskBase64": { "type": ["string", "null"] }, "uplinkEnabled": { "type": "boolean" }, "downlinkEnabled": { "type": "boolean" } }, "additionalProperties": false },
-    "mqtt": { "type": "object", "required": ["serverAddress", "tlsEnabled", "encryptionEnabled", "jsonEnabled", "proxyToClientEnabled", "mapReportingEnabled"], "properties": { "serverAddress": { "type": "string", "minLength": 1 }, "username": { "type": "string" }, "password": { "type": "string" }, "tlsEnabled": { "type": "boolean" }, "encryptionEnabled": { "type": "boolean" }, "jsonEnabled": { "type": "boolean" }, "rootTopic": { "type": "string" }, "proxyToClientEnabled": { "type": "boolean" }, "mapReportingEnabled": { "type": "boolean" }, "mapReportingIntervalSeconds": { "type": "integer", "minimum": 3600 } }, "additionalProperties": false },
-    "requirements": { "type": "object", "properties": { "minimumFirmware": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+][0-9A-Za-z.-]+)?$" }, "positionIntervalMaxSeconds": { "type": "integer", "minimum": 1 }, "telemetryIntervalMaxSeconds": { "type": "integer", "minimum": 1 } }, "additionalProperties": false }
+    "presetModem": {
+      "type": "object",
+      "required": ["kind", "preset"],
+      "properties": {
+        "kind": { "const": "preset" },
+        "preset": {
+          "enum": [
+            "SHORT_TURBO",
+            "SHORT_FAST",
+            "SHORT_SLOW",
+            "MEDIUM_FAST",
+            "MEDIUM_SLOW",
+            "LONG_FAST",
+            "LONG_MODERATE",
+            "LONG_SLOW",
+            "VERY_LONG_SLOW"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "customModem": {
+      "type": "object",
+      "required": ["kind", "bandwidthKhz", "spreadFactor", "codingRate"],
+      "properties": {
+        "kind": { "const": "custom" },
+        "bandwidthKhz": {
+          "enum": [31, 62, 125, 200, 250, 400, 500, 800, 1600]
+        },
+        "spreadFactor": { "type": "integer", "minimum": 5, "maximum": 12 },
+        "codingRate": { "type": "integer", "minimum": 5, "maximum": 8 }
+      },
+      "additionalProperties": false
+    },
+    "channel": {
+      "type": "object",
+      "required": ["name", "pskBase64", "uplinkEnabled", "downlinkEnabled"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 12 },
+        "pskBase64": { "type": ["string", "null"] },
+        "uplinkEnabled": { "type": "boolean" },
+        "downlinkEnabled": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "mqtt": {
+      "type": "object",
+      "required": [
+        "serverAddress",
+        "tlsEnabled",
+        "encryptionEnabled",
+        "jsonEnabled",
+        "proxyToClientEnabled",
+        "mapReportingEnabled"
+      ],
+      "properties": {
+        "serverAddress": { "type": "string", "minLength": 1 },
+        "username": { "type": "string" },
+        "password": { "type": "string" },
+        "tlsEnabled": { "type": "boolean" },
+        "encryptionEnabled": { "type": "boolean" },
+        "jsonEnabled": { "type": "boolean" },
+        "rootTopic": { "type": "string" },
+        "proxyToClientEnabled": { "type": "boolean" },
+        "mapReportingEnabled": { "type": "boolean" },
+        "mapReportingIntervalSeconds": { "type": "integer", "minimum": 3600 }
+      },
+      "additionalProperties": false
+    },
+    "requirements": {
+      "type": "object",
+      "properties": {
+        "minimumFirmware": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+(?:[-+][0-9A-Za-z.-]+)?$"
+        },
+        "positionIntervalMaxSeconds": { "type": "integer", "minimum": 1 },
+        "telemetryIntervalMaxSeconds": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    }
   }
 }
