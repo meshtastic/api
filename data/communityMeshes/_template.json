@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "replace-with-community-id",
+  "name": "Replace with community name",
+  "description": "Replace with a clear public description.",
+  "coverage": {
+    "type": "Polygon",
+    "coordinates": [[[0, 0], [0, 1], [1, 1], [0, 0]]]
+  },
+  "links": [{ "kind": "website", "url": "https://example.org" }],
+  "meshProfiles": [
+    {
+      "id": "public",
+      "name": "Public",
+      "description": "Replace with profile description.",
+      "radio": {
+        "region": "US",
+        "modem": { "kind": "preset", "preset": "LONG_FAST" },
+        "frequencySlot": 0,
+        "frequencyOffsetHz": 0,
+        "maxHops": 3,
+        "txPowerDbm": 0,
+        "ignoreMqtt": false,
+        "sx126xRxBoostedGain": false
+      },
+      "primaryChannel": {
+        "name": "Public",
+        "pskBase64": "AQ==",
+        "uplinkEnabled": false,
+        "downlinkEnabled": false
+      }
+    }
+  ]
+}

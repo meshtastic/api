@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "licensed-test",
+  "name": "Licensed Test",
+  "description": "Invalid encrypted licensed profile.",
+  "coverage": { "type": "Polygon", "coordinates": [[[0, 0], [0, 1], [1, 1], [0, 0]]] },
+  "links": [{ "kind": "website", "url": "https://example.org" }],
+  "meshProfiles": [{
+    "id": "licensed",
+    "name": "Licensed",
+    "description": "Licensed profile.",
+    "radio": { "region": "US", "modem": { "kind": "preset", "preset": "LONG_FAST" }, "frequencySlot": 1, "frequencyOffsetHz": 0, "maxHops": 3, "txPowerDbm": 0, "ignoreMqtt": false, "sx126xRxBoostedGain": false },
+    "primaryChannel": { "name": "Ham", "pskBase64": "AQ==", "uplinkEnabled": false, "downlinkEnabled": false },
+    "licensed": { "required": true }
+  }]
+}
