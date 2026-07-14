@@ -1181,4 +1181,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Heltec Mesh Node T1",
     tags: ["Heltec"],
   },
+  {
+    hwModel: 128,
+    hwModelSlug: "MESH_TRACKER_X1",
+    platformioTarget: "seeed_mesh_tracker_X1",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Seeed SenseCap Mesh Tracker X1",
+    tags: ["Seeed"],
+  },
 ];
