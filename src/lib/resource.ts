@@ -1188,7 +1188,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     architecture: "nrf52840",
     activelySupported: false,
     supportLevel: 1,
-    displayName: "Seeed Mesh Tracker X1",
+    displayName: "Seeed MeshTracker X1",
     tags: ["Seeed"],
   },
 ];
