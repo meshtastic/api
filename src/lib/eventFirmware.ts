@@ -17,7 +17,8 @@ export interface EventFirmwareLink {
 // Brand/theme metadata for ambient event styling (web-flasher tints its whole
 // UI from this; Android may adopt it later). accentColor stays the single
 // primary swatch for clients that only want one color; theme.colors.primary
-// mirrors it. All optional — only DEFCON ships a full published style guide.
+// mirrors it. All optional — DEFCON and FAB26 carry the fullest themes
+// (multi-color palette + fonts); others may ship only a single accent.
 export interface EventFirmwareTheme {
   name?: string | null; // theme title, e.g. "Agency"
   tagline?: string | null; // one-line theme statement
