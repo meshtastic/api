@@ -7,6 +7,7 @@ import { favicon } from "@tinyhttp/favicon";
 import { logger } from "@tinyhttp/logger";
 import { RegisterMqttClient } from "./lib/index.js";
 import {
+  CommunityMeshRoutes,
   DeviceLinksRoutes,
   EventFirmwareIconRoutes,
   EventFirmwareRoutes,
@@ -41,6 +42,7 @@ app
 
         const whitelist = [
           "http://localhost:3000",
+          "https://client.meshtastic.org",
           "https://meshtastic.org",
           "https://flash.meshtastic.org",
           "https://flasher.meshtastic.org",
@@ -82,6 +84,7 @@ app
  * register Routes
  */
 FirmwareRoutes();
+CommunityMeshRoutes(app);
 GithubRoutes();
 ResourceRoutes();
 DeviceLinksRoutes();
