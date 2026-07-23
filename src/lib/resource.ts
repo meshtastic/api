@@ -48,6 +48,17 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["tlora-v2-1-1_6.svg"],
   },
   {
+    hwModel: 3,
+    hwModelSlug: "TLORA_V2_1_1P6",
+    platformioTarget: "tlora-v3-3-0-tcxo",
+    architecture: "esp32",
+    activelySupported: true,
+    supportLevel: 1,
+    displayName: "LILYGO T-LoRa V3-3.0 TCXO",
+    tags: ["LilyGo"],
+    images: ["tlora-v2-1-1_6.svg"],
+  },
+  {
     hwModel: 4,
     hwModelSlug: "TBEAM",
     platformioTarget: "tbeam",
