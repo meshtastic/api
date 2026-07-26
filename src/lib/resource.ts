@@ -1180,7 +1180,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Heltec Mesh Node T1",
     tags: ["Heltec"],
-    images: ["heltec-meshnode-t1.svg"]
+    images: ["heltec-meshnode-t1.svg"],
   },
   {
     hwModel: 128,
