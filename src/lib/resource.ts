@@ -1180,7 +1180,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Heltec Mesh Node T1",
     tags: ["Heltec"],
-    images: ["heltec-meshnode-t1.svg"]
+    images: ["heltec-meshnode-t1.svg"],
   },
   {
     hwModel: 128,
@@ -1191,5 +1191,16 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Seeed MeshTracker X1",
     tags: ["Seeed"],
+  },
+  {
+    hwModel: 130,
+    hwModelSlug: "THINKNODE_M8",
+    platformioTarget: "thinknode_m8",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Elecrow ThinkNode M8",
+    tags: ["Elecrow"],
+    images: ["thinknode-m8.svg"],
   },
 ];
