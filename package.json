@@ -9,7 +9,7 @@
     "dev": "tsx src/index.ts",
     "start": "prisma migrate deploy && node dist/index.js",
     "build": "prisma generate && tsc",
-    "test": "tsx --test tests/**/*.test.ts"
+    "test": "tsx --test \"tests/**/*.test.ts\""
   },
   "dependencies": {
     "@buf/meshtastic_api.bufbuild_es": "1.7.2-20240110092216-3a147af14302.1",

@@ -6,6 +6,7 @@ import {
   findEventFirmwareOTAContract,
   signEventFirmwareOTAContract,
   validateEventFirmwareOTAContract,
+  validateEventFirmwareOTAData,
 } from "../src/lib/eventFirmwareOTA.js";
 
 const artifact = {
@@ -53,6 +54,8 @@ describe("event firmware OTA contract", () => {
     );
 
     const payload = Buffer.from(envelope.payload, "base64");
+    assert.equal(envelope.keyId, "event-release-2026");
+    assert.equal(payload.toString("utf8"), JSON.stringify(contract));
     assert.deepEqual(JSON.parse(payload.toString()), contract);
     assert.equal(
       verifySignature(
@@ -91,12 +94,37 @@ describe("event firmware OTA contract", () => {
     assert.throws(() => validateEventFirmwareOTAContract(duplicate));
   });
 
+  it("rejects event artifacts from another release version", () => {
+    const mismatched = {
+      ...contract,
+      artifacts: [{ ...artifact, version: "2.8.0.other" }],
+    };
+    assert.throws(() => validateEventFirmwareOTAContract(mismatched));
+  });
+
+  it("rejects duplicate editions and release identifiers", () => {
+    assert.throws(() =>
+      validateEventFirmwareOTAData({
+        version: 1,
+        contracts: [contract, { ...contract, releaseId: "another-release" }],
+      }),
+    );
+  });
+
   it("rejects timestamps that the Apple decoder cannot consume", () => {
     const fractionalTimestamp = {
       ...contract,
       issuedAt: "2026-07-29T00:00:00.000Z",
     };
     assert.throws(() => validateEventFirmwareOTAContract(fractionalTimestamp));
+  });
+
+  it("rejects normalized invalid calendar dates", () => {
+    const invalidCalendarDate = {
+      ...contract,
+      issuedAt: "2026-02-31T00:00:00Z",
+    };
+    assert.throws(() => validateEventFirmwareOTAContract(invalidCalendarDate));
   });
 
   it("rejects malformed signing key identifiers", () => {

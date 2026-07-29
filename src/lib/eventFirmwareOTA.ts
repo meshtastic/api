@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 const DATA_PATH = new URL("../../data/eventFirmwareOTA.json", import.meta.url);
 const EDITION_RE = /^[A-Z][A-Z0-9_]{0,63}$/;
 const IDENTIFIER_RE = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
-const SHA256_RE = /^[0-9a-f]{64}$/i;
+const SHA256_RE = /^[0-9a-f]{64}$/;
 const VERSION_RE = /^\d+\.\d+\.\d+(?:\.[0-9A-Za-z_-]+)?$/;
 const ISO8601_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
 const IMMUTABLE_RAW_GITHUB_RE =
@@ -49,7 +49,7 @@ export interface EventFirmwareOTAContract {
   standardArtifacts: EventFirmwareOTAArtifact[];
 }
 
-interface EventFirmwareOTAData {
+export interface EventFirmwareOTAData {
   version: number;
   contracts: EventFirmwareOTAContract[];
 }
@@ -61,7 +61,11 @@ const fail = (message: string): never => {
 };
 
 const validateArtifact = (artifact: EventFirmwareOTAArtifact): void => {
-  if (!artifact.pioEnv || !Number.isSafeInteger(artifact.hwModel)) {
+  if (
+    !artifact.pioEnv ||
+    !Number.isSafeInteger(artifact.hwModel) ||
+    artifact.hwModel < 0
+  ) {
     fail("artifact target is incomplete");
   }
   if (
@@ -144,6 +148,15 @@ const validateArtifactSet = (
   }
 };
 
+const isExactISO8601Timestamp = (value: string): boolean => {
+  if (!ISO8601_RE.test(value)) return false;
+  const date = new Date(value);
+  return (
+    Number.isFinite(date.getTime()) &&
+    date.toISOString().replace(".000Z", "Z") === value
+  );
+};
+
 export const validateEventFirmwareOTAContract = (
   contract: EventFirmwareOTAContract,
 ): void => {
@@ -157,8 +170,8 @@ export const validateEventFirmwareOTAContract = (
   }
 
   if (
-    !ISO8601_RE.test(contract.issuedAt) ||
-    !ISO8601_RE.test(contract.expiresAt)
+    !isExactISO8601Timestamp(contract.issuedAt) ||
+    !isExactISO8601Timestamp(contract.expiresAt)
   ) {
     fail("validity timestamps must use UTC ISO-8601 seconds");
   }
@@ -182,6 +195,29 @@ export const validateEventFirmwareOTAContract = (
 
   validateArtifactSet("artifacts", contract.artifacts);
   validateArtifactSet("standardArtifacts", contract.standardArtifacts);
+  if (
+    contract.artifacts.some((artifact) => artifact.version !== contract.version)
+  ) {
+    fail("event artifact version does not match the release");
+  }
+};
+
+export const validateEventFirmwareOTAData = (
+  data: EventFirmwareOTAData,
+): void => {
+  if (data.version !== 1 || !Array.isArray(data.contracts)) {
+    fail("data envelope is invalid");
+  }
+  const editions = new Set<string>();
+  const releaseIds = new Set<string>();
+  for (const contract of data.contracts) {
+    validateEventFirmwareOTAContract(contract);
+    if (editions.has(contract.edition) || releaseIds.has(contract.releaseId)) {
+      fail("data contains a duplicate edition or release identifier");
+    }
+    editions.add(contract.edition);
+    releaseIds.add(contract.releaseId);
+  }
 };
 
 const getEventFirmwareOTAData = (): EventFirmwareOTAData => {
@@ -189,12 +225,7 @@ const getEventFirmwareOTAData = (): EventFirmwareOTAData => {
     cached = JSON.parse(
       readFileSync(DATA_PATH, "utf8"),
     ) as EventFirmwareOTAData;
-    if (cached.version !== 1 || !Array.isArray(cached.contracts)) {
-      fail("data envelope is invalid");
-    }
-    for (const contract of cached.contracts) {
-      validateEventFirmwareOTAContract(contract);
-    }
+    validateEventFirmwareOTAData(cached);
   }
   return cached;
 };
