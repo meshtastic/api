@@ -9,6 +9,7 @@ import { RegisterMqttClient } from "./lib/index.js";
 import {
   DeviceLinksRoutes,
   EventFirmwareIconRoutes,
+  EventFirmwareOTARoutes,
   EventFirmwareRoutes,
   FirmwareRoutes,
   GithubRoutes,
@@ -86,6 +87,7 @@ GithubRoutes();
 ResourceRoutes();
 DeviceLinksRoutes();
 EventFirmwareRoutes();
+EventFirmwareOTARoutes();
 EventFirmwareIconRoutes();
 UpdaterRoutes();
 MqttRoutes();
