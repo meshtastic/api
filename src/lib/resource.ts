@@ -1203,4 +1203,15 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Elecrow"],
     images: ["thinknode-m8.svg"],
   },
+  {
+    hwModel: 124,
+    hwModelSlug: "TBEAM_BPF",
+    platformioTarget: "t-beam-bpf",
+    architecture: "esp32-s3",
+    activelySupported: true,
+    supportLevel: 3,
+    displayName: "LilyGo T-Beam BPF",
+    tags: ["LilyGo"],
+    images: ["tbeam-bpf.svg"],
+  },
 ];
