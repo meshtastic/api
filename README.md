@@ -9,6 +9,17 @@
 
 API backend used for meshtastic.org and associated tools.
 
+## Community Mesh Registry
+
+Clients can download the community mesh registry from `GET /v1/community-meshes`,
+inspect one record at `GET /v1/community-meshes/:id`, and fetch its JSON Schema
+from `GET /v1/community-meshes/schema`. Discovery is privacy-preserving: clients
+download the same cacheable registry and compare its GeoJSON coverage locally;
+they do not send a location to this API.
+
+To list or update a community, follow the
+[community mesh contribution guide](docs/community-mesh-registry.md).
+
 ## Stats
 
 ![Alt](https://repobeats.axiom.co/api/embed/42de1569e61bc8171266ba5e0cc1dab2e0a3986b.svg "Repobeats analytics image")
