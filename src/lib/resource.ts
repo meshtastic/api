@@ -1191,6 +1191,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Seeed MeshTracker X1",
     tags: ["Seeed"],
+    images: ["seeed_mesh_tracker_x1.svg"],
   },
   {
     hwModel: 130,
