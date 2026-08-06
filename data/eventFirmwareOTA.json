@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "contracts": [
+    {
+      "schemaVersion": 1,
+      "releaseId": "defcon34-2.8.0.b00d76f",
+      "edition": "DEFCON",
+      "version": "2.8.0.b00d76f",
+      "issuedAt": "2026-07-29T00:00:00Z",
+      "expiresAt": "2026-10-01T00:00:00Z",
+      "artifacts": [
+        {
+          "pioEnv": "tbeam-s3-core",
+          "hwModel": 12,
+          "architecture": "esp32-s3",
+          "version": "2.8.0.b00d76f",
+          "format": "bin",
+          "url": "https://raw.githubusercontent.com/meshtastic/meshtastic.github.io/f6688533ba0c57f33d42d99958656d3e8a2057e6/event/defcon34/firmware-2.8.0.b00d76f/firmware-tbeam-s3-core-2.8.0.b00d76f.bin",
+          "sha256": "bab5253d557d424802637f5dca301268d1122f559f10a6f9fb3d21b8197fdcef",
+          "byteCount": 2383792,
+          "minimumSourceVersion": "2.7.26",
+          "partitionRole": "app0",
+          "partitionScheme": "8MB",
+          "dfuProtocol": null,
+          "minimumBootloaderVersion": null
+        }
+      ],
+      "standardArtifacts": [
+        {
+          "pioEnv": "tbeam-s3-core",
+          "hwModel": 12,
+          "architecture": "esp32-s3",
+          "version": "2.7.26.54e0d8d",
+          "format": "bin",
+          "url": "https://raw.githubusercontent.com/meshtastic/meshtastic.github.io/869f193161a1d03460d901ad827483871d74f692/firmware-2.7.26.54e0d8d/firmware-tbeam-s3-core-2.7.26.54e0d8d.bin",
+          "sha256": "64c1e3f797625da70f7c55794f78986e84515213a0192289ce4e6bef8ae543b4",
+          "byteCount": 2213168,
+          "minimumSourceVersion": "2.7.26",
+          "partitionRole": "app0",
+          "partitionScheme": "8MB",
+          "dfuProtocol": null,
+          "minimumBootloaderVersion": null
+        }
+      ]
+    }
+  ]
+}
