@@ -1187,7 +1187,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "MESH_TRACKER_X1",
     platformioTarget: "seeed_mesh_tracker_X1",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "Seeed MeshTracker X1",
     tags: ["Seeed"],
