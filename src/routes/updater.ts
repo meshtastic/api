@@ -11,6 +11,17 @@ const DEFAULT_MANIFEST_URL =
 
 const manifestUrl = process.env.UPDATER_MANIFEST_URL || DEFAULT_MANIFEST_URL;
 
+// A manifest source that accepts the connection and then stalls would otherwise
+// leave the updater request pending indefinitely. The abort rejects the fetch,
+// which the catch below maps to 502 like any other upstream failure.
+const MANIFEST_FETCH_TIMEOUT_MS = 10_000;
+
+// The payload is whatever the manifest source chose to serve, so it is checked
+// at runtime rather than asserted. `typeof null === "object"`, and arrays are
+// objects too, so both are excluded explicitly.
+const isManifest = (value: unknown): value is object =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
 export const UpdaterRoutes = () => {
   return app
     .get("/updater", (_req, res) => {
@@ -54,7 +65,9 @@ export const UpdaterRoutes = () => {
       let parsedManifests: unknown;
 
       try {
-        const manifestResponse = await fetch(manifestUrl);
+        const manifestResponse = await fetch(manifestUrl, {
+          signal: AbortSignal.timeout(MANIFEST_FETCH_TIMEOUT_MS),
+        });
 
         if (!manifestResponse.ok) {
           console.error(
@@ -62,6 +75,9 @@ export const UpdaterRoutes = () => {
             manifestResponse.status,
             manifestUrl,
           );
+          // Release the connection: an unread body is not returned to the pool
+          // until it is consumed or cancelled.
+          await manifestResponse.body?.cancel().catch(() => {});
           return res
             .status(502)
             .send("Error fetching manifests, please contact a developer.");
@@ -78,12 +94,20 @@ export const UpdaterRoutes = () => {
       }
 
       const mostRecentManifest = Array.isArray(parsedManifests)
-        ? (parsedManifests[0] as object | undefined)
+        ? parsedManifests[0]
         : undefined;
 
-      if (!mostRecentManifest) {
+      // Non-array JSON, an empty array and a first element that is not a
+      // manifest object are all the manifest source serving something this
+      // endpoint cannot use, so they are reported as upstream failures rather
+      // than as a fault in this service.
+      if (!isManifest(mostRecentManifest)) {
+        console.error(
+          "[updater] manifest source returned an unusable payload",
+          manifestUrl,
+        );
         return res
-          .status(500)
+          .status(502)
           .send(
             "Error finding most recent manifest, please contact a developer.",
           );
