@@ -1,0 +1,14 @@
+-- Purge stored gateway coordinates.
+--
+-- These were never the gateway's own position. The row was keyed on
+-- packet.gatewayId, but the coordinates came from the POSITION_APP payload of
+-- the packet being relayed, whose origin is packet.packet.from -- so each row
+-- held the last known position of some *other* node that the gateway happened
+-- to forward, at full precision (degrees * 1e7, ~1cm). Every row was served
+-- publicly and unauthenticated by GET /mqtt and the gatewayStream RPC.
+--
+-- The following migration drops these tables outright, which makes this
+-- statement redundant on a successful deploy. It is kept deliberately: Prisma
+-- applies migrations in order and halts on the first failure, so if the DROP
+-- fails for any reason the coordinates have already been cleared.
+UPDATE "Gateway" SET "latitude" = NULL, "longitude" = NULL;

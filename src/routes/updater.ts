@@ -2,6 +2,15 @@ import { app } from "../index.js";
 
 export type SupportedApps = "meshtastic-desktop-flasher";
 
+// A production endpoint should not depend on one contributor's personal gist.
+// The gist remains the default so existing clients keep working, but the source
+// is overridable via UPDATER_MANIFEST_URL and should be pointed at infrastructure
+// the project controls.
+const DEFAULT_MANIFEST_URL =
+  "https://gist.githubusercontent.com/ajmcquilkin/4bdf1a679f070e74da61c64132aa431d/raw/manifests.json";
+
+const manifestUrl = process.env.UPDATER_MANIFEST_URL || DEFAULT_MANIFEST_URL;
+
 export const UpdaterRoutes = () => {
   return app
     .get("/updater", (_req, res) => {
@@ -42,11 +51,35 @@ export const UpdaterRoutes = () => {
       // }
 
       // const gistContent = await fetch(rawUrl);
-      const gistContent = await fetch(
-        "https://gist.githubusercontent.com/ajmcquilkin/4bdf1a679f070e74da61c64132aa431d/raw/manifests.json",
-      );
-      const parsedGistContent = (await gistContent.json()) as object[];
-      const mostRecentManifest = parsedGistContent[0];
+      let parsedManifests: unknown;
+
+      try {
+        const manifestResponse = await fetch(manifestUrl);
+
+        if (!manifestResponse.ok) {
+          console.error(
+            "[updater] manifest fetch returned",
+            manifestResponse.status,
+            manifestUrl,
+          );
+          return res
+            .status(502)
+            .send("Error fetching manifests, please contact a developer.");
+        }
+
+        parsedManifests = await manifestResponse.json();
+      } catch (error) {
+        // An unreachable or non-JSON manifest source previously threw out of the
+        // handler rather than returning a response.
+        console.error("[updater] manifest fetch failed", manifestUrl, error);
+        return res
+          .status(502)
+          .send("Error fetching manifests, please contact a developer.");
+      }
+
+      const mostRecentManifest = Array.isArray(parsedManifests)
+        ? (parsedManifests[0] as object | undefined)
+        : undefined;
 
       if (!mostRecentManifest) {
         return res
