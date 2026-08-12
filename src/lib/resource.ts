@@ -1222,6 +1222,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     architecture: "esp32-s3",
     activelySupported: false,
     supportLevel: 1,
+    partitionScheme: "16MB",
     displayName: "Elecrow ThinkNode M9",
     tags: ["Elecrow"],
   },
