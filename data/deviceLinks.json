@@ -1452,6 +1452,12 @@
       "Targets": [
         "rak_wismesh_tap_v2"
       ]
+    },
+    {
+      "ShortCode": "meshstick",
+      "Description": "Meshstick LoRa USB Adapter",
+      "Type": "Vendor",
+      "Targets": []
     }
   ],
   "Marketplaces": {
