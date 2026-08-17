@@ -1215,4 +1215,15 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     images: ["tbeam-bpf.svg"],
   },
+  {
+    hwModel: 131,
+    hwModelSlug: "THINKNODE_M9",
+    platformioTarget: "thinknode-m9",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    partitionScheme: "16MB",
+    displayName: "Elecrow ThinkNode M9",
+    tags: ["Elecrow"],
+  },
 ];
