@@ -801,7 +801,7 @@
     },
     {
       "ShortCode": "aliexpress-wismesh-pocket-mini",
-      "Description": "WisMesh Pocket Mini (Rokland)",
+      "Description": "WisMesh Pocket Mini (AliExpress)",
       "Type": "Marketplace"
     },
     {
@@ -1388,6 +1388,76 @@
       "Targets": [
         "heltec-wireless-tracker-v2"
       ]
+    },
+    {
+      "ShortCode": "thinknode_m7",
+      "Description": "ThinkNode M7",
+      "Type": "Vendor",
+      "Targets": [
+        "thinknode_m7"
+      ]
+    },
+    {
+      "ShortCode": "heltec-mesh-node-t1",
+      "Description": "MeshNode T1",
+      "Type": "Vendor",
+      "Targets": [
+        "heltec-mesh-node-t1"
+      ]
+    },
+    {
+      "ShortCode": "m5stack-unitc6l",
+      "Description": "M5Stack Unit C6L",
+      "Type": "Vendor",
+      "Targets": [
+        "m5stack-unitc6l"
+      ]
+    },
+    {
+      "ShortCode": "m5stack-cardputer-adv",
+      "Description": "M5Stack Cardputer Mesh Kit",
+      "Type": "Vendor",
+      "Targets": [
+        "m5stack-cardputer-adv"
+      ]
+    },
+    {
+      "ShortCode": "heltec-mesh-node-t096",
+      "Description": "Mesh Node T096",
+      "Type": "Vendor",
+      "Targets": [
+        "heltec-mesh-node-t096"
+      ]
+    },
+    {
+      "ShortCode": "t-beam-1w",
+      "Description": "T-Beam 1W",
+      "Type": "Vendor",
+      "Targets": [
+        "t-beam-1w"
+      ]
+    },
+    {
+      "ShortCode": "t-echo-plus",
+      "Description": "T-Echo Plus",
+      "Type": "Vendor",
+      "Targets": [
+        "t-echo-plus"
+      ]
+    },
+    {
+      "ShortCode": "rak_wismesh_tap_v2",
+      "Description": "RAK WisMesh Tap V2",
+      "Type": "Vendor",
+      "Targets": [
+        "rak_wismesh_tap_v2"
+      ]
+    },
+    {
+      "ShortCode": "meshstick",
+      "Description": "Meshstick LoRa USB Adapter",
+      "Type": "Vendor",
+      "Targets": []
     }
   ],
   "Marketplaces": {
