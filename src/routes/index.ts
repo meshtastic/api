@@ -1,6 +1,7 @@
 export { DeviceLinksRoutes } from "./deviceLinks.js";
 export { EventFirmwareRoutes } from "./eventFirmware.js";
 export { EventFirmwareIconRoutes } from "./eventFirmwareIcon.js";
+export { EventFirmwareOTARoutes } from "./eventFirmwareOTA.js";
 export { FirmwareRoutes } from "./firmware.js";
 export { GithubRoutes } from "./github.js";
 export { MqttRoutes } from "./mqtt.js";
