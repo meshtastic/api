@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "bad-psk",
+  "name": "Bad PSK",
+  "description": "Schema-valid but invalid encoded PSK.",
+  "coverage": {
+    "type": "Polygon",
+    "coordinates": [[[0, 0], [0, 1], [1, 1], [0, 0]]]
+  },
+  "links": [{ "kind": "website", "url": "https://example.org" }],
+  "meshProfiles": [
+    {
+      "id": "public",
+      "name": "Public",
+      "description": "Invalid PSK profile.",
+      "radio": {
+        "region": "US",
+        "modem": { "kind": "preset", "preset": "LONG_FAST" },
+        "frequencySlot": 1,
+        "frequencyOffsetHz": 0,
+        "maxHops": 3,
+        "txPowerDbm": 0,
+        "ignoreMqtt": false,
+        "sx126xRxBoostedGain": false
+      },
+      "primaryChannel": {
+        "name": "Bad",
+        "pskBase64": "not base64!",
+        "uplinkEnabled": false,
+        "downlinkEnabled": false
+      }
+    }
+  ]
+}

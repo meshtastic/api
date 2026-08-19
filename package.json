@@ -8,7 +8,9 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "start": "prisma migrate deploy && node dist/index.js",
-    "build": "prisma generate && tsc"
+    "build": "prisma generate && tsc",
+    "test": "tsx --test tests/*.test.ts",
+    "validate:community-meshes": "tsx src/scripts/validateCommunityMeshes.ts"
   },
   "dependencies": {
     "@buf/meshtastic_api.bufbuild_es": "1.7.2-20240110092216-3a147af14302.1",
@@ -25,6 +27,7 @@
     "@tinyhttp/favicon": "^3.0.0",
     "@tinyhttp/logger": "^2.0.0",
     "add": "^2.0.6",
+    "ajv": "^8.17.1",
     "mqtt": "^5.3.5",
     "octokit": "^3.1.2",
     "pnpm": "^8.15.3",
