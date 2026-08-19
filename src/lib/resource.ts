@@ -1218,12 +1218,13 @@ export const deviceHardwareList: DeviceHardware[] = [
   {
     hwModel: 131,
     hwModelSlug: "THINKNODE_M9",
-    platformioTarget: "thinknode-m9",
+    platformioTarget: "thinknode_m9",
     architecture: "esp32-s3",
     activelySupported: false,
     supportLevel: 1,
     partitionScheme: "16MB",
     displayName: "Elecrow ThinkNode M9",
+    images: ["thinknode_m9.svg"],
     tags: ["Elecrow"],
   },
   {
