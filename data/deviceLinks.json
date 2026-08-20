@@ -1458,6 +1458,14 @@
       "Description": "Meshstick LoRa USB Adapter",
       "Type": "Vendor",
       "Targets": []
+    },
+    {
+      "ShortCode": "thinknode_m9",
+      "Description": "ThinkNode M9",
+      "Type": "Vendor",
+      "Targets": [
+        "thinknode_m9"
+      ]
     }
   ],
   "Marketplaces": {
