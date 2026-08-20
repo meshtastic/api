@@ -7,7 +7,10 @@ import { readFileSync } from "node:fs";
 // its own board map by hand and could take `devices` as the "upgrade your bootloader first"
 // advisory, and web-flasher's drag-and-drop UF2 flow has no such nudge at all. The path resolves
 // the same in dev (src/lib) and prod (dist/lib), both two levels below the repo root.
-const DATA_PATH = new URL("../../data/bootloaderOtaQuirks.json", import.meta.url);
+const DATA_PATH = new URL(
+  "../../data/bootloaderOtaQuirks.json",
+  import.meta.url,
+);
 
 /**
  * Advisory only: devices that usually ship with a bootloader lacking OTA support and need a
