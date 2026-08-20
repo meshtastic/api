@@ -1,24 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// The MQTT subsystem that read and wrote these models is gone, and the
-// migrations in this directory drop both tables on deploy. The models are kept
-// here for one release regardless, because `prisma generate` exits 1 on a schema
-// with no models and this project's build runs it. Emptying the schema in the
-// same change would break the build, and the drop would then never reach
-// production.
-//
-// So between this deploy and the follow-up, the schema deliberately describes
-// two tables that no longer exist. Nothing reads them -- no code imports the
-// generated client. Do not run `prisma migrate dev` against a deployed database
-// in that window: it would read the missing tables as drift and try to recreate
-// them.
-//
-// FOLLOW-UP, once the drop migration has been applied: delete this file and the
-// migrations directory, drop the `prisma` and `@prisma/client` dependencies and
-// the `prisma generate` / `prisma migrate deploy` steps from package.json, and
-// remove DATABASE_URL from the environment.
-
 generator client {
   provider = "prisma-client-js"
 }
