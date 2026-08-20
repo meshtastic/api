@@ -20,11 +20,8 @@ interface Manifest {
   manifestVersion: number;
   otafixReleaseTag: string;
   otafixBase: string;
-  erase: Record<
-    string,
-    { fileName: string; sha256: string; expectedFirstTargetAddress?: number }
-  >;
-  otafixByBoardId: Record<string, { board: string; sha256: string }>;
+  erase: unknown; // untouched by this script — see maintenanceUf2.ts for the real shape
+  otafixByBoardId: Record<string, { otafixBoardSlug: string; sha256: string }>;
   otafixSupportedTargets: string[];
 }
 
@@ -62,7 +59,7 @@ execFileSync(
 
 const boardBySlug = new Map(
   Object.entries(manifest.otafixByBoardId).map(([boardId, e]) => [
-    e.board,
+    e.otafixBoardSlug,
     boardId,
   ]),
 );

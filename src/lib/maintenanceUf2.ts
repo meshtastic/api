@@ -31,7 +31,11 @@ export interface EraseImageEntry {
 }
 
 export interface OtafixAssetEntry {
-  board: string;
+  // OTAFIX's own release-asset board slug (e.g. "wiscore_rak4631_board") — deliberately NOT
+  // named the same as Meshtastic's platformioTarget (e.g. "rak4631", in otafixSupportedTargets
+  // below): the two vocabularies differ per board, and a shared name here would invite exactly
+  // the confusion the doc comment above already has to spell out in prose.
+  otafixBoardSlug: string;
   sha256: string;
 }
 
@@ -40,8 +44,10 @@ export interface MaintenanceUf2Manifest {
   otafixReleaseTag: string;
   otafixBase: string;
   erase: {
-    s140_6_1_1: EraseImageEntry;
-    s140_7_3_0: EraseImageEntry;
+    // Nested by architecture, then by SoftDevice wire value — RP2040 has no SoftDevice concept at
+    // all, so it correctly has no sub-key, unlike the old flat {s140_6_1_1, s140_7_3_0, rp2040}
+    // shape that mixed a SoftDevice-variant axis with an architecture axis in one object.
+    nrf52: Record<string, EraseImageEntry>; // keyed by SoftDeviceVariant.fromWire's input, e.g. "6.1.1"
     rp2040: EraseImageEntry;
   };
   otafixByBoardId: Record<string, OtafixAssetEntry>;
@@ -72,12 +78,15 @@ export const getMaintenanceUf2Manifest = (): MaintenanceUf2Manifest => {
 // Same naming convention as android's otafixAsset()/otafixUf2ForBoardId() — the release asset
 // filename is derived, not stored, so the JSON doesn't repeat otafixReleaseTag per row.
 export const otafixAssetFileName = (
-  board: string,
+  otafixBoardSlug: string,
   releaseTag: string,
-): string => `update-${board}_bootloader-${releaseTag}_nosd.uf2`;
+): string => `update-${otafixBoardSlug}_bootloader-${releaseTag}_nosd.uf2`;
 
-export const otafixAssetUrl = (board: string): string | null => {
+export const otafixAssetUrl = (otafixBoardSlug: string): string | null => {
   const manifest = getMaintenanceUf2Manifest();
-  const fileName = otafixAssetFileName(board, manifest.otafixReleaseTag);
+  const fileName = otafixAssetFileName(
+    otafixBoardSlug,
+    manifest.otafixReleaseTag,
+  );
   return `${manifest.otafixBase}/${fileName}`;
 };

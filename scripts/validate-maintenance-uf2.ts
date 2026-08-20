@@ -18,15 +18,21 @@ const BOARD_RE = /^[a-z0-9_]+$/;
 const errors: string[] = [];
 const fail = (msg: string) => errors.push(msg);
 
+interface EraseImageEntry {
+  fileName: string;
+  sha256: string;
+  expectedFirstTargetAddress?: number;
+}
+
 const manifest = JSON.parse(readFileSync(DATA_PATH, "utf8")) as {
   manifestVersion: number;
   otafixReleaseTag: string;
   otafixBase: string;
-  erase: Record<
-    string,
-    { fileName: string; sha256: string; expectedFirstTargetAddress?: number }
-  >;
-  otafixByBoardId: Record<string, { board: string; sha256: string }>;
+  erase: {
+    nrf52: Record<string, EraseImageEntry>;
+    rp2040: EraseImageEntry;
+  };
+  otafixByBoardId: Record<string, { otafixBoardSlug: string; sha256: string }>;
   otafixSupportedTargets: string[];
 };
 
@@ -51,23 +57,31 @@ const checkSha256 = (sha256: string, where: string) => {
 };
 
 // --- erase images: fileName/sha256 shape, and the vendored bytes actually match ---
-for (const [key, entry] of Object.entries(manifest.erase)) {
-  checkFileName(entry.fileName, `erase.${key}`);
-  checkSha256(entry.sha256, `erase.${key}`);
+const checkEraseEntry = (entry: EraseImageEntry, where: string) => {
+  checkFileName(entry.fileName, where);
+  checkSha256(entry.sha256, where);
   try {
     const bytes = readFileSync(new URL(entry.fileName, ASSET_DIR));
     const actual = createHash("sha256").update(bytes).digest("hex");
     if (actual !== entry.sha256) {
       fail(
-        `erase.${key}: vendored ${entry.fileName} hashes to ${actual}, manifest says ${entry.sha256}`,
+        `${where}: vendored ${entry.fileName} hashes to ${actual}, manifest says ${entry.sha256}`,
       );
     }
   } catch (err) {
     fail(
-      `erase.${key}: could not read static/maintenanceUf2/${entry.fileName}: ${(err as Error).message}`,
+      `${where}: could not read static/maintenanceUf2/${entry.fileName}: ${(err as Error).message}`,
     );
   }
+};
+
+let eraseImageCount = 0;
+for (const [softDevice, entry] of Object.entries(manifest.erase.nrf52)) {
+  checkEraseEntry(entry, `erase.nrf52["${softDevice}"]`);
+  eraseImageCount++;
 }
+checkEraseEntry(manifest.erase.rp2040, "erase.rp2040");
+eraseImageCount++;
 
 // --- OTAFIX board map: unique non-blank Board-IDs, valid board slugs, valid digests ---
 const seenBoardIds = new Set<string>();
@@ -78,17 +92,17 @@ for (const [boardId, entry] of Object.entries(manifest.otafixByBoardId)) {
     fail(`otafixByBoardId: duplicate Board-ID "${boardId}"`);
   seenBoardIds.add(boardId);
 
-  if (!BOARD_RE.test(entry.board)) {
+  if (!BOARD_RE.test(entry.otafixBoardSlug)) {
     fail(
-      `otafixByBoardId["${boardId}"]: board slug "${entry.board}" doesn't match ${BOARD_RE}`,
+      `otafixByBoardId["${boardId}"]: otafixBoardSlug "${entry.otafixBoardSlug}" doesn't match ${BOARD_RE}`,
     );
   }
-  if (seenBoardSlugs.has(entry.board)) {
+  if (seenBoardSlugs.has(entry.otafixBoardSlug)) {
     fail(
-      `otafixByBoardId["${boardId}"]: board slug "${entry.board}" reused by another Board-ID`,
+      `otafixByBoardId["${boardId}"]: otafixBoardSlug "${entry.otafixBoardSlug}" reused by another Board-ID`,
     );
   }
-  seenBoardSlugs.add(entry.board);
+  seenBoardSlugs.add(entry.otafixBoardSlug);
   checkSha256(entry.sha256, `otafixByBoardId["${boardId}"]`);
 }
 
@@ -108,7 +122,7 @@ if (errors.length > 0) {
   process.exit(1);
 }
 console.log(
-  `maintenanceUf2.json OK: ${Object.keys(manifest.erase).length} erase image(s), ` +
+  `maintenanceUf2.json OK: ${eraseImageCount} erase image(s), ` +
     `${Object.keys(manifest.otafixByBoardId).length} OTAFIX board(s), ` +
     `${manifest.otafixSupportedTargets.length} supported target(s).`,
 );
