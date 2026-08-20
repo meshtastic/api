@@ -6,20 +6,32 @@ import type { ServiceImpl } from "@connectrpc/connect";
 import type { Channel } from "@prisma/client";
 import { prisma } from "../lib/index.js";
 
-export class Gateway implements ServiceImpl<typeof GatewayService> {
-  public async *gatewayStream(): AsyncGenerator<GatewayStreamResponse> {
-    const gateways = await prisma.gateway.findMany({
-      include: {
-        channels: true,
-      },
-      where: {
-        latitude: {
-          not: {
-            equals: null,
-          },
+const fetchGateways = () =>
+  prisma.gateway.findMany({
+    include: {
+      channels: true,
+    },
+    where: {
+      latitude: {
+        not: {
+          equals: null,
         },
       },
-    });
+    },
+  });
+
+export class Gateway implements ServiceImpl<typeof GatewayService> {
+  public async *gatewayStream(): AsyncGenerator<GatewayStreamResponse> {
+    // The tables this reads may already be gone -- see the note in
+    // routes/mqtt.ts. End the stream cleanly rather than letting the rejection
+    // escape the generator.
+    let gateways: Awaited<ReturnType<typeof fetchGateways>>;
+    try {
+      gateways = await fetchGateways();
+    } catch (error) {
+      console.error("[gatewayStream] gateway query failed", error);
+      return;
+    }
 
     for (const gateway of gateways) {
       //delay for 1 second
