@@ -1,5 +1,5 @@
 import { app } from "../index.js";
-import { GitHub, redis } from "../lib/index.js";
+import { cacheGet, cacheSet, GitHub } from "../lib/index.js";
 
 export interface FirmwareReleases {
   releases: {
@@ -31,7 +31,7 @@ export const FirmwareRoutes = () => {
     }
 
     const cacheKey = `gh-pr-build:${prNumber}`;
-    const cached = await redis.get(cacheKey);
+    const cached = await cacheGet(cacheKey);
     if (cached) {
       return res.send(JSON.parse(cached));
     }
@@ -112,7 +112,7 @@ export const FirmwareRoutes = () => {
         targets,
       };
 
-      redis.set(cacheKey, JSON.stringify(payload), { EX: 120 });
+      cacheSet(cacheKey, JSON.stringify(payload), 120);
       return res.send(payload);
     } catch (error) {
       if ((error as { status?: number }).status === 404) {
@@ -162,7 +162,7 @@ export const FirmwareRoutes = () => {
   });
 
   return app.get("/github/firmware/list", async (_req, res) => {
-    const releaseCache = await redis.get("gh-releases");
+    const releaseCache = await cacheGet("gh-releases");
 
     if (releaseCache) {
       res.send(JSON.parse(releaseCache));
@@ -251,9 +251,7 @@ export const FirmwareRoutes = () => {
         },
         pullRequests: prArtifacts.filter((pr) => pr.zip_url),
       };
-      redis.set("gh-releases", JSON.stringify(firmwareReleases), {
-        EX: 120,
-      });
+      cacheSet("gh-releases", JSON.stringify(firmwareReleases), 120);
       res.send(firmwareReleases);
     }
   });
