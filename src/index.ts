@@ -22,7 +22,6 @@ import { Gateway } from "./services/index.js";
 
 export const app = new App();
 config();
-RegisterMqttClient();
 app
   .use(logger())
   .use(favicon("static/favicon.ico"))
@@ -95,3 +94,7 @@ UpdaterRoutes();
 MqttRoutes();
 
 app.listen(Number.parseInt(process.env.PORT ?? "4000"));
+
+// After listen, deliberately: MQTT is an optional ingest, and nothing it does should be able to
+// stand between the process starting and the port being served. See lib/mqtt.ts.
+RegisterMqttClient();

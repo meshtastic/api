@@ -2,33 +2,69 @@ import { Protobuf } from "@meshtastic/js";
 import MQTT from "mqtt";
 import { prisma, redis } from "./index.js";
 
-const mqtt = MQTT.connect(process.env.MQTT_URL as string, {
-  username: process.env.MQTT_USERNAME,
-  password: process.env.MQTT_PASSWORD,
-});
-
+// The client is built inside RegisterMqttClient rather than at module scope, and every failure it
+// can raise is handled here. Both of those matter: index.ts reaches this module through the lib
+// barrel, so anything that throws during import -- or any unhandled "error" event on the client --
+// ends the process before app.listen() is reached. That is the fourth way this service had to fail
+// to boot, alongside the three closed in "Take Postgres and Redis out of the boot path" and "Stop
+// the gateway reads from crashing the process", and the only one those two left open.
+//
+// MQTT.connect with MQTT_URL unset falls back to localhost:1883; the resulting ECONNREFUSED
+// arrives as an "error" event, and with no listener registered EventEmitter rethrows it and Node
+// exits. Since the client is a module-scope singleton today, that is a crash loop on every boot --
+// the process is up, nothing is listening, and the platform serves every route from no healthy
+// upstream.
+//
+// Ingest has been dead since 2024-07-15 regardless: the topic parser never matched
+// region-prefixed topics (#115). So an absent or unreachable broker is logged and skipped, not
+// treated as a reason to hold the API down.
 export const RegisterMqttClient = () => {
-  const queue = new MqttQueue();
-  // Subscribe to all topics
-  mqtt.subscribe(process.env.MQTT_ROOT_TOPIC as string);
+  const url = process.env.MQTT_URL;
+  if (!url) {
+    console.warn("MQTT_URL unset, starting without MQTT ingest");
+    return;
+  }
 
-  mqtt.on("message", (topic, payload) => {
-    // Split topic into parts
-    const topicParts = topic.substring(8).split("/");
+  try {
+    const mqtt = MQTT.connect(url, {
+      username: process.env.MQTT_USERNAME,
+      password: process.env.MQTT_PASSWORD,
+    });
 
-    if (topicParts.length === 2) {
-      // Standard channel message
-      try {
-        const decoded = Protobuf.Mqtt.ServiceEnvelope.fromBinary(payload);
-        queue.push(decoded);
-      } catch (error) {
-        console.error(error, topic, payload);
+    // Without this listener the first connection failure is an unhandled "error" event, and an
+    // unhandled "error" event ends the process.
+    mqtt.on("error", (error) => {
+      console.error("MQTT client error", error);
+    });
+
+    const queue = new MqttQueue();
+    // Subscribe to all topics
+    mqtt.subscribe(process.env.MQTT_ROOT_TOPIC as string, (error) => {
+      if (error) {
+        console.error("MQTT subscribe failed", error);
       }
-    } else {
-      // Likely stat message
-      console.log("Unknown topic", topic);
-    }
-  });
+    });
+
+    mqtt.on("message", (topic, payload) => {
+      // Split topic into parts
+      const topicParts = topic.substring(8).split("/");
+
+      if (topicParts.length === 2) {
+        // Standard channel message
+        try {
+          const decoded = Protobuf.Mqtt.ServiceEnvelope.fromBinary(payload);
+          queue.push(decoded);
+        } catch (error) {
+          console.error(error, topic, payload);
+        }
+      } else {
+        // Likely stat message
+        console.log("Unknown topic", topic);
+      }
+    });
+  } catch (error) {
+    console.error("MQTT setup failed, starting without ingest", error);
+  }
 };
 
 interface QueueItem {
