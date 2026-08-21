@@ -35,7 +35,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "latest"
+          # Match engines.node and the deployment runtime. "latest" resolved to Node 26, where
+          # buffer.SlowBuffer is gone and the octokit -> jwa import chain throws on load, so the
+          # server could not boot at all on the version CI was testing -- while the version we
+          # actually ship was never exercised.
+          node-version: "22"
 
       - name: Install Dependencies
         run: pnpm install --ignore-scripts=false
@@ -55,7 +59,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "latest"
+          # Match engines.node and the deployment runtime. "latest" resolved to Node 26, where
+          # buffer.SlowBuffer is gone and the octokit -> jwa import chain throws on load, so the
+          # server could not boot at all on the version CI was testing -- while the version we
+          # actually ship was never exercised.
+          node-version: "22"
 
       - name: Install Dependencies
         run: pnpm install --ignore-scripts=false
