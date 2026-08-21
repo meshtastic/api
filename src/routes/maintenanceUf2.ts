@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { app } from "../index.js";
-import { getMaintenanceUf2ManifestBytes } from "../lib/maintenanceUf2.js";
+import { getMaintenanceUf2Manifest } from "../lib/maintenanceUf2.js";
 
 // Vendored erase-image binaries — see maintenanceUf2.ts for why these are hosted here rather
 // than at web-flasher's public/uf2/. :file is constrained to a bare "<name>.uf2" so it can never
@@ -14,11 +14,7 @@ const assetCache = new Map<string, Buffer>();
 export const MaintenanceUf2Routes = () => {
   app.get("resource/maintenanceUf2", (_req, res) => {
     try {
-      // Send the raw committed bytes, not a re-serialized JSON.stringify of the parsed object —
-      // a client's compile-time manifest-digest pin hashes these exact bytes, and JSON.stringify
-      // is not guaranteed byte-identical to the file on disk (key order, whitespace).
-      res.setHeader("Content-Type", "application/json");
-      res.send(getMaintenanceUf2ManifestBytes());
+      res.json(getMaintenanceUf2Manifest());
     } catch (err) {
       console.error("maintenanceUf2", err);
       res.sendStatus(502);

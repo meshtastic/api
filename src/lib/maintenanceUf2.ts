@@ -12,14 +12,10 @@ import { readFileSync } from "node:fs";
 // that repo does cut releases and mirroring release binaries here would be a second copy to keep
 // in sync.
 //
-// Unlike bootloaderOtaQuirks.ts's advisory data, this manifest gates an irreversible write — the
-// wrong board/image pairing or the wrong erase image against a device's SoftDevice bricks the
-// radio, recoverable only via SWD/serial DFU. Clients must not trust a fetched response blindly:
-// pin a compile-time SHA-256 of this file's raw bytes (not the parsed object — key order and
-// whitespace can differ) and only adopt a fetch whose raw-byte digest matches. A mismatch means
-// keep whatever was already trusted (bundled seed or last-good cache), never the new bytes. This
-// mirrors the existing discipline in MaintenanceUf2.kt's resolveNrfEraseImage: a disagreement
-// refuses, it never guesses.
+// Served like bootloaderOtaQuirks.ts — parsed once, trusted as-is. Each image's own sha256 (below)
+// is still checked against the downloaded bytes before any write, same as before this moved here;
+// that guards against a corrupted download, which is a different concern from trusting this
+// endpoint's content in the first place.
 //
 // The path resolves the same in dev (src/lib) and prod (dist/lib), both two levels below the root.
 const DATA_PATH = new URL("../../data/maintenanceUf2.json", import.meta.url);
@@ -54,22 +50,14 @@ export interface MaintenanceUf2Manifest {
   otafixSupportedTargets: string[];
 }
 
-// Cache the raw bytes once per process — this is what the resource route serves, byte-identical
-// to the committed file, so a client's compile-time manifest-digest pin is checking the same
-// bytes a reviewer/CI would hash when minting that pin.
-let cachedBytes: Buffer | null = null;
-
-export const getMaintenanceUf2ManifestBytes = (): Buffer => {
-  if (!cachedBytes) cachedBytes = readFileSync(DATA_PATH);
-  return cachedBytes;
-};
-
+// Parse once per process — the file only changes via a committed edit + redeploy, same as
+// bootloaderOtaQuirks and eventFirmware.
 let cachedManifest: MaintenanceUf2Manifest | null = null;
 
 export const getMaintenanceUf2Manifest = (): MaintenanceUf2Manifest => {
   if (!cachedManifest) {
     cachedManifest = JSON.parse(
-      getMaintenanceUf2ManifestBytes().toString("utf8"),
+      readFileSync(DATA_PATH, "utf8"),
     ) as MaintenanceUf2Manifest;
   }
   return cachedManifest;
