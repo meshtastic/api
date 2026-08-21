@@ -1,0 +1,62 @@
+name: Sync maintenance UF2 manifest
+
+# Manually run by whoever cuts a new OTAFIX release, to update data/maintenanceUf2.json's pinned
+# digests and release tag. Deliberately NOT scheduled and NOT auto-merged, unlike sync-device-links
+# — this data gates an irreversible bootloader/erase write, so a new board's Board-ID needs a human
+# to confirm it on real hardware before it's trusted. Opens a PR for review; never pushes to main
+# directly.
+
+on:
+  workflow_dispatch:
+    inputs:
+      otafix_release_tag:
+        description: "The Adafruit_nRF52_Bootloader_OTAFIX release tag to sync (e.g. 0.9.2-OTAFIX2.3-BP1.5)"
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "latest"
+
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts=false
+
+      - name: Sync digests from the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm tsx scripts/sync-maintenance-uf2.ts "${{ inputs.otafix_release_tag }}"
+
+      - name: Validate the updated manifest
+        run: pnpm validate:maintenance-uf2
+
+      - name: Read summary
+        id: summary
+        run: |
+          {
+            echo 'body<<EOF'
+            cat otafix-sync-summary.md
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Open PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: sync maintenance UF2 manifest for ${{ inputs.otafix_release_tag }}"
+          title: "chore: sync maintenance UF2 manifest for ${{ inputs.otafix_release_tag }}"
+          body: ${{ steps.summary.outputs.body }}
+          branch: sync-maintenance-uf2
+          add-paths: data/maintenanceUf2.json

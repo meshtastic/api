@@ -27,6 +27,25 @@ jobs:
 
       - name: Run Biome
         run: biome ci
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          # Match engines.node and the deployment runtime. "latest" resolved to Node 26, where
+          # buffer.SlowBuffer is gone and the octokit -> jwa import chain throws on load, so the
+          # server could not boot at all on the version CI was testing -- while the version we
+          # actually ship was never exercised.
+          node-version: "22"
+
+      - name: Install Dependencies
+        run: pnpm install --ignore-scripts=false
+
+      - name: Validate maintenanceUf2.json
+        run: pnpm validate:maintenance-uf2
   build:
     runs-on: ubuntu-latest
     steps:
@@ -40,10 +59,45 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "latest"
+          # Match engines.node and the deployment runtime. "latest" resolved to Node 26, where
+          # buffer.SlowBuffer is gone and the octokit -> jwa import chain throws on load, so the
+          # server could not boot at all on the version CI was testing -- while the version we
+          # actually ship was never exercised.
+          node-version: "22"
 
       - name: Install Dependencies
         run: pnpm install --ignore-scripts=false
 
       - name: Build Package
         run: pnpm build
+
+      # A green build only proved tsc exited 0. In #121 it did exactly that while emitting the
+      # entry point to dist/src/index.js, so `start` hit a missing file and every deploy after it
+      # crash-looped. This step runs what the platform runs and waits for a real response, which
+      # catches both a relocated entry point and anything that dies during boot.
+      - name: Check the built server boots and serves
+        run: |
+          test -f dist/index.js || {
+            echo "::error::dist/index.js is missing -- start runs this exact path"
+            find dist -name index.js
+            exit 1
+          }
+          node dist/index.js &
+          server=$!
+          for _ in $(seq 1 30); do
+            if curl -fsS -o /dev/null "http://127.0.0.1:${PORT}/"; then
+              echo "server answered GET / on port ${PORT}"
+              kill "$server"
+              exit 0
+            fi
+            if ! kill -0 "$server" 2>/dev/null; then
+              echo "::error::server exited during boot without serving a request"
+              exit 1
+            fi
+            sleep 1
+          done
+          echo "::error::server never answered GET / within 30s"
+          kill "$server"
+          exit 1
+        env:
+          PORT: 4000
