@@ -27,21 +27,6 @@ jobs:
 
       - name: Run Biome
         run: biome ci
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "latest"
-
-      - name: Install Dependencies
-        run: pnpm install --ignore-scripts=false
-
-      - name: Validate maintenanceUf2.json
-        run: pnpm validate:maintenance-uf2
   build:
     runs-on: ubuntu-latest
     steps:

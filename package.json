@@ -9,8 +9,7 @@
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
     "build": "prisma generate && tsc",
-    "migrate": "prisma migrate deploy",
-    "validate:maintenance-uf2": "tsx scripts/validate-maintenance-uf2.ts"
+    "migrate": "prisma migrate deploy"
   },
   "engines": {
     "node": "22.x"
