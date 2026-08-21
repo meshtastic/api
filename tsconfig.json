@@ -26,7 +26,13 @@
 
     /* Modules */
     "module": "NodeNext" /* Specify what module code is generated. */,
-    // "rootDir": "./",                                  /* Specify the root folder within your source files. */
+    "rootDir": "./src" /* Make the emit root explicit rather than derived. tsc otherwise infers
+                          it from the common parent of the files in the program, so one .ts file
+                          added outside src/ moved the entry point to dist/src/index.js and left
+                          start (node dist/index.js) pointing at nothing -- how #121 took the API
+                          down. With include below holding the program to src/, this is the
+                          backstop: widen include again and tsc reports the outside file instead
+                          of quietly relocating the output. */,
     "moduleResolution": "NodeNext" /* Specify how TypeScript looks up a file from a given module specifier. */,
     // "baseUrl": "./",                                  /* Specify the base directory to resolve non-relative module names. */
     // "paths": {},                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
@@ -105,5 +111,12 @@
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
-  }
+  },
+
+  /* Hold the build program to the server. This is what keeps a .ts file elsewhere in the repo out
+     of the emit-root calculation: the default is every TypeScript file in the repo, which is how
+     scripts/ entered the program and moved the output in #121. Such a file is now excluded rather
+     than compiled -- scripts under scripts/ run through tsx, which compiles whatever file it is
+     handed regardless of this list, as pnpm validate:maintenance-uf2 does. */
+  "include": ["src/**/*"]
 }
