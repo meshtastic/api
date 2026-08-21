@@ -13,6 +13,7 @@ import {
   EventFirmwareRoutes,
   FirmwareRoutes,
   GithubRoutes,
+  MaintenanceUf2Routes,
   MqttRoutes,
   ResourceRoutes,
   UpdaterRoutes,
@@ -86,6 +87,7 @@ FirmwareRoutes();
 GithubRoutes();
 ResourceRoutes();
 BootloaderOtaQuirksRoutes();
+MaintenanceUf2Routes();
 DeviceLinksRoutes();
 EventFirmwareRoutes();
 EventFirmwareIconRoutes();
