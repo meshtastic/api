@@ -1466,6 +1466,22 @@
       "Targets": [
         "thinknode_m9"
       ]
+    },
+    {
+      "ShortCode": "rokland-t-deck-cypher",
+      "Description": "LILYGO T-Deck CYPHER-M8K (Rokland)",
+      "Type": "Marketplace",
+      "Targets": [
+        "t-deck"
+      ]
+    },
+    {
+      "ShortCode": "rokland-rak6421",
+      "Description": "Rokland RAK6421 Hat+",
+      "Type": "Marketplace",
+      "Targets": [
+        "native"
+      ]
     }
   ],
   "Marketplaces": {
