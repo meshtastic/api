@@ -53,7 +53,16 @@ app
         if (whitelist.indexOf(req.headers.origin) !== -1) {
           return req.headers.origin;
         }
-        throw new Error("Origin not allowed by CORS");
+
+        // Not allowed: return no origin rather than throwing. @tinyhttp/cors
+        // passes this return value straight to res.setHeader and does not catch,
+        // so throwing here escaped the middleware and turned every request from a
+        // non-whitelisted origin into a 500 -- including the OPTIONS preflight.
+        // An empty value is the same denial the no-origin branch above already
+        // returns: the browser sees no matching Access-Control-Allow-Origin and
+        // blocks the read, which is where that decision belongs. Credentials are
+        // enabled, so a wildcard is not an option.
+        return "";
       },
     }),
   )
