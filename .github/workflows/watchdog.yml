@@ -1,0 +1,83 @@
+name: Watchdog
+
+# Catches the failure mode static hosting is worst at: everything returns 200 forever while the
+# data behind it quietly stops being updated.
+
+on:
+  schedule:
+    - cron: "40 */6 * * *"
+  workflow_dispatch:
+    inputs:
+      base:
+        description: "Base URL to check"
+        type: string
+        required: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Contract self-check
+        run: node tools/parity.mjs --self-check --base "${{ inputs.base || vars.API_BASE_URL || 'https://apiv2.meshtastic.org' }}"
+
+      # Asserts on _meta.deployedAt, which the publisher rewrites on EVERY run whether or not
+      # content changed. Deliberately not on deviceLinks.generatedAt: the msh.to catalog changes
+      # on a scale of days, so a freshness alarm on a payload timestamp would fire within a day
+      # and then forever -- turning the one alarm that catches a stalled pipeline into noise.
+      - name: Pipeline freshness
+        run: |
+          set -euo pipefail
+          base="${{ inputs.base || vars.API_BASE_URL || 'https://apiv2.meshtastic.org' }}"
+          deployed=$(curl -fsS -m 20 "$base/_meta" | jq -r '.deployedAt')
+          echo "last publish: $deployed"
+          age=$(( ($(date -u +%s) - $(date -u -d "$deployed" +%s)) / 60 ))
+          echo "age: ${age} minutes"
+          if [ "$age" -gt 360 ]; then
+            echo "::error::no publish in ${age} minutes -- the sync pipeline has stalled"
+            exit 1
+          fi
+
+      # Railway is the rollback target for the whole cutover window. A Worker route on /* would
+      # otherwise swallow its ACME challenge and let the cert lapse on a host nobody can log in to.
+      # The Worker passes /.well-known/* through, SSL mode is Full (which tolerates an expired
+      # origin cert), and this is the third layer: notice before either matters.
+      - name: Railway origin certificate still healthy
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          host=api-production-871d.up.railway.app
+          end=$(echo | openssl s_client -servername "$host" -connect "$host":443 2>/dev/null \
+                | openssl x509 -noout -enddate | cut -d= -f2)
+          echo "notAfter: $end"
+          days=$(( ($(date -u -d "$end" +%s) - $(date -u +%s)) / 86400 ))
+          echo "days remaining: $days"
+          if [ "$days" -lt 21 ]; then
+            echo "::warning::Railway origin cert expires in ${days} days -- the rollback target is at risk"
+          fi
+
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const title = '[pipeline] Watchdog failed';
+            const body = `Run: ${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', labels: 'pipeline-alert',
+            });
+            const existing = open.find(i => i.title === title);
+            if (existing) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: existing.number, body });
+            } else {
+              await github.rest.issues.create({ owner, repo, title, body, labels: ['pipeline-alert'] });
+            }

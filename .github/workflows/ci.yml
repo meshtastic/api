@@ -5,11 +5,13 @@ on:
     branches:
       - main
       - master
+      - v2
 
   pull_request:
     branches:
       - main
       - master
+      - v2
 
 jobs:
   quality:
@@ -101,3 +103,66 @@ jobs:
           exit 1
         env:
           PORT: 4000
+
+  # The v2 static pipeline. Runs alongside the jobs above, which still gate the tinyhttp server
+  # that Railway serves until the flip. When the server is deleted, `quality` and `build` go with
+  # it and this becomes the whole of CI.
+  static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # build-data derives deviceLinks' generatedAt from `git log`, so it needs real history.
+          # With the default shallow clone it throws rather than silently stamping something wrong.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile --ignore-scripts=false
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build the published documents
+        run: pnpm build:data
+
+      - name: Validate data
+        run: pnpm validate
+
+      # The build must be a pure function of the tree: no clock, no network, no environment.
+      # Anything non-deterministic here would make byte-parity unprovable and turn every publish
+      # into a spurious diff.
+      - name: Build is deterministic
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/gen-a
+          cp -R worker/src/generated /tmp/gen-a
+          pnpm build:data
+          diff -r /tmp/gen-a worker/src/generated
+
+      # Scoped to the two FROZEN captures only. A byte-exact gate over all generated output would
+      # go red on this repo's single most common PR (adding a board) and on every hourly
+      # deviceLinks commit -- and because deploy.yml runs the same check, it would block every R2
+      # update an hour after cutover.
+      - name: Frozen objects have not drifted
+        run: shasum -a 256 -c tests/golden/frozen.sha256
+
+      - name: Router contract tests
+        run: pnpm test
+
+      - name: Stage the R2 objects
+        run: pnpm build:static
+
+      - name: Worker bundles and stays within budget
+        run: |
+          set -euo pipefail
+          pnpm exec wrangler deploy --dry-run --outdir=.dry --env staging
+          size=$(cat .dry/*.js | wc -c)
+          echo "bundle: ${size} bytes"
+          test "$size" -lt 2097152

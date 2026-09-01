@@ -10,7 +10,13 @@
     "start": "node dist/index.js",
     "build": "prisma generate && tsc",
     "migrate": "prisma migrate deploy",
-    "validate:maintenance-uf2": "tsx scripts/validate-maintenance-uf2.ts"
+    "validate:maintenance-uf2": "tsx scripts/validate-maintenance-uf2.ts",
+    "build:data": "tsx tools/build-data.ts",
+    "build:static": "tsx tools/build-static.ts",
+    "validate": "tsx tools/validate.ts",
+    "typecheck": "tsc --noEmit && tsc -p worker/tsconfig.json && tsc -p tools/tsconfig.json",
+    "test": "vitest run",
+    "parity": "node tools/parity.mjs"
   },
   "engines": {
     "node": "22.x"
@@ -41,8 +47,13 @@
   "devDependencies": {
     "@biomejs/biome": "^2.1.3",
     "@buf/meshtastic_protobufs.bufbuild_es": "1.7.2-20240216123215-6b07c41c68c9.1",
-    "@types/node": "^20.11.19",
+    "@cloudflare/vitest-pool-workers": "^0.22.0",
+    "@cloudflare/workers-types": "^5.20260901.1",
+    "@types/node": "^22.20.1",
     "prisma": "^5.22.0",
-    "tsx": "^4.7.1"
+    "tsx": "^4.23.13",
+    "vitest": "^4.1.11",
+    "wrangler": "^4.127.1",
+    "yaml": "^2.9.0"
   }
 }

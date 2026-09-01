@@ -7,3 +7,10 @@ dist
 
 #Dotfiles 
 .dotfiles/
+
+# Build output: a pure function of the tree, so committing it would be a second source of truth.
+worker/src/generated/
+dist-static/
+dist-github/
+dist-meta/
+.dry/

@@ -1,0 +1,135 @@
+name: Sync firmware list
+
+# Regenerates /github/firmware/list and /github/releases, which the old server rebuilt from the
+# GitHub API on every cache miss (120s Redis TTL).
+#
+# This writes STRAIGHT TO R2 and deliberately does not commit. The payload is ~330 KB across the
+# two documents and turns over several times a day; committing it would couple every firmware
+# release to a repo deploy and bury `wrangler rollback` under dozens of content-only versions.
+#
+# It is the SOLE writer of these two objects. There is no Worker cron: one writer, in Actions,
+# where the maintainer can actually see it -- unlike Railway, whose logs are unreachable -- and
+# sharing no rate-limit budget with a public request path.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+  # meshtastic/firmware's release workflow can collapse release latency from 15 minutes to
+  # seconds with a single curl. Optional; the schedule is the floor.
+  repository_dispatch:
+    types: [firmware-release]
+  push:
+    branches: [v2]
+    paths: [tools/fetch-firmware-list.mjs, tools/publish-firmware-list.mjs]
+
+concurrency:
+  group: sync-firmware-list
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  R2_BUCKET: meshtastic-api-v1
+  AWS_DEFAULT_REGION: auto
+  AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+  AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Configure R2 endpoint
+        run: echo "R2_ENDPOINT=https://${{ vars.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com" >> "$GITHUB_ENV"
+
+      # The current object is the baseline for the RELATIVE validation checks (did stable drop to
+      # zero? did the payload halve?). Absent on the very first run, which the script tolerates.
+      - name: Fetch the currently-published list
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 cp "s3://$R2_BUCKET/v1/github/firmware/list.json" /tmp/previous.json \
+            --endpoint-url "$R2_ENDPOINT" --no-progress || echo "(no previous object yet)"
+
+      # Exits non-zero WITHOUT writing if validation fails, so R2 keeps serving the last good
+      # payload. A stale list beats a truncated one.
+      - name: Build and validate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node tools/publish-firmware-list.mjs --previous /tmp/previous.json
+
+      - name: Upload
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            aws s3 cp dist-github/github/firmware/list.json \
+              "s3://$R2_BUCKET/v1/github/firmware/list.json" \
+              --endpoint-url "$R2_ENDPOINT" --content-type application/json --no-progress && break
+            echo "retry $attempt"; sleep $((attempt * 5))
+          done
+          for attempt in 1 2 3; do
+            aws s3 cp dist-github/github/releases.json \
+              "s3://$R2_BUCKET/v1/github/releases.json" \
+              --endpoint-url "$R2_ENDPOINT" --content-type application/json --no-progress && break
+            echo "retry $attempt"; sleep $((attempt * 5))
+          done
+
+      - name: Verify the objects landed
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          EXTRA_KEYS: "[]"
+        run: |
+          mkdir -p dist-static
+          cp dist-github/manifest.json dist-static/manifest.json
+          node tools/verify-r2.mjs
+
+      - name: Refresh _meta
+        env:
+          META_SOURCE: sync-firmware-list
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          node tools/write-meta.mjs
+          aws s3 cp dist-meta/_meta.json "s3://$R2_BUCKET/v1/_meta.json" \
+            --endpoint-url "$R2_ENDPOINT" --content-type application/json --no-progress
+
+      # External dead-man's switch. `|| true` on purpose: a dead monitoring service must never be
+      # able to fail a publish. An in-repo watchdog cannot detect its own disablement, which is
+      # exactly the failure this covers -- GitHub disables scheduled workflows in a public repo
+      # after 60 days of no repository activity, silently.
+      - name: Ping dead-man's switch
+        if: success() && vars.HEALTHCHECK_FIRMWARE_URL != ''
+        run: curl -fsS -m 10 "${{ vars.HEALTHCHECK_FIRMWARE_URL }}" || true
+
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const title = '[pipeline] Sync firmware list failed';
+            const body = `Run: ${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', labels: 'pipeline-alert',
+            });
+            const existing = open.find(i => i.title === title);
+            if (existing) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: existing.number, body });
+            } else {
+              await github.rest.issues.create({ owner, repo, title, body, labels: ['pipeline-alert'] });
+            }

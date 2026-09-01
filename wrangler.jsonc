@@ -1,0 +1,63 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "meshtastic-api",
+  "main": "worker/src/index.ts",
+  "compatibility_date": "2026-08-22",
+
+  // No node_compat, no nodejs_compat, no polyfills: the Worker has zero runtime dependencies.
+  // Dropping octokit in particular removes the jwa -> buffer.SlowBuffer import chain that took
+  // the whole API down when the builder picked a newer Node.
+
+  // Smart placement is deliberately OFF. It relocates the Worker toward its backend, which adds
+  // eyeball latency on a cache-serving hot path and fragments the per-colo Cache API.
+
+  "observability": { "enabled": true },
+
+  "r2_buckets": [
+    {
+      "binding": "DATA",
+      "bucket_name": "meshtastic-api-v1"
+    }
+  ],
+
+  "env": {
+    "staging": {
+      "name": "meshtastic-api-staging",
+      "routes": [
+        {
+          "pattern": "apiv2.meshtastic.org/*",
+          "zone_name": "meshtastic.org"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "DATA",
+          "bucket_name": "meshtastic-api-v1"
+        }
+      ]
+    },
+
+    "production": {
+      "name": "meshtastic-api",
+      // THE FLIP. Uncommenting this block and running `wrangler deploy --env production` is what
+      // moves api.meshtastic.org off Railway. It attaches to the EXISTING proxied DNS record --
+      // no record is deleted and no certificate is issued, so there is no gap. (A Workers Custom
+      // Domain cannot be created on a hostname that already has a CNAME, which would have meant
+      // deleting the Railway record and waiting for cert issuance: minutes of hard downtime and a
+      // DNS-TTL-bound rollback. A Route attaches and detaches in seconds.)
+      //
+      // Rollback order matters: disable the Deploy workflow FIRST, then delete the route --
+      // otherwise the next deploy.yml run silently re-creates it mid-incident. See ROLLBACK.md.
+      //
+      // "routes": [
+      //   { "pattern": "api.meshtastic.org/*", "zone_name": "meshtastic.org" }
+      // ],
+      "r2_buckets": [
+        {
+          "binding": "DATA",
+          "bucket_name": "meshtastic-api-v1"
+        }
+      ]
+    }
+  }
+}

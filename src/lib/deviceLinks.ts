@@ -47,7 +47,7 @@ const targetToHwModel = new Map(
   deviceHardwareList.map((d) => [d.platformioTarget, d.hwModel]),
 );
 
-const resolve = (): DeviceLinksResponse => {
+const resolve = (generatedAt: string): DeviceLinksResponse => {
   const data = JSON.parse(readFileSync(CATALOG_PATH, "utf8")) as Catalog;
   const routes = data.Routes ?? [];
   const marketplaces = data.Marketplaces ?? {}; // tolerate null/absent
@@ -94,17 +94,26 @@ const resolve = (): DeviceLinksResponse => {
 
   return {
     version: 1,
-    generatedAt: new Date().toISOString(),
+    generatedAt,
     source: SOURCE,
     links,
   };
 };
+
+/**
+ * Build-time entry point. `generatedAt` is passed in rather than read from the clock so the
+ * output is a pure function of the committed catalog: the same commit always produces the same
+ * bytes, which is what lets CI assert determinism and lets the parity harness diff exactly.
+ * The publisher passes the catalog file's commit time.
+ */
+export const resolveDeviceLinks = (generatedAt: string): DeviceLinksResponse =>
+  resolve(generatedAt);
 
 // Resolve once per process. The catalog only changes via a committed file + redeploy,
 // so there is nothing to invalidate at runtime.
 let cached: DeviceLinksResponse | null = null;
 
 export const getDeviceLinks = (): DeviceLinksResponse => {
-  if (!cached) cached = resolve();
+  if (!cached) cached = resolve(new Date().toISOString());
   return cached;
 };

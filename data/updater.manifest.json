@@ -1,0 +1,19 @@
+{
+  "version": "0.3.5",
+  "notes": "See release assets to download this version and install.",
+  "pub_date": "2023-11-16T07:52:39.674Z",
+  "platforms": {
+    "linux-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSVTQ3ZXg2TkEzbFh6Z0FySVoxN2FVMDVGM1RNWGpRak1XL1RoRmFnUGJSRFpVTEJMaHdaeGdUZ2lFWWxoNDMzUWlIK1lKT3Rsb1ZEU0NkTDJuNE5POWxpa2czcGhnVndFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzAwMTIwODc1CWZpbGU6bWVzaHRhc3RpYy1kZXNrdG9wLWZsYXNoZXJfMC4zLjVfYW1kNjQuQXBwSW1hZ2UudGFyLmd6ClBkYlRodnhvNlhESFdIUkd0UmtKODFFYXNqdk1YOGdhU09iYTdjYlU5R2FsTnhKNHBvNUliZm1wOEJnckJDc0tmcE5NOGY5ZHFoTjQxR25vQ1RERURRPT0K",
+      "url": "https://github.com/ajmcquilkin/meshtastic-flasher/releases/download/app-v0.3.5/meshtastic-desktop-flasher_0.3.5_amd64.AppImage.tar.gz"
+    },
+    "darwin-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSVTQ3ZXg2TkEzbFZzY253RCs3SjQ0ZFdSVEwvelhVN2dxWGhSVFdzU0JEQ2VKdEpkM0tPMGFKYWp4ejYxbHROa0ppZm1SM0s1cCtucW41WFVIeWV4TnZjaGpMVUhWWHdBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzAwMTIxMDAxCWZpbGU6TWVzaHRhc3RpYyBEZXNrdG9wIEZsYXNoZXIuYXBwLnRhci5negp6Q0UvSHVZcmR6b0o3TEdIUTFLMHFNYWl2eDBwVndnR0F6clJIVDJaam5qWktzV2wzaWRMd1p0QjJza2ZEdHZ4c1E3WXdrSVU4aTlieVFUZHVscEpEQT09Cg==",
+      "url": "https://github.com/ajmcquilkin/meshtastic-flasher/releases/download/app-v0.3.5/Meshtastic.Desktop.Flasher_x64.app.tar.gz"
+    },
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSVTQ3ZXg2TkEzbGVSNmpubzl5R29hVGNkQlJRRlFrd25PUDJDN1JWV3d2Y3FrdkpaM1NGTHI3Y1MrZ0h1b0hYSmZCd3ZDTStDa0JzbWxTVS9rU09nbEZoRWNDQ2xJYUF3PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzAwMTIxMTU0CWZpbGU6TWVzaHRhc3RpYyBEZXNrdG9wIEZsYXNoZXJfMC4zLjVfeDY0X2VuLVVTLm1zaS56aXAKaFZ5OGZ6SlFFcWFWNW13ck5SR0xDRldCQ01DYkFFeHo3M1ZxVU9Yb0Y5TFQ0VldxZy9hTmN4Q2xoa0ZzdWdkalZzUlU3R3hFaWhMN0E3VlNUNTN0Q3c9PQo=",
+      "url": "https://github.com/ajmcquilkin/meshtastic-flasher/releases/download/app-v0.3.5/Meshtastic.Desktop.Flasher_0.3.5_x64_en-US.msi.zip"
+    }
+  }
+}
