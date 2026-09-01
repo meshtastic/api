@@ -104,9 +104,17 @@ cmd_dns() {
   echo "==> Creating proxied placeholder record for ${HOST}"
   # AAAA to 100:: is the documented route-only placeholder: it exists purely so a Worker route can
   # attach to the hostname. It must be PROXIED (orange) or the route never sees traffic.
-  local existing
-  existing=$(curl -fsS "${api}/zones/${zone_id}/dns_records?name=${HOST}" \
-    -H "Authorization: Bearer ${CF_DNS_TOKEN}" | jq -r '.result[0].id // empty')
+  # Filter client-side on an exact name match rather than trusting the API's ?name= semantics.
+  # Taking .result[0] from a filter that turns out to be ignored hands you an arbitrary record
+  # from the zone -- the same mistake that made the zone lookup above pick the wrong zone.
+  local records existing
+  records=$(curl -fsS "${api}/zones/${zone_id}/dns_records?per_page=5000" \
+    -H "Authorization: Bearer ${CF_DNS_TOKEN}")
+  existing=$(printf '%s' "$records" | jq -r --arg n "$HOST" \
+    '[.result[] | select(.name == $n)] | .[0].id // empty')
+  printf '%s' "$records" | jq -r --arg n "$HOST" \
+    '.result[] | select(.name == $n) | "    existing: type=\(.type) content=\(.content) proxied=\(.proxied) ttl=\(.ttl)"'
+
   if [ -n "$existing" ]; then
     echo "    a record for ${HOST} already exists (id ${existing}) -- leaving it alone"
   else
@@ -122,7 +130,7 @@ cmd_dns() {
   # Ask the zone's own authoritative nameservers, which bypasses every cache.
   echo "==> Verifying against the authoritative nameservers"
   local ns rc
-  ns=$(dig +short NS "${ZONE}" | head -1)
+  ns=$(dig +short NS "${ZONE}" | head -1 | sed 's/\.$//')
   rc=$(dig "@${ns}" "${HOST}" 2>/dev/null | grep -c "^${HOST}" || true)
   if [ "${rc:-0}" -gt 0 ]; then
     echo "    ${HOST} resolves authoritatively -- good"
@@ -213,9 +221,34 @@ cmd_check() {
   fi
 }
 
+# Dumps what the API believes about the record, next to what DNS actually answers. Prints no
+# secrets -- DNS records are public data.
+cmd_dns_debug() {
+  need curl; need jq
+  if [ -z "${CF_DNS_TOKEN:-}" ]; then
+    printf 'Cloudflare API token with Zone:Read + DNS:Read (input hidden): '
+    read -rs CF_DNS_TOKEN; echo
+  fi
+  local api=https://api.cloudflare.com/client/v4 zone_id
+  zone_id=$(curl -fsS "${api}/zones?name=${ZONE}" -H "Authorization: Bearer ${CF_DNS_TOKEN}" \
+    | jq -r '.result[0].id')
+  echo "== what the API says =="
+  curl -fsS "${api}/zones/${zone_id}/dns_records?per_page=5000" \
+    -H "Authorization: Bearer ${CF_DNS_TOKEN}" \
+    | jq --arg n "$HOST" '[.result[] | select(.name == $n)]'
+  echo "== zone settings that can suppress a record =="
+  curl -fsS "${api}/zones/${zone_id}" -H "Authorization: Bearer ${CF_DNS_TOKEN}" \
+    | jq '{status: .result.status, paused: .result.paused, type: .result.type, plan: .result.plan.name}'
+  unset CF_DNS_TOKEN
+  echo "== what DNS actually answers =="
+  local ns; ns=$(dig +short NS "${ZONE}" | head -1 | sed 's/\.$//')
+  dig "@${ns}" "${HOST}" AAAA | grep -E "status:|^${HOST}" || echo "   (no answer)"
+}
+
 case "${1:-}" in
   bucket)  cmd_bucket ;;
   dns)     cmd_dns ;;
+  dns-debug) cmd_dns_debug ;;
   secrets) cmd_secrets ;;
   check)   cmd_check ;;
   *) sed -n '2,20p' "$0" | sed 's/^# \{0,1\}//'; exit 1 ;;
