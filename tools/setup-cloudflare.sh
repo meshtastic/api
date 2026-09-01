@@ -284,6 +284,22 @@ cmd_secrets() {
   check_shape .r2-secret-access-key  '^[0-9a-f]{64}$'          'an R2 Secret Access Key (64 hex)' || shape_ok=1
   [ "$shape_ok" = "0" ] || die "refusing to store a malformed credential"
 
+  # Shape is necessary but not sufficient: a well-formed token that has been revoked, or was
+  # created in the wrong account, looks identical here and then fails deep inside a deploy with
+  # "Invalid access token [code: 9109]". Prove both credentials actually work first.
+  echo
+  echo "==> Verifying the Workers token against the Cloudflare API"
+  CLOUDFLARE_API_TOKEN="$(tr -d '\r\n' < .cf-worker-token)" \
+  CLOUDFLARE_ACCOUNT_ID="$account_id" \
+    node tools/cf-verify-token.mjs || die "the Workers token is not usable -- nothing was stored"
+
+  echo "==> Verifying the R2 credentials against the bucket"
+  R2_ACCOUNT_ID="$account_id" R2_BUCKET="$BUCKET" \
+  R2_ACCESS_KEY_ID="$(tr -d '\r\n' < .r2-access-key-id)" \
+  R2_SECRET_ACCESS_KEY="$(tr -d '\r\n' < .r2-secret-access-key)" \
+    node tools/r2-verify-creds.mjs || die "the R2 credentials are not usable -- nothing was stored"
+  echo
+
   # Piped straight from file to gh; the value is never rendered to a terminal.
   tr -d '\r\n' < .cf-worker-token       | gh secret set CLOUDFLARE_API_TOKEN   -R "$REPO"
   tr -d '\r\n' < .r2-access-key-id      | gh secret set R2_ACCESS_KEY_ID       -R "$REPO"

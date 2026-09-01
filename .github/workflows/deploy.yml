@@ -48,6 +48,11 @@ concurrency:
 
 permissions:
   contents: read
+  # The failure-reporting step opens or comments on a deduplicated issue, which needs issues:
+  # write. Without it that step fails with "Resource not accessible by integration" -- so a failed
+  # deploy produced TWO failures and no notification, which is the one moment the notification
+  # actually matters.
+  issues: write
 
 env:
   R2_BUCKET: meshtastic-api-v1

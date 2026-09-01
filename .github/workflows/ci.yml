@@ -132,8 +132,13 @@ jobs:
       - name: Build the published documents
         run: pnpm build:data
 
-      - name: Typecheck
-        run: pnpm typecheck
+      # typecheck:v2 covers worker/ and tools/ only. The root `tsc --noEmit` takes in src/**, the
+      # tinyhttp server, whose types are not resolvable until `prisma generate` has run -- that is
+      # the `build` job's concern, and it already does exactly that. Running it here made the
+      # static pipeline fail on the legacy server's Prisma types depending on whether the
+      # postinstall generate had happened.
+      - name: Typecheck the v2 tree
+        run: pnpm typecheck:v2
 
       - name: Validate data
         run: pnpm validate

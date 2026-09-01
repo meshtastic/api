@@ -16,7 +16,8 @@
     "validate": "tsx tools/validate.ts",
     "typecheck": "tsc --noEmit && tsc -p worker/tsconfig.json && tsc -p tools/tsconfig.json",
     "test": "vitest run",
-    "parity": "node tools/parity.mjs"
+    "parity": "node tools/parity.mjs",
+    "typecheck:v2": "tsc -p worker/tsconfig.json && tsc -p tools/tsconfig.json"
   },
   "engines": {
     "node": "22.x"
