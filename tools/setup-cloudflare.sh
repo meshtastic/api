@@ -161,19 +161,31 @@ cmd_dns() {
   fi
   unset CF_DNS_TOKEN
 
-  # A 200 from the API is not proof the name resolves -- it only proves SOME zone accepted it.
-  # Ask the zone's own authoritative nameservers, which bypasses every cache.
-  echo "==> Verifying against the authoritative nameservers"
-  local ns rc
-  ns=$(dig +short NS "${ZONE}" | head -1 | sed 's/\.$//')
-  rc=$(dig "@${ns}" "${HOST}" 2>/dev/null | grep -c "^${HOST}" || true)
-  if [ "${rc:-0}" -gt 0 ]; then
-    echo "    ${HOST} resolves authoritatively -- good"
-  else
-    echo "    ${HOST} does NOT resolve on ${ns}." >&2
-    echo "    The record was accepted by a zone that is not serving this domain." >&2
-    exit 1
-  fi
+  # A 200 from the API is not proof the name is being served yet, so verify against the zone's
+  # own authoritative nameservers. But RETRY: Cloudflare's edge publish is usually seconds and is
+  # occasionally minutes, and a single failed lookup here previously produced a confidently wrong
+  # "the record was accepted by a zone that is not serving this domain" -- which sent an
+  # investigation down an account-mismatch path for half an hour. A slow publish and a misdirected
+  # write look identical for the first minute; only time tells them apart.
+  echo "==> Verifying against the authoritative nameservers (retrying, publish can take minutes)"
+  local ns; ns=$(dig +short NS "${ZONE}" | head -1 | sed 's/\.$//')
+  local i
+  for i in $(seq 1 30); do
+    if dig "@${ns}" "${HOST}" AAAA +short 2>/dev/null | grep -q .; then
+      echo "    ${HOST} resolves authoritatively after ~$(( (i - 1) * 10 ))s:"
+      dig "@${ns}" "${HOST}" AAAA +short | sed 's/^/      /'
+      return 0
+    fi
+    printf '.'
+    sleep 10
+  done
+  echo
+  echo "    ${HOST} still does not resolve on ${ns} after 5 minutes." >&2
+  echo "    Before assuming the write went to the wrong zone, check the dashboard:" >&2
+  echo "      ${ZONE} -> DNS -> Records, and search for ${HOST}." >&2
+  echo "    If it is listed there, this is still a publish delay -- just re-check with:" >&2
+  echo "      dig @${ns} ${HOST} AAAA" >&2
+  exit 1
 }
 
 # Derives the R2 S3 credentials from a Cloudflare API token, per the R2 docs:
