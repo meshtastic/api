@@ -126,11 +126,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile --ignore-scripts=false
 
-      - name: Typecheck
-        run: pnpm typecheck
-
+      # build:data FIRST. worker/src/generated/ is gitignored -- it is a pure function of the
+      # tree, so committing it would be a second source of truth -- which means a fresh checkout
+      # does not have it and `tsc` cannot resolve ./generated/documents.js until it is built.
       - name: Build the published documents
         run: pnpm build:data
+
+      - name: Typecheck
+        run: pnpm typecheck
 
       - name: Validate data
         run: pnpm validate
