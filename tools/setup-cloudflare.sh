@@ -63,11 +63,43 @@ cmd_dns() {
 
   local api=https://api.cloudflare.com/client/v4
   echo "==> Looking up zone ${ZONE}"
+  local zones
+  zones=$(curl -fsS "${api}/zones?name=${ZONE}" -H "Authorization: Bearer ${CF_DNS_TOKEN}")
+  local count
+  count=$(printf '%s' "$zones" | jq -r '.result | length')
+  [ "$count" != "0" ] || die "no zone named ${ZONE} visible to this token (lacks Zone:Read, or wrong account)"
+
+  printf '%s' "$zones" | jq -r '.result[] | "    candidate: id=\(.id) status=\(.status) account=\(.account.name) ns=\(.name_servers // [] | join(","))"'
+
+  # A domain can exist as more than one zone object -- a live one plus a pending/moved duplicate in
+  # another account. Creating a record in the wrong one succeeds, returns 200, and then never
+  # resolves, which is a genuinely confusing failure. Pick the zone whose ASSIGNED NAMESERVERS
+  # match what the internet is actually being told to use.
+  local live_ns
+  live_ns=$(dig +short NS "${ZONE}" | sed 's/\.$//' | sort | head -1)
+  [ -n "$live_ns" ] || die "could not read the live NS for ${ZONE}"
+  echo "    live nameserver in public DNS: ${live_ns}"
+
   local zone_id
-  zone_id=$(curl -fsS "${api}/zones?name=${ZONE}" \
-    -H "Authorization: Bearer ${CF_DNS_TOKEN}" | jq -r '.result[0].id // empty')
-  [ -n "$zone_id" ] || die "could not resolve zone ${ZONE} (token lacks Zone:Read, or wrong account)"
-  echo "    zone id: ${zone_id}"
+  zone_id=$(printf '%s' "$zones" | jq -r --arg ns "$live_ns" \
+    '.result[] | select((.name_servers // []) | map(ascii_downcase) | index($ns)) | .id' | head -1)
+
+  if [ -z "$zone_id" ]; then
+    echo
+    echo "    None of the zones this token can see is the one serving ${ZONE}:" >&2
+    echo "    its live nameservers (${live_ns}...) do not match any candidate above." >&2
+    echo >&2
+    echo "    That means this token belongs to a different Cloudflare account than the one" >&2
+    echo "    hosting ${ZONE}. It matters beyond DNS: Worker routes and R2 custom domains for" >&2
+    echo "    this zone can only be created from the account that owns it, so the whole" >&2
+    echo "    deployment has to happen in that account." >&2
+    die "wrong Cloudflare account for ${ZONE}"
+  fi
+
+  local status
+  status=$(printf '%s' "$zones" | jq -r --arg id "$zone_id" '.result[] | select(.id==$id) | .status')
+  echo "    selected zone: ${zone_id} (status=${status})"
+  [ "$status" = "active" ] || echo "    WARNING: zone status is '${status}', not 'active'" >&2
 
   echo "==> Creating proxied placeholder record for ${HOST}"
   # AAAA to 100:: is the documented route-only placeholder: it exists purely so a Worker route can
@@ -85,6 +117,20 @@ cmd_dns() {
       | jq -r 'if .success then "    created: \(.result.name) \(.result.type) proxied=\(.result.proxied)" else "    FAILED: \(.errors)" end'
   fi
   unset CF_DNS_TOKEN
+
+  # A 200 from the API is not proof the name resolves -- it only proves SOME zone accepted it.
+  # Ask the zone's own authoritative nameservers, which bypasses every cache.
+  echo "==> Verifying against the authoritative nameservers"
+  local ns rc
+  ns=$(dig +short NS "${ZONE}" | head -1)
+  rc=$(dig "@${ns}" "${HOST}" 2>/dev/null | grep -c "^${HOST}" || true)
+  if [ "${rc:-0}" -gt 0 ]; then
+    echo "    ${HOST} resolves authoritatively -- good"
+  else
+    echo "    ${HOST} does NOT resolve on ${ns}." >&2
+    echo "    The record was accepted by a zone that is not serving this domain." >&2
+    exit 1
+  fi
 }
 
 # Derives the R2 S3 credentials from a Cloudflare API token, per the R2 docs:
