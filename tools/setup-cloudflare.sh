@@ -245,8 +245,61 @@ cmd_dns_debug() {
   dig "@${ns}" "${HOST}" AAAA | grep -E "status:|^${HOST}" || echo "   (no answer)"
 }
 
+# Distinguishes "the API writes are not reaching the zone that DNS actually serves" from
+# "this specific proxied AAAA will not publish", by writing a plain unproxied TXT record --
+# the simplest thing a nameserver can serve -- and asking the authoritative servers for it.
+# Self-cleaning: the TXT is deleted whether or not it resolved.
+cmd_dns_probe() {
+  need curl; need jq; need dig
+  if [ -z "${CF_DNS_TOKEN:-}" ]; then
+    printf 'Cloudflare API token with Zone:Read + DNS:Edit (input hidden): '
+    read -rs CF_DNS_TOKEN; echo
+  fi
+  local api=https://api.cloudflare.com/client/v4 zone_id ns probe rec_id
+  zone_id=$(curl -fsS "${api}/zones?name=${ZONE}" -H "Authorization: Bearer ${CF_DNS_TOKEN}" \
+    | jq -r '.result[0].id')
+  ns=$(dig +short NS "${ZONE}" | head -1 | sed 's/\.$//')
+  probe="_v2probe.${ZONE}"
+
+  echo "==> SOA serial before the write"
+  local before; before=$(dig "@${ns}" "${ZONE}" SOA +short | awk '{print $3}')
+  echo "    ${before}"
+
+  echo "==> Creating unproxied TXT ${probe}"
+  rec_id=$(curl -fsS -X POST "${api}/zones/${zone_id}/dns_records" \
+    -H "Authorization: Bearer ${CF_DNS_TOKEN}" -H "Content-Type: application/json" \
+    --data "{\"type\":\"TXT\",\"name\":\"${probe}\",\"content\":\"v2probe\",\"ttl\":60}" \
+    | jq -r '.result.id // empty')
+  [ -n "$rec_id" ] || die "the API refused to create the TXT record"
+  echo "    id ${rec_id}"
+
+  sleep 10
+  echo "==> Asking ${ns} for it"
+  local got; got=$(dig "@${ns}" "${probe}" TXT +short 2>/dev/null)
+  local after; after=$(dig "@${ns}" "${ZONE}" SOA +short | awk '{print $3}')
+
+  echo "==> Deleting the probe record"
+  curl -fsS -X DELETE "${api}/zones/${zone_id}/dns_records/${rec_id}" \
+    -H "Authorization: Bearer ${CF_DNS_TOKEN}" >/dev/null && echo "    deleted"
+  unset CF_DNS_TOKEN
+
+  echo
+  echo "    SOA serial: ${before} -> ${after}"
+  if [ -n "$got" ]; then
+    echo "    TXT RESOLVED (${got})."
+    echo "    => Writes DO reach the served zone. The problem is specific to the proxied AAAA"
+    echo "       placeholder, not to the account or the token."
+  else
+    echo "    TXT did NOT resolve."
+    echo "    => API writes are not reaching the zone these nameservers serve, even for a plain"
+    echo "       TXT record. That is an account/zone-object mismatch, not anything about Workers."
+    echo "       Check the dashboard: does ${ZONE} -> DNS list the records this token can see?"
+  fi
+}
+
 case "${1:-}" in
   bucket)  cmd_bucket ;;
+  dns-probe) cmd_dns_probe ;;
   dns)     cmd_dns ;;
   dns-debug) cmd_dns_debug ;;
   secrets) cmd_secrets ;;
