@@ -41,11 +41,17 @@ if (verified.success) {
 
 if (!kind) {
   const err = verified.errors?.[0];
-  console.error(`FAILED: ${err?.message ?? "token rejected"} (code ${err?.code ?? "?"})`);
+  console.error(
+    `FAILED: ${err?.message ?? "token rejected"} (code ${err?.code ?? "?"})`,
+  );
   console.error("  Tried both the user and account token endpoints.");
   if (!account) {
-    console.error("  CLOUDFLARE_ACCOUNT_ID was not set, so the account endpoint was skipped --");
-    console.error("  an account-owned (cfat_) token can only be verified with it.");
+    console.error(
+      "  CLOUDFLARE_ACCOUNT_ID was not set, so the account endpoint was skipped --",
+    );
+    console.error(
+      "  an account-owned (cfat_) token can only be verified with it.",
+    );
   }
   process.exit(1);
 }
@@ -57,9 +63,15 @@ if (account) {
   const workers = await get(`/accounts/${account}/workers/services`);
   if (!workers.success) {
     const err = workers.errors?.[0];
-    console.error(`FAILED: cannot reach Workers on this account -- ${err?.message} (code ${err?.code})`);
-    console.error("  The token is valid but lacks Workers Scripts: Edit, or belongs to another account.");
+    console.error(
+      `FAILED: cannot reach Workers on this account -- ${err?.message} (code ${err?.code})`,
+    );
+    console.error(
+      "  The token is valid but lacks Workers Scripts: Edit, or belongs to another account.",
+    );
     process.exit(1);
   }
-  console.log(`OK: can reach Workers on ${account.slice(0, 8)}... (${workers.result?.length ?? 0} services)`);
+  console.log(
+    `OK: can reach Workers on ${account.slice(0, 8)}... (${workers.result?.length ?? 0} services)`,
+  );
 }
