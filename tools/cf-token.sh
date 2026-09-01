@@ -84,12 +84,35 @@ while IFS= read -r c; do
 done <<< "$candidates"
 
 if [ -z "$found" ]; then
-  # Re-run the single/last candidate with output shown, so the reason is visible rather than
-  # swallowed -- "no candidate worked" is not an actionable message on its own.
-  echo "==> No candidate authenticated. Reason from the most likely one:" >&2
-  last=$(printf '%s\n' "$candidates" | tail -1)
-  CLOUDFLARE_API_TOKEN="$last" CLOUDFLARE_ACCOUNT_ID="$account" \
-    node tools/cf-verify-token.mjs || true
+  echo "==> No candidate authenticated." >&2
+  echo >&2
+
+  # Describe what was actually on the clipboard, by shape only. "No candidate worked" is not
+  # actionable; "you pasted a 64-hex string, which is an R2 secret, not an API token" is. The most
+  # common cause of landing here is copying the wrong page.
+  echo "    What was found (shapes only -- no values):" >&2
+  local_n=0
+  while IFS= read -r c; do
+    [ -n "$c" ] || continue
+    local_n=$((local_n + 1))
+    len=$(printf '%s' "$c" | wc -c | tr -d ' ')
+    note=""
+    if printf '%s' "$c" | grep -qE '^[0-9a-f]{64}$'; then
+      note="  <- 64 hex: this is an R2 SECRET ACCESS KEY, not an API token"
+    elif printf '%s' "$c" | grep -qE '^[0-9a-f]{32}$'; then
+      note="  <- 32 hex: this is an account/zone id or an R2 Access Key ID"
+    elif printf '%s' "$c" | grep -qE '^cf[a-z]{2}_'; then
+      note="  <- has a Cloudflare token prefix, but Cloudflare rejects it (revoked? mistyped?)"
+    else
+      note="  <- token-shaped, but Cloudflare does not recognise it"
+    fi
+    echo "      candidate ${local_n}: length=${len}${note}" >&2
+  done <<< "$candidates"
+
+  echo >&2
+  echo "    If you see R2 shapes above, you copied the R2 token page. The Workers token comes" >&2
+  echo "    from a different place: My Profile -> API Tokens -> Create Token -> Custom token." >&2
+  echo "    Its page says \"API token created!\" and shows one long value." >&2
   die "nothing was written"
 fi
 
