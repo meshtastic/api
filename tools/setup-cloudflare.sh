@@ -206,9 +206,28 @@ cmd_secrets() {
   need gh
   gh auth status >/dev/null 2>&1 || die "gh is not authenticated"
 
-  echo "==> Cloudflare account ID (not secret; stored as a repo VARIABLE)"
-  read -r -p "    CLOUDFLARE_ACCOUNT_ID: " account_id
-  [ -n "$account_id" ] || die "account id is required"
+  echo "==> Cloudflare account ID (an identifier, not a secret -- stored as a repo VARIABLE)"
+  # Auto-detect rather than asking. A Cloudflare login often sees more than one account (a personal
+  # one and an org one), and picking the wrong ID is a silent failure: the deploy authenticates
+  # fine and then cannot find the bucket. The right account is definitionally the one that HOLDS
+  # the bucket -- and that must also be the account owning the zone, since Worker routes can only
+  # be created from there.
+  local account_id=""
+  if [ -n "${CLOUDFLARE_ACCOUNT_ID:-}" ]; then
+    account_id="$CLOUDFLARE_ACCOUNT_ID"
+    echo "    using CLOUDFLARE_ACCOUNT_ID from the environment"
+  else
+    local ids id
+    ids=$(npx wrangler whoami 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' \
+          | grep -oE '[0-9a-f]{32}' | sort -u)
+    for id in $ids; do
+      if CLOUDFLARE_ACCOUNT_ID="$id" npx wrangler r2 bucket list 2>/dev/null | grep -q "$BUCKET"; then
+        account_id="$id"; break
+      fi
+    done
+    [ -n "$account_id" ] || die "could not find an account holding the ${BUCKET} bucket -- run: $0 bucket"
+    echo "    detected: ${account_id:0:8}...${account_id: -4} (the account holding ${BUCKET})"
+  fi
   gh variable set CLOUDFLARE_ACCOUNT_ID -R "$REPO" --body "$account_id"
 
   echo
