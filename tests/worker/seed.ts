@@ -12,6 +12,14 @@ export const seed = async (): Promise<void> => {
   );
   await env.DATA.put("v1/favicon.ico", new Uint8Array([0, 0, 1, 0]));
   await env.DATA.put(
+    "v1/_meta.json",
+    JSON.stringify(
+      { deployedAt: "2026-09-01T00:00:00.000Z", sha: "test" },
+      null,
+      2,
+    ),
+  );
+  await env.DATA.put(
     "v1/github/firmware/list.json",
     JSON.stringify(
       { releases: { stable: [], alpha: [] }, pullRequests: [] },

@@ -5,6 +5,7 @@ import {
 } from "cloudflare:test";
 import { beforeAll, describe, expect, it } from "vitest";
 import worker from "../../worker/src/index.js";
+import { FLASH_TTL } from "../../worker/src/respond.js";
 import { seed } from "./seed.js";
 
 const BASE = "https://api.meshtastic.org";
@@ -79,10 +80,8 @@ describe("path matching reproduces regexparam", () => {
     });
     expect(res.status).toBe(404);
     expect(res.headers.get("content-type")).toBeNull();
-    expect(res.headers.get("access-control-allow-origin")).toBe(
-      "https://flash.meshtastic.org",
-    );
-    expect(res.headers.get("vary")).toBe("Origin");
+    expect(res.headers.get("access-control-allow-origin")).toBe("*");
+    expect(res.headers.get("vary")).toBeNull();
   });
 });
 
@@ -149,18 +148,6 @@ describe("content negotiation and caching", () => {
     expect((await res.arrayBuffer()).byteLength).toBe(8);
   });
 
-  it("flash-critical routes are no-cache and never stale-while-revalidate", async () => {
-    for (const p of [
-      "/resource/bootloaderOtaQuirks",
-      "/resource/maintenanceUf2",
-      "/resource/maintenanceUf2/asset/nrf_erase2.uf2",
-    ]) {
-      const cc = (await call(p)).headers.get("cache-control");
-      expect(cc).toBe("no-cache");
-      expect(cc).not.toContain("stale-while-revalidate");
-    }
-  });
-
   it("?platform= is ignored and byte-identical, as it is today", async () => {
     const a = await (await call("/resource/deviceHardware")).text();
     const b = await (
@@ -170,33 +157,39 @@ describe("content negotiation and caching", () => {
   });
 });
 
-describe("CORS is a strict superset of today", () => {
-  it("no Origin gets an empty ACAO plus credentials", async () => {
-    const res = await call("/resource/deviceHardware");
-    expect(res.headers.get("access-control-allow-origin")).toBe("");
-    expect(res.headers.get("access-control-allow-credentials")).toBe("true");
-  });
-
+describe("CORS is a static wildcard", () => {
+  // The response body is byte-identical for every caller, so there is nothing to vary on. A
+  // static `*` is the maximally-cacheable CORS pattern and a strict superset of the old allowlist
+  // for every unauthenticated GET -- which is all this API serves.
   it.each([
-    "http://localhost:3000",
-    "https://meshtastic.org",
-    "https://flash.meshtastic.org",
-    "https://flasher.meshtastic.org",
-    "https://map.meshtastic.org",
-    "https://web-flasher-git-facelift-meshtastic.vercel.app",
-  ])("allowlisted %s is echoed with credentials", async (origin) => {
-    const res = await call("/resource/deviceHardware", { headers: { origin } });
-    expect(res.headers.get("access-control-allow-origin")).toBe(origin);
-    expect(res.headers.get("access-control-allow-credentials")).toBe("true");
-  });
-
-  it("an unknown origin gets * and no credentials, instead of today's 500", async () => {
-    const res = await call("/resource/deviceHardware", {
-      headers: { origin: "https://example.com" },
-    });
+    ["no Origin", undefined],
+    ["allowlisted origin", "https://flash.meshtastic.org"],
+    ["former allowlist entry", "https://meshtastic.org"],
+    ["unknown origin", "https://example.com"],
+    ["null origin", "null"],
+  ])("%s gets a bare wildcard", async (_label, origin) => {
+    const res = await call(
+      "/resource/deviceHardware",
+      origin ? { headers: { origin } } : {},
+    );
     expect(res.status).toBe(200);
     expect(res.headers.get("access-control-allow-origin")).toBe("*");
+    // `*` and Allow-Credentials are mutually exclusive per the Fetch spec, so sending both would
+    // be invalid rather than merely redundant.
     expect(res.headers.get("access-control-allow-credentials")).toBeNull();
+  });
+
+  // Vary is what made every response a distinct cache variant for no benefit. Cloudflare ignores
+  // Vary by default, but Workers Caching honours it fully, so a stray one would fragment the
+  // cache -- and under a Cache Rules Vary policy of `default: bypass` it would disable caching
+  // outright.
+  it.each([
+    "/resource/deviceHardware",
+    "/github/releases",
+    "/resource/eventFirmware/hamvention.png",
+    "/definitely-not-a-route",
+  ])("%s sends no Vary at all", async (p) => {
+    expect((await call(p)).headers.get("vary")).toBeNull();
   });
 
   it("OPTIONS is answered before routing, so an unknown path is 204 not 404", async () => {
@@ -205,9 +198,8 @@ describe("CORS is a strict superset of today", () => {
       headers: { origin: "https://flash.meshtastic.org" },
     });
     expect(res.status).toBe(204);
-    expect(res.headers.get("access-control-allow-origin")).toBe(
-      "https://flash.meshtastic.org",
-    );
+    expect(res.headers.get("access-control-allow-origin")).toBe("*");
+    expect(res.headers.get("access-control-allow-methods")).toContain("GET");
   });
 
   it("favicon carries no CORS headers, matching the old middleware order", async () => {
@@ -216,6 +208,88 @@ describe("CORS is a strict superset of today", () => {
     });
     expect(res.status).toBe(200);
     expect(res.headers.get("access-control-allow-origin")).toBeNull();
+  });
+});
+
+describe("edge cache policy", () => {
+  const cc = async (p: string) => (await call(p)).headers.get("cache-control");
+
+  it.each([
+    ["/resource/deviceHardware", "s-maxage=86400"],
+    ["/resource/deviceLinks", "s-maxage=86400"],
+    ["/resource/eventFirmware", "s-maxage=86400"],
+    ["/github/firmware/list", "s-maxage=900"],
+    ["/github/releases", "s-maxage=900"],
+    ["/resource/eventFirmware/hamvention.png", "s-maxage=86400"],
+    ["/updater/a/b/c/d", "s-maxage=86400"],
+  ])("%s carries %s", async (p, directive) => {
+    expect(await cc(p)).toContain(directive);
+  });
+
+  // The whole point of the shared constant: if these two could expire independently, a client
+  // could hold a freshly-revalidated manifest beside a stale binary, on the one flow that ends in
+  // an irreversible bootloader write.
+  it("the flash manifest and its assets share one TTL", async () => {
+    const manifest = await cc("/resource/maintenanceUf2");
+    const asset = await cc("/resource/maintenanceUf2/asset/nrf_erase2.uf2");
+    const quirks = await cc("/resource/bootloaderOtaQuirks");
+    expect(manifest).toContain(`s-maxage=${FLASH_TTL}`);
+    expect(asset).toContain(`s-maxage=${FLASH_TTL}`);
+    expect(quirks).toContain(`s-maxage=${FLASH_TTL}`);
+    expect(asset).toBe(manifest);
+  });
+
+  it("no flash-critical route serves stale without revalidating", async () => {
+    for (const p of [
+      "/resource/maintenanceUf2",
+      "/resource/maintenanceUf2/asset/nrf_erase2.uf2",
+      "/resource/bootloaderOtaQuirks",
+    ]) {
+      expect(await cc(p)).not.toContain("stale-while-revalidate");
+      expect(await cc(p)).not.toContain("stale-if-error");
+    }
+  });
+
+  // /_meta is the watchdog's only evidence that the sync pipeline is alive. A cached copy would
+  // keep reporting a fresh deployedAt while every sync was silently dead.
+  it("/_meta is never cacheable", async () => {
+    expect(await cc("/_meta")).toBe("no-store");
+  });
+
+  it.each(["/", "/updater", "/github/firmware/pr/1", "/mirror/webui"])(
+    "%s is no-store",
+    async (p) => {
+      expect(await cc(p)).toBe("no-store");
+    },
+  );
+
+  // Negative answers must not be cached. Without this, Cloudflare's status-code default caches a
+  // 404 for three minutes -- and a cached GET 404 then gets served for a HEAD request, skipping
+  // the HEAD-on-router-miss-is-204 branch. Caught by the live parity run, not by unit tests.
+  it.each([
+    ["/definitely-not-a-route", "router miss"],
+    ["/resource/eventFirmware/nope.png", "handler 404"],
+    ["/updater/only/three/segments", "wrong segment count"],
+  ])("%s (%s) is no-store", async (p) => {
+    expect(await cc(p)).toBe("no-store");
+  });
+
+  it("HEAD on a router miss is uncacheable", async () => {
+    const res = await call("/definitely-not-a-route", { method: "HEAD" });
+    expect(res.status).toBe(404);
+    expect(res.headers.get("cache-control")).toBe("no-store");
+  });
+
+  // Every cache-control we emit must parse as integers: "Floating-point values are not valid and
+  // will be ignored, potentially causing cache bypass."
+  it("all TTLs are integers", async () => {
+    for (const p of ["/resource/deviceHardware", "/github/releases"]) {
+      for (const [, n] of (await cc(p))!.matchAll(
+        /(?:max-age|s-maxage)=(\S+?)(?:,|$)/g,
+      )) {
+        expect(n).toMatch(/^\d+$/);
+      }
+    }
   });
 });
 
@@ -269,12 +343,13 @@ describe("methods", () => {
     ).toBe(404);
   });
 
-  // Verified against production: HEAD on an unmatched path returns 204, while HEAD on a route
-  // whose own handler 404s stays 404. A tinyhttp quirk, but an observable one.
-  it("HEAD on a router miss is 204, not 404", async () => {
+  // The old server returned 204 for HEAD on an unmatched path. v2 returns 404 -- the same status
+  // GET returns, and the more correct one. The quirk was reproduced until Workers Caching made it
+  // non-deterministic; see the note in index.ts.
+  it("HEAD on a router miss is 404, matching GET", async () => {
     expect(
       (await call("/definitely-not-a-route", { method: "HEAD" })).status,
-    ).toBe(204);
+    ).toBe(404);
   });
   it("HEAD on a handler 404 stays 404", async () => {
     expect(

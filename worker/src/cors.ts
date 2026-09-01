@@ -1,50 +1,35 @@
 /**
- * CORS, reproducing src/index.ts:29-58 of the tinyhttp server.
+ * CORS for a public, read-only, unauthenticated JSON API.
  *
- * The allowlist is copied verbatim. The one behavioural change is the failure branch: the old
- * `origin()` callback THREW on an unrecognised origin, which tinyhttp turned into a 500 -- so a
- * third-party page asking for public JSON got an opaque server error, and at least two forks
- * responded by building proxies that spoof an allowlisted Origin. Unknown origins now get a plain
- * `*` instead. That makes v2 a strict superset: every request that works today is byte-identical,
- * and the ones that 500 start working.
+ * This used to reproduce the tinyhttp server's origin allowlist: echo the request's Origin when it
+ * matched, send `Access-Control-Allow-Credentials: true`, and `Vary: Origin` because the response
+ * body depended on... nothing, actually. That is the point. Every byte of every response here is
+ * identical regardless of who asks, so there was never anything to vary on, and reflecting the
+ * origin bought nothing while costing cacheability.
  *
- * `*` and `Allow-Credentials` are mutually exclusive per the Fetch spec, which is why the
- * fallback branch omits credentials rather than sending both.
+ * A static `*` is the canonical maximally-cacheable CORS pattern, and it is a strict superset of
+ * the allowlist for every unauthenticated GET -- which is all this API serves.
+ *
+ * `Allow-Credentials` is gone with it, and not merely as tidying: per the Fetch Standard, if a
+ * request's credentials mode is "include" then `Access-Control-Allow-Origin` cannot be `*`. The
+ * two are mutually exclusive, so keeping both would have been invalid rather than redundant.
+ *
+ * `Vary` is gone too. Cloudflare ignores Vary by default -- it does NOT make a response
+ * uncacheable, contrary to a common belief; only `Vary: *` does that -- but a stray `Vary` becomes
+ * a live bypass the moment Cache Rules Vary is configured with `default: bypass`, and Workers
+ * Caching honours Vary fully with no allowlist. Sending a Vary we do not need is a trap armed for
+ * later.
  */
-const ALLOWLIST: ReadonlySet<string> = new Set([
-  "http://localhost:3000",
-  "https://meshtastic.org",
-  "https://flash.meshtastic.org",
-  "https://flasher.meshtastic.org",
-  "https://map.meshtastic.org",
-  "https://web-flasher-git-facelift-meshtastic.vercel.app",
-]);
 
-// @tinyhttp/cors emits these as four separate header lines. workerd folds repeated appends into
+// @tinyhttp/cors emitted these as four separate header lines. workerd folds repeated appends into
 // one comma-joined value (only Set-Cookie is special-cased), so we send the joined form directly.
-// Semantically identical for every CORS implementation -- see the note in the parity harness.
+// Kept for preflight: a client that sends Content-Type on a GET would otherwise be refused.
 const ALLOW_HEADERS =
   "Content-Type, Authorization, X-Custom-Header, Connect-Protocol-Version";
 const ALLOW_METHODS = "GET, HEAD, PUT, PATCH, POST, DELETE";
 
-export const applyCors = (headers: Headers, origin: string | null): void => {
+export const applyCors = (headers: Headers): void => {
+  headers.set("access-control-allow-origin", "*");
   headers.set("access-control-allow-headers", ALLOW_HEADERS);
   headers.set("access-control-allow-methods", ALLOW_METHODS);
-  // Vary on Origin because the value below depends on it. The edge cache key deliberately
-  // excludes Origin (see index.ts) and stores no CORS headers, so this never fragments anything.
-  headers.set("vary", "Origin");
-
-  if (origin === null) {
-    // No Origin header: the old server's `origin()` returned "" and cors still set credentials.
-    // Native apps, curl and every CI consumer land here.
-    headers.set("access-control-allow-origin", "");
-    headers.set("access-control-allow-credentials", "true");
-    return;
-  }
-  if (ALLOWLIST.has(origin)) {
-    headers.set("access-control-allow-origin", origin);
-    headers.set("access-control-allow-credentials", "true");
-    return;
-  }
-  headers.set("access-control-allow-origin", "*");
 };

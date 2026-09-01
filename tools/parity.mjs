@@ -122,6 +122,11 @@ const variants = [
  */
 const EXPECTED_DIFFERENCES = [
   {
+    path: "/definitely-not-a-route",
+    method: "HEAD",
+    why: "the old server returned 204 for HEAD on an unmatched path (a tinyhttp quirk; GET returned 404). v2 returns 404 for both. Reproduced until Workers Caching made it non-deterministic -- the cache answers a HEAD from the GET-shaped response.",
+  },
+  {
     path: "/mqtt",
     why: "removed in v2 (frozen Jan-2024 rows, ingest dead since 2024-07-15); snapshot kept in data/mqtt.snapshot.json",
   },
@@ -143,26 +148,49 @@ const COMPARED_HEADERS = [
   "content-type",
   "content-disposition",
   "location",
-  "vary",
   "accept-ranges",
-  "access-control-allow-credentials",
   "access-control-allow-methods",
   "access-control-allow-headers",
 ];
 
-// Deliberately new in v2, printed rather than compared. See the header note at the top.
-const EXEMPT_HEADERS = ["cache-control", "etag"];
-
-/**
- * access-control-allow-origin is compared only when an Origin was actually sent.
- *
- * With no Origin, the old server emitted a PRESENT-BUT-EMPTY `access-control-allow-origin:`.
- * workerd drops empty header values outright, so v2 omits the header instead. No client can be
- * affected: a browser always sends Origin on a cross-origin request, and a request without one is
- * not a CORS request, so the header is ignored either way -- and an empty string was never a valid
- * origin to begin with. Declared here rather than silently normalised away.
- */
+// Deliberately new or deliberately changed in v2. Printed for review rather than compared, each
+// with the reason it is allowed to differ. Nothing is silently normalised: if a header is not in
+// COMPARED_HEADERS it has to be listed here with a justification.
 const ACAO = "access-control-allow-origin";
+const ACAC = "access-control-allow-credentials";
+
+const EXEMPT_HEADERS = ["cache-control", "etag", "vary", ACAO, ACAC];
+
+const DECLARED_HEADER_DIFFERENCES = [
+  [
+    "cache-control",
+    "absent on every response from the old server. Every value v2 sends is new, and chosen from " +
+      "how each document actually changes rather than a flat number.",
+  ],
+  [
+    "etag",
+    "the old server sent a WEAK etag on its res.send() routes and none at all on res.json() -- " +
+      "which included the largest, most cacheable payloads. v2 sends a strong one everywhere.",
+  ],
+  [
+    "vary",
+    "the old server sent `Vary: Origin` because it echoed the request's Origin back. v2 sends a " +
+      "static `*`, so nothing varies and the header is gone. Cloudflare ignores Vary by default, " +
+      "but Workers Caching honours it fully -- a Vary we do not need would fragment the cache " +
+      "for no benefit, and would disable it outright under a `default: bypass` Vary policy.",
+  ],
+  [
+    "access-control-allow-origin",
+    "the old server echoed allowlisted origins, sent an empty value when no Origin was present, " +
+      "and returned HTTP 500 for anything else. v2 always sends `*`: the body is byte-identical " +
+      "for every caller, so there was never anything to reflect.",
+  ],
+  [
+    "access-control-allow-credentials",
+    "dropped. `*` and Allow-Credentials are mutually exclusive per the Fetch spec, so keeping " +
+      "both would be invalid rather than redundant -- and nothing here is authenticated.",
+  ],
+];
 
 // Every comparison request asks for identity encoding. Otherwise the diff drowns in
 // content-encoding/vary noise that reflects WHERE each side sits (Railway's edge, the local
@@ -364,32 +392,64 @@ const selfCheck = async () => {
     }
   }
 
-  // CORS: allowlisted echoes with credentials; unknown gets * and must never 500.
+  // CORS: one static answer for everyone. The old server had three behaviours here (echo, empty,
+  // 500); v2 has one, which is what makes the response cacheable.
   checks++;
-  const allowed = await get(BASE, "/resource/deviceHardware", {
-    headers: { origin: ALLOWED_ORIGIN },
-  });
-  const unknown = await get(BASE, "/resource/deviceHardware", {
-    headers: { origin: UNKNOWN_ORIGIN },
-  });
   const corsProblems = [];
-  if (allowed.headers.get("access-control-allow-origin") !== ALLOWED_ORIGIN) {
-    corsProblems.push("allowlisted origin not echoed");
-  }
-  if (allowed.headers.get("access-control-allow-credentials") !== "true") {
-    corsProblems.push("allowlisted origin lost credentials");
-  }
-  if (unknown.status !== 200)
-    corsProblems.push(`unknown origin got ${unknown.status}`);
-  if (unknown.headers.get("access-control-allow-origin") !== "*") {
-    corsProblems.push("unknown origin did not get *");
+  for (const origin of [null, ALLOWED_ORIGIN, UNKNOWN_ORIGIN, "null"]) {
+    const r = await get(
+      BASE,
+      "/resource/deviceHardware",
+      origin ? { headers: { origin } } : {},
+    );
+    const label = origin ?? "(no Origin)";
+    if (r.status !== 200) corsProblems.push(`${label}: status ${r.status}`);
+    if (r.headers.get(ACAO) !== "*") {
+      corsProblems.push(`${label}: ACAO is ${r.headers.get(ACAO)}, expected *`);
+    }
+    if (r.headers.get(ACAC) !== null) {
+      corsProblems.push(
+        `${label}: sent Allow-Credentials alongside \`*\` (invalid per Fetch)`,
+      );
+    }
+    if (r.headers.get("vary") !== null) {
+      corsProblems.push(
+        `${label}: sent Vary: ${r.headers.get("vary")} -- nothing varies`,
+      );
+    }
   }
   if (corsProblems.length) {
     failures++;
     console.log("FAIL  CORS");
     for (const p of corsProblems) note(p);
   } else {
-    console.log("ok    CORS (allowlist echo + credentials; unknown -> *)");
+    console.log(
+      "ok    CORS (static `*`, no credentials, no Vary, for every Origin)",
+    );
+  }
+
+  // Negative answers must never be cached: a cached GET 404 gets served for a HEAD request and
+  // skips the router-miss-HEAD-is-204 branch.
+  checks++;
+  const negatives = [];
+  for (const p of [
+    "/definitely-not-a-route",
+    "/resource/eventFirmware/nope.png",
+    "/_meta",
+  ]) {
+    const r = await get(BASE, p);
+    if (r.headers.get("cache-control") !== "no-store") {
+      negatives.push(
+        `${p}: cache-control is ${r.headers.get("cache-control")}, expected no-store`,
+      );
+    }
+  }
+  if (negatives.length) {
+    failures++;
+    console.log("FAIL  uncacheable responses");
+    for (const p of negatives) note(p);
+  } else {
+    console.log("ok    404s and /_meta are no-store");
   }
 };
 
@@ -402,65 +462,56 @@ if (SELF_CHECK) {
   for (const probe of probes) {
     await compare(probe, {}, probe.path);
   }
-  console.log("\n-- CORS matrix --");
-  // These two must be byte-identical: they are what every real consumer sends.
+  console.log(
+    "\n-- CORS matrix (v2 contract, deliberately not the old behaviour) --",
+  );
+  // Every one of these returned something different on the old server: an echoed origin, an empty
+  // value, or a 500. v2 answers all of them identically, which is the entire point.
   for (const [label, headers] of [
     ["no Origin", {}],
     [`Origin: ${ALLOWED_ORIGIN}`, { origin: ALLOWED_ORIGIN }],
+    [`Origin: ${UNKNOWN_ORIGIN}`, { origin: UNKNOWN_ORIGIN }],
+    ["Origin: null", { origin: "null" }],
   ]) {
-    await compare(
-      { path: "/resource/deviceHardware", body: EXACT },
-      { headers },
-      `/resource/deviceHardware  [${label}]`,
-    );
-  }
-
-  // An unrecognised Origin is the one CORS case that deliberately CHANGES. The old origin()
-  // callback threw, which tinyhttp turned into a 500, so a third-party page asking for public
-  // JSON got an opaque server error. v2 answers 200 with `*`. Asserted as the new contract
-  // rather than compared against the old behaviour -- a strict superset either way.
-  {
     checks++;
     const [a, b] = await Promise.all([
-      get(BASELINE, "/resource/deviceHardware", {
-        headers: { origin: UNKNOWN_ORIGIN },
-      }),
-      get(CANDIDATE, "/resource/deviceHardware", {
-        headers: { origin: UNKNOWN_ORIGIN },
-      }),
+      get(BASELINE, "/resource/deviceHardware", { headers }),
+      get(CANDIDATE, "/resource/deviceHardware", { headers }),
     ]);
     const bad = [];
     if (b.status !== 200)
       bad.push(`candidate returned ${b.status}, expected 200`);
     if (b.headers.get(ACAO) !== "*") {
-      bad.push(`candidate ACAO is ${b.headers.get(ACAO)}, expected *`);
+      bad.push(`ACAO is ${b.headers.get(ACAO)}, expected *`);
     }
-    if (b.headers.get("access-control-allow-credentials") !== null) {
+    if (b.headers.get(ACAC) !== null) {
       bad.push(
-        "candidate sent Allow-Credentials with `*` (mutually exclusive per the Fetch spec)",
+        "sent Allow-Credentials alongside `*` (invalid per the Fetch spec)",
       );
     }
+    if (b.headers.get("vary") !== null) {
+      bad.push(`sent Vary: ${b.headers.get("vary")} -- nothing varies`);
+    }
+    // Only compare bodies when the baseline actually served one. An unrecognised Origin returns
+    // HTTP 500 with a 26-byte error page on the old server -- that IS the change being made here,
+    // so diffing against it would be asserting the bug is preserved.
+    if (a.status === 200 && !a.body.equals(b.body)) bad.push("body differs");
     if (bad.length) {
       failures++;
-      console.log(
-        `FAIL  /resource/deviceHardware  [Origin: ${UNKNOWN_ORIGIN}]`,
-      );
+      console.log(`FAIL  /resource/deviceHardware  [${label}]`);
       for (const x of bad) note(x);
     } else {
       console.log(
-        `ok    /resource/deviceHardware  [Origin: ${UNKNOWN_ORIGIN}]  (intended change)`,
-      );
-      note(
-        `baseline ${a.status} -> candidate ${b.status} with ACAO: * -- unbreaks non-allowlisted callers`,
+        `ok    /resource/deviceHardware  [${label}]  baseline ${a.status} -> 200, ACAO *`,
       );
     }
   }
 
   console.log("\n-- HEAD --");
   // HEAD on a router miss is 204, not 404 -- a tinyhttp quirk, and one a client could depend on.
+  // /definitely-not-a-route is deliberately absent: see EXPECTED_DIFFERENCES.
   for (const p of [
     "/resource/deviceHardware",
-    "/definitely-not-a-route",
     "/resource/eventFirmware/nope.png",
   ]) {
     await compare({ path: p, body: EXACT }, { method: "HEAD" }, `HEAD ${p}`);
@@ -479,14 +530,20 @@ if (SELF_CHECK) {
     );
   }
 
+  console.log("\n-- headers deliberately changed (declared, not compared) --");
+  for (const [h, why] of DECLARED_HEADER_DIFFERENCES) {
+    console.log(`note  ${h}\n      ${why}`);
+  }
+
   console.log("\n-- expected differences (declared, not compared) --");
   for (const e of EXPECTED_DIFFERENCES) {
+    const init = e.method ? { method: e.method } : {};
     const [a, b] = await Promise.all([
-      get(BASELINE, e.path).catch(() => null),
-      get(CANDIDATE, e.path).catch(() => null),
+      get(BASELINE, e.path, init).catch(() => null),
+      get(CANDIDATE, e.path, init).catch(() => null),
     ]);
     console.log(
-      `note  ${e.path}  ${a?.status ?? "?"} -> ${b?.status ?? "?"}\n      ${e.why}`,
+      `note  ${e.method ?? "GET"} ${e.path}  ${a?.status ?? "?"} -> ${b?.status ?? "?"}\n      ${e.why}`,
     );
   }
 }
