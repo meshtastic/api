@@ -1,12 +1,23 @@
 /**
- * Proves a Cloudflare API token is valid and carries the permissions the deploy needs, before
- * anything stores it. Reads CLOUDFLARE_API_TOKEN from the environment so the value never appears
- * in a process listing, and never prints it.
+ * Proves a Cloudflare API token works for what the deploy actually needs, before anything stores
+ * it. Reads CLOUDFLARE_API_TOKEN (and optionally CLOUDFLARE_ACCOUNT_ID) from the environment so
+ * the value never appears in a process listing, and never prints it.
  *
- * Exists because an invalid token is not visibly different from a valid one until a deploy fails
- * with "Invalid access token [code: 9109]", several steps into a job, long after the paste.
+ * Cloudflare issues TWO kinds of token and they verify at different endpoints:
+ *
+ *   user-owned    (cfut_)  My Profile   -> API Tokens   ->  /user/tokens/verify
+ *   account-owned (cfat_)  Manage Account -> API Tokens ->  /accounts/{id}/tokens/verify
+ *
+ * An account-owned token returns "Invalid API Token" from the USER endpoint -- it is not invalid,
+ * it is simply not a user token. Checking only the user endpoint therefore reports a perfectly
+ * good token as dead, which is exactly the false alarm this file was written to prevent and then
+ * caused. Both are tried before concluding anything.
+ *
+ * For the same reason there is no "can it list accounts?" check: /accounts is a user-scoped call
+ * that an account-owned token cannot make by design, so failing it proves nothing.
  */
 const token = process.env.CLOUDFLARE_API_TOKEN;
+const account = process.env.CLOUDFLARE_ACCOUNT_ID;
 if (!token) {
   console.error("missing CLOUDFLARE_API_TOKEN");
   process.exit(2);
@@ -14,51 +25,41 @@ if (!token) {
 
 const api = "https://api.cloudflare.com/client/v4";
 const auth = { authorization: `Bearer ${token}` };
+const get = async (path) => {
+  const res = await fetch(`${api}${path}`, { headers: auth });
+  return res.json();
+};
 
-const verify = await (
-  await fetch(`${api}/user/tokens/verify`, { headers: auth })
-).json();
-if (!verify.success) {
-  const err = verify.errors?.[0];
-  console.error(
-    `FAILED: ${err?.message ?? "token rejected"} (code ${err?.code ?? "?"})`,
-  );
-  if (err?.code === 1000) {
-    console.error(
-      "  The token does not exist. It was mistyped, revoked, or is a different kind",
-    );
-    console.error(
-      "  of credential -- an R2 Access Key ID/Secret is NOT a Cloudflare API token.",
-    );
+let kind = null;
+let verified = await get("/user/tokens/verify");
+if (verified.success) {
+  kind = "user-owned";
+} else if (account) {
+  verified = await get(`/accounts/${account}/tokens/verify`);
+  if (verified.success) kind = "account-owned";
+}
+
+if (!kind) {
+  const err = verified.errors?.[0];
+  console.error(`FAILED: ${err?.message ?? "token rejected"} (code ${err?.code ?? "?"})`);
+  console.error("  Tried both the user and account token endpoints.");
+  if (!account) {
+    console.error("  CLOUDFLARE_ACCOUNT_ID was not set, so the account endpoint was skipped --");
+    console.error("  an account-owned (cfat_) token can only be verified with it.");
   }
   process.exit(1);
 }
-console.log(`OK: token is ${verify.result.status}`);
+console.log(`OK: ${kind} token, status ${verified.result?.status ?? "active"}`);
 
-// A valid token with the wrong permissions fails later and just as opaquely, so check the two
-// things the deploy actually does: list accounts, and reach the bucket's account.
-const accounts = await (
-  await fetch(`${api}/accounts`, { headers: auth })
-).json();
-if (!accounts.success) {
-  console.error(
-    "FAILED: the token cannot list accounts -- it needs Account Settings: Read",
-  );
-  process.exit(1);
+// The only check that really matters: can it do the deploy's job? A token can be live and still
+// lack Workers Scripts: Edit, which otherwise surfaces as an opaque 10000 mid-deploy.
+if (account) {
+  const workers = await get(`/accounts/${account}/workers/services`);
+  if (!workers.success) {
+    const err = workers.errors?.[0];
+    console.error(`FAILED: cannot reach Workers on this account -- ${err?.message} (code ${err?.code})`);
+    console.error("  The token is valid but lacks Workers Scripts: Edit, or belongs to another account.");
+    process.exit(1);
+  }
+  console.log(`OK: can reach Workers on ${account.slice(0, 8)}... (${workers.result?.length ?? 0} services)`);
 }
-const names = (accounts.result ?? []).map(
-  (a) => `${a.name} (${a.id.slice(0, 8)}...)`,
-);
-console.log(`OK: sees ${names.length} account(s): ${names.join(", ")}`);
-
-const wanted = process.env.CLOUDFLARE_ACCOUNT_ID;
-if (wanted && !(accounts.result ?? []).some((a) => a.id === wanted)) {
-  console.error(
-    `FAILED: the token cannot see account ${wanted.slice(0, 8)}... -- it was probably`,
-  );
-  console.error(
-    "  created in a different Cloudflare account than the one holding the bucket.",
-  );
-  process.exit(1);
-}
-if (wanted) console.log("OK: token can see the account that holds the bucket");

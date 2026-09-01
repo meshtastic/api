@@ -110,9 +110,11 @@ if [ -z "$found" ]; then
   done <<< "$candidates"
 
   echo >&2
-  echo "    If you see R2 shapes above, you copied the R2 token page. The Workers token comes" >&2
-  echo "    from a different place: My Profile -> API Tokens -> Create Token -> Custom token." >&2
-  echo "    Its page says \"API token created!\" and shows one long value." >&2
+  echo "    If you see R2 shapes above, you copied the R2 token page. An API token comes from" >&2
+  echo "    one of two other places, depending on which kind you want:" >&2
+  echo "      account-owned (cfat_):  Manage Account -> API Tokens" >&2
+  echo "      user-owned    (cfut_):  My Profile     -> API Tokens" >&2
+  echo "    Either works here. The page says \"API token created!\" and shows one long value." >&2
   die "nothing was written"
 fi
 
