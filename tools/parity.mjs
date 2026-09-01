@@ -145,8 +145,6 @@ const COMPARED_HEADERS = [
   "location",
   "vary",
   "accept-ranges",
-  "content-encoding",
-  "access-control-allow-origin",
   "access-control-allow-credentials",
   "access-control-allow-methods",
   "access-control-allow-headers",
@@ -155,8 +153,29 @@ const COMPARED_HEADERS = [
 // Deliberately new in v2, printed rather than compared. See the header note at the top.
 const EXEMPT_HEADERS = ["cache-control", "etag"];
 
+/**
+ * access-control-allow-origin is compared only when an Origin was actually sent.
+ *
+ * With no Origin, the old server emitted a PRESENT-BUT-EMPTY `access-control-allow-origin:`.
+ * workerd drops empty header values outright, so v2 omits the header instead. No client can be
+ * affected: a browser always sends Origin on a cross-origin request, and a request without one is
+ * not a CORS request, so the header is ignored either way -- and an empty string was never a valid
+ * origin to begin with. Declared here rather than silently normalised away.
+ */
+const ACAO = "access-control-allow-origin";
+
+// Every comparison request asks for identity encoding. Otherwise the diff drowns in
+// content-encoding/vary noise that reflects WHERE each side sits (Railway's edge, the local
+// runtime, Cloudflare's edge) rather than anything this migration controls. Compression is
+// checked once, on its own, at the end.
+const IDENTITY = { "accept-encoding": "identity" };
+
 const get = async (root, path, init = {}) => {
-  const res = await fetch(root + path, { redirect: "manual", ...init });
+  const res = await fetch(root + path, {
+    redirect: "manual",
+    ...init,
+    headers: { ...IDENTITY, ...(init.headers ?? {}) },
+  });
   const buf = Buffer.from(await res.arrayBuffer());
   return { status: res.status, headers: res.headers, body: buf };
 };
@@ -249,11 +268,20 @@ const compare = async (probe, init, label) => {
         ? null
         : v
             .split(",")
-            .map((x) => x.trim())
+            .map((x) => x.trim().toLowerCase())
+            // accept-encoding lands in Vary only when something in the path compressed, which
+            // differs between Railway's edge and Cloudflare's. Origin is the part we control.
+            .filter((x) => x !== "accept-encoding")
             .sort()
-            .join(",");
+            .join(",") || null;
     if (norm(va) !== norm(vb)) problems.push(`${h}: ${va} -> ${vb}`);
   }
+
+  const sentOrigin = Boolean(init.headers?.origin);
+  if (sentOrigin && a.headers.get(ACAO) !== b.headers.get(ACAO)) {
+    problems.push(`${ACAO}: ${a.headers.get(ACAO)} -> ${b.headers.get(ACAO)}`);
+  }
+
   const bodyResult = bodiesMatch(probe.body, a.body, b.body);
   if (!bodyResult.ok) {
     problems.push(
@@ -375,15 +403,79 @@ if (SELF_CHECK) {
     await compare(probe, {}, probe.path);
   }
   console.log("\n-- CORS matrix --");
+  // These two must be byte-identical: they are what every real consumer sends.
   for (const [label, headers] of [
     ["no Origin", {}],
     [`Origin: ${ALLOWED_ORIGIN}`, { origin: ALLOWED_ORIGIN }],
-    [`Origin: ${UNKNOWN_ORIGIN}`, { origin: UNKNOWN_ORIGIN }],
   ]) {
     await compare(
       { path: "/resource/deviceHardware", body: EXACT },
       { headers },
       `/resource/deviceHardware  [${label}]`,
+    );
+  }
+
+  // An unrecognised Origin is the one CORS case that deliberately CHANGES. The old origin()
+  // callback threw, which tinyhttp turned into a 500, so a third-party page asking for public
+  // JSON got an opaque server error. v2 answers 200 with `*`. Asserted as the new contract
+  // rather than compared against the old behaviour -- a strict superset either way.
+  {
+    checks++;
+    const [a, b] = await Promise.all([
+      get(BASELINE, "/resource/deviceHardware", {
+        headers: { origin: UNKNOWN_ORIGIN },
+      }),
+      get(CANDIDATE, "/resource/deviceHardware", {
+        headers: { origin: UNKNOWN_ORIGIN },
+      }),
+    ]);
+    const bad = [];
+    if (b.status !== 200)
+      bad.push(`candidate returned ${b.status}, expected 200`);
+    if (b.headers.get(ACAO) !== "*") {
+      bad.push(`candidate ACAO is ${b.headers.get(ACAO)}, expected *`);
+    }
+    if (b.headers.get("access-control-allow-credentials") !== null) {
+      bad.push(
+        "candidate sent Allow-Credentials with `*` (mutually exclusive per the Fetch spec)",
+      );
+    }
+    if (bad.length) {
+      failures++;
+      console.log(
+        `FAIL  /resource/deviceHardware  [Origin: ${UNKNOWN_ORIGIN}]`,
+      );
+      for (const x of bad) note(x);
+    } else {
+      console.log(
+        `ok    /resource/deviceHardware  [Origin: ${UNKNOWN_ORIGIN}]  (intended change)`,
+      );
+      note(
+        `baseline ${a.status} -> candidate ${b.status} with ACAO: * -- unbreaks non-allowlisted callers`,
+      );
+    }
+  }
+
+  console.log("\n-- HEAD --");
+  // HEAD on a router miss is 204, not 404 -- a tinyhttp quirk, and one a client could depend on.
+  for (const p of [
+    "/resource/deviceHardware",
+    "/definitely-not-a-route",
+    "/resource/eventFirmware/nope.png",
+  ]) {
+    await compare({ path: p, body: EXACT }, { method: "HEAD" }, `HEAD ${p}`);
+  }
+
+  console.log(
+    "\n-- compression (informational: set by the edge, not by this code) --",
+  );
+  for (const p of ["/github/releases", "/resource/deviceHardware"]) {
+    const [a, b] = await Promise.all([
+      fetch(BASELINE + p, { headers: { "accept-encoding": "gzip, br" } }),
+      fetch(CANDIDATE + p, { headers: { "accept-encoding": "gzip, br" } }),
+    ]);
+    console.log(
+      `note  ${p}  content-encoding ${a.headers.get("content-encoding") ?? "-"} -> ${b.headers.get("content-encoding") ?? "-"}`,
     );
   }
 

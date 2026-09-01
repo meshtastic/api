@@ -14,3 +14,6 @@ dist-static/
 dist-github/
 dist-meta/
 .dry/
+
+# wrangler scratch (bundles, local R2/KV state). Gitignored so biome skips it too.
+.wrangler/

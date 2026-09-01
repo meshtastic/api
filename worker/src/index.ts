@@ -12,6 +12,7 @@ import {
   build,
   type Cls,
   jsonError,
+  noContentRouter,
   notFoundHandler,
   notFoundRouter,
   ok,
@@ -59,8 +60,16 @@ const R2KEY: Readonly<Record<string, { key: string; cls: Cls }>> =
 
 // Applied to the ORIGINAL-case path so the lowercase character classes still reject
 // /resource/eventFirmware/DEFCON34.PNG exactly as the old server's regexes did.
-const ICON_RE = /^\/resource\/eventFirmware\/([a-z0-9-]+\.png)$/;
-const UF2_RE = /^\/resource\/maintenanceUf2\/asset\/([a-z0-9_-]+\.uf2)$/;
+// Route matching and filename validation are SEPARATE, because that is how the old server was
+// built and the difference is observable. regexparam matched the literal segments
+// case-insensitively and let `:file` capture anything; the handler then applied its own strict
+// lowercase regex and, on a miss, called res.sendStatus(404) -- which produces the text/plain 404,
+// not the router's bare no-content-type one. Folding the two together would quietly downgrade
+// /resource/eventFirmware/HAMVENTION.PNG from a handler 404 to a router miss.
+const ICON_ROUTE_RE = /^\/resource\/eventFirmware\/([^/]+)$/i;
+const ICON_FILE_RE = /^[a-z0-9-]+\.png$/;
+const UF2_ROUTE_RE = /^\/resource\/maintenanceUf2\/asset\/([^/]+)$/i;
+const UF2_FILE_RE = /^[a-z0-9_-]+\.uf2$/;
 // EXACTLY four segments. A prefix match would make /updater/foo -- which 404s today -- start
 // serving a minisign-signed update manifest, which is the opposite of freezing it.
 const UPDATER_RE = /^\/updater\/[^/]+\/[^/]+\/[^/]+\/[^/]+$/;
@@ -120,17 +129,27 @@ export default {
     }
 
     // regexparam normalises a doubled slash into a miss; so do we, before any lookup.
-    if (url.pathname.includes("//")) return notFoundRouter();
+    if (url.pathname.includes("//")) {
+      return request.method === "HEAD"
+        ? noContentRouter(origin)
+        : notFoundRouter(origin);
+    }
 
     const path = trimSlash(url.pathname);
     const lower = path.toLowerCase();
 
     if (request.method !== "GET" && request.method !== "HEAD") {
-      return notFoundRouter();
+      return notFoundRouter(origin);
     }
 
     const res = await route(request, env, ctx, path, lower, origin);
-    return request.method === "HEAD" ? stripBody(res) : res;
+    if (request.method !== "HEAD") return res;
+    // A router miss is the one 404 that becomes a 204 under HEAD (see noContentRouter). It is
+    // identifiable by having no content-type -- the handler 404 sets text/plain and stays a 404.
+    if (res.status === 404 && !res.headers.get("content-type")) {
+      return noContentRouter(origin);
+    }
+    return stripBody(res);
   },
 } satisfies ExportedHandler<Env>;
 
@@ -157,13 +176,15 @@ async function route(
     return serveDoc(request, UPDATER_MANIFEST, "updaterJson", origin, SUNSET);
   }
 
-  const iconMatch = ICON_RE.exec(path);
+  const iconMatch = ICON_ROUTE_RE.exec(path);
   if (iconMatch) {
+    const file = iconMatch[1] ?? "";
+    if (!ICON_FILE_RE.test(file)) return notFoundHandler(origin);
     return serveR2(
       request,
       env,
       ctx,
-      `v1/resource/eventFirmware/icons/${iconMatch[1] ?? ""}`,
+      `v1/resource/eventFirmware/icons/${file}`,
       "eventIcon",
       origin,
       lower,
@@ -171,13 +192,15 @@ async function route(
     );
   }
 
-  const uf2Match = UF2_RE.exec(path);
+  const uf2Match = UF2_ROUTE_RE.exec(path);
   if (uf2Match) {
+    const file = uf2Match[1] ?? "";
+    if (!UF2_FILE_RE.test(file)) return notFoundHandler(origin);
     return serveR2(
       request,
       env,
       ctx,
-      `v1/resource/maintenanceUf2/asset/${uf2Match[1] ?? ""}`,
+      `v1/resource/maintenanceUf2/asset/${file}`,
       "flashCriticalBinary",
       origin,
       lower,
@@ -223,7 +246,7 @@ async function route(
     return new Response(null, { status: 302, headers });
   }
 
-  return notFoundRouter();
+  return notFoundRouter(origin);
 }
 
 function serveDoc(
@@ -274,7 +297,7 @@ async function serveR2(
     // A missing key is a genuine 404. Which SHAPE depends on the route: the old server's
     // parameterised handlers used res.sendStatus(404) (text/plain), while an unmatched path fell
     // through to the router's bare "Not Found" with no content-type.
-    return handlerNotFound ? notFoundHandler(origin) : notFoundRouter();
+    return handlerNotFound ? notFoundHandler(origin) : notFoundRouter(origin);
   }
 
   // R2 returns a strong, already-quoted ETag (the object's MD5, or "<hash>-<n>" for a

@@ -58,6 +58,32 @@ describe("path matching reproduces regexparam", () => {
     expect(res.status).toBe(404);
     expect(res.headers.get("content-type")).toBe("text/plain; charset=utf-8");
   });
+
+  // Route matching and filename validation are separate steps, as they were on tinyhttp: the
+  // route matches case-insensitively and captures anything, then the handler's strict lowercase
+  // regex rejects. Folding them into one regex would downgrade this to a router miss -- a
+  // different 404, with a different content-type.
+  it.each([
+    "/resource/eventFirmware/HAMVENTION.PNG",
+    "/resource/maintenanceUf2/asset/NRF_ERASE2.UF2",
+    "/resource/eventFirmware/not a slug.png",
+  ])("%s is a HANDLER 404, not a router miss", async (p) => {
+    const res = await call(p);
+    expect(res.status).toBe(404);
+    expect(res.headers.get("content-type")).toBe("text/plain; charset=utf-8");
+  });
+
+  it("the router-miss 404 still carries CORS, because cors() ran before the router", async () => {
+    const res = await call("/definitely-not-a-route", {
+      headers: { origin: "https://flash.meshtastic.org" },
+    });
+    expect(res.status).toBe(404);
+    expect(res.headers.get("content-type")).toBeNull();
+    expect(res.headers.get("access-control-allow-origin")).toBe(
+      "https://flash.meshtastic.org",
+    );
+    expect(res.headers.get("vary")).toBe("Origin");
+  });
 });
 
 describe("health stubs differ, exactly as they do today", () => {
@@ -240,6 +266,20 @@ describe("methods", () => {
   it("POST to a GET route is a router miss", async () => {
     expect(
       (await call("/resource/deviceHardware", { method: "POST" })).status,
+    ).toBe(404);
+  });
+
+  // Verified against production: HEAD on an unmatched path returns 204, while HEAD on a route
+  // whose own handler 404s stays 404. A tinyhttp quirk, but an observable one.
+  it("HEAD on a router miss is 204, not 404", async () => {
+    expect(
+      (await call("/definitely-not-a-route", { method: "HEAD" })).status,
+    ).toBe(204);
+  });
+  it("HEAD on a handler 404 stays 404", async () => {
+    expect(
+      (await call("/resource/eventFirmware/nope.png", { method: "HEAD" }))
+        .status,
     ).toBe(404);
   });
 });
