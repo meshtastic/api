@@ -82,7 +82,12 @@ cmd_bucket() {
   if npx wrangler r2 bucket list 2>/dev/null | grep -q "\b${BUCKET}\b"; then
     echo "    already exists"
   else
-    npx wrangler r2 bucket create "$BUCKET"
+    # --update-config=false is important. Interactively, wrangler offers to add the bucket to
+    # wrangler.jsonc and defaults the binding to the bucket name -- which appends a SECOND
+    # r2_buckets entry (binding "meshtastic_api_v1", remote: true) alongside the DATA binding the
+    # Worker actually uses, reformats the file from spaces to tabs, and drops the trailing
+    # newline. The config in this repo is already correct; the bucket exists independently of it.
+    npx wrangler r2 bucket create "$BUCKET" --update-config=false
   fi
   echo
   echo "    Do NOT attach a custom domain or enable public access to this bucket. It is read"
