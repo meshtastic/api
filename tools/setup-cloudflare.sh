@@ -2,14 +2,20 @@
 #
 # One-time setup for the v2 Cloudflare deployment.
 #
-# Automates everything that can be automated WITHOUT creating a super-credential, and reads the
-# two Cloudflare tokens interactively so their values never reach a shell history, a log, or a
-# terminal scrollback buffer. Nothing here prints a secret.
+# Automates everything that can be automated WITHOUT creating a super-credential.
 #
-#   ./tools/setup-cloudflare.sh bucket    # wrangler OAuth -> create the R2 bucket
-#   ./tools/setup-cloudflare.sh dns       # create the apiv2 DNS record (needs a DNS:Edit token)
-#   ./tools/setup-cloudflare.sh secrets   # store the tokens as GitHub Actions secrets
-#   ./tools/setup-cloudflare.sh check     # show what is and is not configured
+# Secrets are read from gitignored files and piped straight to their destination. They are never
+# prompted for and never rendered to a terminal: `read -rs` is NOT reliably invisible, because
+# under bracketed paste many terminals echo pasted text before the read consumes it.
+#
+#   ./tools/setup-cloudflare.sh check      # show what is and is not configured
+#   ./tools/setup-cloudflare.sh bucket     # wrangler OAuth -> create the R2 bucket
+#   ./tools/setup-cloudflare.sh dns        # create the apiv2 DNS record
+#   ./tools/setup-cloudflare.sh dns-debug  # what the API holds vs what DNS answers
+#   ./tools/setup-cloudflare.sh dns-probe  # write+query+delete a TXT record to isolate a fault
+#   ./tools/setup-cloudflare.sh secrets    # store the tokens as GitHub Actions secrets
+#
+# Tokens are read from gitignored files, never from a prompt -- see load_token below.
 #
 # Why the two Cloudflare API tokens are NOT minted here: `POST /user/tokens` requires a calling
 # token carrying `API Tokens Write`, and that bootstrap credential can mint any token in the
@@ -25,6 +31,39 @@ ZONE=meshtastic.org
 HOST=apiv2.meshtastic.org
 
 die() { echo "error: $*" >&2; exit 1; }
+
+TOKEN_FILE=".cf-token"
+
+# Reads the Cloudflare API token from a gitignored file rather than prompting for it.
+#
+# The earlier version prompted with `read -rs`. That is NOT reliably invisible: under bracketed
+# paste, many terminals echo pasted text before the read consumes it, so a token can land in
+# scrollback anyway -- which is exactly what happened. A file keeps the value off the terminal
+# entirely, out of shell history, and easy to delete when you are done.
+#
+#   printf '%s' 'YOUR_TOKEN' > .cf-token && chmod 600 .cf-token
+#
+# .cf-token is gitignored. Delete it when you are finished: rm -P .cf-token
+load_token() {
+  if [ -n "${CF_DNS_TOKEN:-}" ]; then return 0; fi
+  if [ ! -f "$TOKEN_FILE" ]; then
+    cat >&2 <<EOF
+error: no token available.
+
+  Write it to ${TOKEN_FILE} (gitignored, never echoed):
+
+    printf '%s' 'YOUR_CLOUDFLARE_TOKEN' > ${TOKEN_FILE} && chmod 600 ${TOKEN_FILE}
+
+  Then re-run. Delete it afterwards with: rm -P ${TOKEN_FILE}
+EOF
+    exit 1
+  fi
+  # Strip a trailing newline; a token pasted via an editor usually has one, and it silently
+  # produces a 400 that looks like a permissions problem.
+  CF_DNS_TOKEN=$(tr -d '\r\n' < "$TOKEN_FILE")
+  [ -n "$CF_DNS_TOKEN" ] || die "${TOKEN_FILE} is empty"
+}
+
 
 need() { command -v "$1" >/dev/null 2>&1 || die "$1 is not installed"; }
 
@@ -55,11 +94,7 @@ cmd_dns() {
   need curl; need jq
   # A DNS:Edit + Zone:Read token. Far narrower than the API-Tokens-Write bootstrap that minting
   # tokens would need, and it can be deleted immediately after this step.
-  if [ -z "${CF_DNS_TOKEN:-}" ]; then
-    printf 'Cloudflare API token with Zone:Read + DNS:Edit on %s (input hidden): ' "$ZONE"
-    read -rs CF_DNS_TOKEN; echo
-  fi
-  [ -n "$CF_DNS_TOKEN" ] || die "no token given"
+  load_token
 
   local api=https://api.cloudflare.com/client/v4
   echo "==> Looking up zone ${ZONE}"
@@ -169,26 +204,32 @@ cmd_secrets() {
   echo "    Do NOT add Cache Purge or any Rulesets permission. The Worker sets every header in"
   echo "    code, so the token needs neither -- and without Rulesets it cannot touch the other"
   echo "    hostnames in this zone."
-  printf '    CLOUDFLARE_API_TOKEN (input hidden): '
-  read -rs cf_token; echo
-  [ -n "$cf_token" ] || die "no token given"
-  printf '%s' "$cf_token" | gh secret set CLOUDFLARE_API_TOKEN -R "$REPO"
-  unset cf_token
-
   echo
   echo "==> R2 token"
   echo "    Dashboard -> R2 -> API -> Manage API Tokens -> Create -> Object Read & Write,"
-  echo "    scoped to the ${BUCKET} bucket ONLY."
-  echo "    Paste the Access Key ID and Secret Access Key it shows you (they are not"
-  echo "    recoverable afterwards)."
-  printf '    R2_ACCESS_KEY_ID (input hidden): '
-  read -rs r2_id; echo
-  printf '    R2_SECRET_ACCESS_KEY (input hidden): '
-  read -rs r2_secret; echo
-  [ -n "$r2_id" ] && [ -n "$r2_secret" ] || die "both R2 values are required"
-  printf '%s' "$r2_id" | gh secret set R2_ACCESS_KEY_ID -R "$REPO"
-  printf '%s' "$r2_secret" | gh secret set R2_SECRET_ACCESS_KEY -R "$REPO"
-  unset r2_id r2_secret
+  echo "    scoped to the ${BUCKET} bucket ONLY. Both values are shown once and are not"
+  echo "    recoverable afterwards."
+  echo
+  echo "    Put each value in its own gitignored file -- never paste a secret at a prompt, since"
+  echo "    a terminal can echo pasted text before the read consumes it:"
+  echo
+  echo "      printf '%s' 'VALUE' > .cf-worker-token     && chmod 600 .cf-worker-token"
+  echo "      printf '%s' 'VALUE' > .r2-access-key-id    && chmod 600 .r2-access-key-id"
+  echo "      printf '%s' 'VALUE' > .r2-secret-access-key && chmod 600 .r2-secret-access-key"
+  echo
+  local missing=0
+  for f in .cf-worker-token .r2-access-key-id .r2-secret-access-key; do
+    [ -f "$f" ] || { echo "    missing: $f" >&2; missing=1; }
+  done
+  [ "$missing" = "0" ] || die "create the files above, then re-run"
+
+  # Piped straight from file to gh; the value is never rendered to a terminal.
+  tr -d '\r\n' < .cf-worker-token       | gh secret set CLOUDFLARE_API_TOKEN   -R "$REPO"
+  tr -d '\r\n' < .r2-access-key-id      | gh secret set R2_ACCESS_KEY_ID       -R "$REPO"
+  tr -d '\r\n' < .r2-secret-access-key  | gh secret set R2_SECRET_ACCESS_KEY   -R "$REPO"
+
+  echo "    stored. Now delete the local copies:"
+  echo "      rm -P .cf-worker-token .r2-access-key-id .r2-secret-access-key"
 
   echo
   echo "==> Stored. Verifying names only (values are never readable back):"
@@ -225,10 +266,7 @@ cmd_check() {
 # secrets -- DNS records are public data.
 cmd_dns_debug() {
   need curl; need jq
-  if [ -z "${CF_DNS_TOKEN:-}" ]; then
-    printf 'Cloudflare API token with Zone:Read + DNS:Read (input hidden): '
-    read -rs CF_DNS_TOKEN; echo
-  fi
+  load_token
   local api=https://api.cloudflare.com/client/v4 zone_id
   zone_id=$(curl -fsS "${api}/zones?name=${ZONE}" -H "Authorization: Bearer ${CF_DNS_TOKEN}" \
     | jq -r '.result[0].id')
@@ -251,10 +289,7 @@ cmd_dns_debug() {
 # Self-cleaning: the TXT is deleted whether or not it resolved.
 cmd_dns_probe() {
   need curl; need jq; need dig
-  if [ -z "${CF_DNS_TOKEN:-}" ]; then
-    printf 'Cloudflare API token with Zone:Read + DNS:Edit (input hidden): '
-    read -rs CF_DNS_TOKEN; echo
-  fi
+  load_token
   local api=https://api.cloudflare.com/client/v4 zone_id ns probe rec_id
   zone_id=$(curl -fsS "${api}/zones?name=${ZONE}" -H "Authorization: Bearer ${CF_DNS_TOKEN}" \
     | jq -r '.result[0].id')

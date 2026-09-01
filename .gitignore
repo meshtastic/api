@@ -17,3 +17,9 @@ dist-meta/
 
 # wrangler scratch (bundles, local R2/KV state). Gitignored so biome skips it too.
 .wrangler/
+
+# Local credential files for tools/setup-cloudflare.sh. Never commit these.
+.cf-token
+.cf-worker-token
+.r2-access-key-id
+.r2-secret-access-key
