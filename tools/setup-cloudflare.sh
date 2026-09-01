@@ -259,6 +259,31 @@ cmd_secrets() {
   done
   [ "$missing" = "0" ] || die "create the files above, then re-run"
 
+  # Shape-check before storing. These values are pasted from a dashboard, and a mis-paste (page
+  # text, a description block, the wrong field) is stored just as happily as the real thing --
+  # then surfaces days later as an opaque SignatureDoesNotMatch in a deploy. Checking the shape
+  # costs nothing and never reveals the value.
+  #
+  #   R2 Access Key ID     : 32 lowercase hex
+  #   R2 Secret Access Key : 64 lowercase hex
+  #   Cloudflare API token : 40+ chars of [A-Za-z0-9_-]
+  check_shape() {
+    local file="$1" pattern="$2" description="$3" value
+    value=$(tr -d '\r\n' < "$file")
+    if ! printf '%s' "$value" | grep -qE "$pattern"; then
+      echo "error: ${file} does not look like ${description}." >&2
+      echo "       length=$(printf '%s' "$value" | wc -c | tr -d ' ') lines=$(wc -l < "$file" | tr -d ' ')" >&2
+      echo "       Re-copy just that one field from the dashboard and write it again:" >&2
+      echo "         printf '%s' 'VALUE' > ${file} && chmod 600 ${file}" >&2
+      return 1
+    fi
+  }
+  local shape_ok=0
+  check_shape .cf-worker-token       '^[A-Za-z0-9_-]{40,120}$' 'a Cloudflare API token'      || shape_ok=1
+  check_shape .r2-access-key-id      '^[0-9a-f]{32}$'          'an R2 Access Key ID (32 hex)' || shape_ok=1
+  check_shape .r2-secret-access-key  '^[0-9a-f]{64}$'          'an R2 Secret Access Key (64 hex)' || shape_ok=1
+  [ "$shape_ok" = "0" ] || die "refusing to store a malformed credential"
+
   # Piped straight from file to gh; the value is never rendered to a terminal.
   tr -d '\r\n' < .cf-worker-token       | gh secret set CLOUDFLARE_API_TOKEN   -R "$REPO"
   tr -d '\r\n' < .r2-access-key-id      | gh secret set R2_ACCESS_KEY_ID       -R "$REPO"
