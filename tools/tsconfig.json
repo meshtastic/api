@@ -10,5 +10,10 @@
     "skipLibCheck": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["*.ts", "../src/lib/**/*.ts"]
+  // Only the two src/lib files the build tooling actually imports. A `src/lib/**/*.ts` glob also
+  // pulls in prisma.ts, redis.ts and mqtt.ts -- the tinyhttp server's infrastructure -- and
+  // prisma.ts needs types that only exist after `prisma generate`. That made the v2 typecheck
+  // depend on the legacy server's codegen, which is precisely the coupling this split removed
+  // from CI a commit earlier.
+  "include": ["*.ts", "../src/lib/resource.ts", "../src/lib/deviceLinks.ts"]
 }
