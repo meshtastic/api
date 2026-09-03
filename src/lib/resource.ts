@@ -1388,7 +1388,9 @@ export const deviceHardwareList: DeviceHardware[] = [
     architecture: "esp32-s3",
     activelySupported: false,
     supportLevel: 1,
-    displayName: "Seeed Wio Tracker L2",
+    displayName: "Seeed Wio Tracker L2 Pro",
     tags: ["Seeed"],
+    requiresDfu: true,
+    partitionScheme: "16MB",
   },
 ];
