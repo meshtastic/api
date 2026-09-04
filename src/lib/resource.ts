@@ -1381,4 +1381,16 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["rak3401.svg"],
     requiresDfu: true,
   },
+  {
+    hwModel: 137,
+    hwModelSlug: "SEEED_WIO_TRACKER_L2",
+    platformioTarget: "seeed-wio-tracker-l2",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Seeed Wio Tracker L2 Pro",
+    tags: ["Seeed"],
+    requiresDfu: true,
+    partitionScheme: "16MB",
+  },
 ];

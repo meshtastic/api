@@ -4,6 +4,7 @@ import {
   waitOnExecutionContext,
 } from "cloudflare:test";
 import { beforeAll, describe, expect, it } from "vitest";
+import { DEVICE_HARDWARE } from "../../worker/src/generated/documents.js";
 import worker from "../../worker/src/index.js";
 import { FLASH_TTL } from "../../worker/src/respond.js";
 import { seed } from "./seed.js";
@@ -31,7 +32,10 @@ describe("path matching reproduces regexparam", () => {
   ])("%s serves the same bytes", async (p) => {
     const res = await call(p);
     expect(res.status).toBe(200);
-    expect((await res.text()).length).toBe(38536);
+    // Compare against the generated document rather than a hard-coded length: this test is
+    // about the router resolving all four spellings to one handler, and a byte count turns
+    // every device-registry addition into an unrelated failure here.
+    expect(await res.text()).toBe(DEVICE_HARDWARE.body);
   });
 
   it.each(["//resource/deviceHardware", "/resource//deviceHardware"])(
