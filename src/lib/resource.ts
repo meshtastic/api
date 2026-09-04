@@ -1390,6 +1390,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Seeed Wio Tracker L2 Pro",
     tags: ["Seeed"],
+    images: ["seeed_wio_tracker_l2.svg"],
     requiresDfu: true,
     partitionScheme: "16MB",
   },
