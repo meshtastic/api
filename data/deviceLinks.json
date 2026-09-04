@@ -1482,6 +1482,12 @@
       "Targets": [
         "native"
       ]
+    },
+    {
+      "ShortCode": "ttc",
+      "Description": "Thing Things Conference 2026",
+      "Type": "Internal",
+      "Targets": []
     }
   ],
   "Marketplaces": {
