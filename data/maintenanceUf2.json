@@ -30,6 +30,14 @@
       "otafixBoardSlug": "heltec_t114",
       "sha256": "96a461dcf5eb3df81de26ed278632a949f777304878ddb445958dbbf0684702a"
     },
+    "Heltec-T096-v1": {
+      "otafixBoardSlug": "heltec_t096",
+      "sha256": "e81ca347718ce0f3511fb909db793e090020e684f903ba35a4efe5aa2872356e"
+    },
+    "Heltec-T1": {
+      "otafixBoardSlug": "heltec_t1",
+      "sha256": "112fa1f748a6b6c33bbb1893378b432180c9afeb7ca608a23b7544bf364a6fb4"
+    },
     "MinewSemi-MX25LE01": {
       "otafixBoardSlug": "minewsemi_mx25le01",
       "sha256": "301937aaade9c548d40c4c25db7a7cd2356d694c27764ad295789e04128f4170"
@@ -38,6 +46,10 @@
       "otafixBoardSlug": "wio_tracker_l1",
       "sha256": "4eb3c0aa307f6f69395817b49e2041ba063e7004333c3a702296f6724cdeae58"
     },
+    "WisBlock-RAK3401-Board": {
+      "otafixBoardSlug": "wiscore_rak3401",
+      "sha256": "33d1d5f46ceda68e96d95ad358f9625eedc02fd9ebe67517e603a018ee1eac38"
+    },
     "WisBlock-RAK4631-Board": {
       "otafixBoardSlug": "wiscore_rak4631_board",
       "sha256": "20044aefae6f02e6b769d2018cdab827af359ca12aea5a93591e300574e8a7f4"
@@ -45,6 +57,14 @@
     "WisMesh-Tag": {
       "otafixBoardSlug": "wismesh_tag",
       "sha256": "228545896fb2e16f4eaf0f70c672b7cd0ceab8448b51d24cd4f5a4b4515d6f52"
+    },
+    "muzi-Base-Board": {
+      "otafixBoardSlug": "muzi_base",
+      "sha256": "bee189b0c8aabacdd0033caac11cd1fb01445fe0d92912fb5e4bf5ba21ca7374"
+    },
+    "nRF52840-MeshTracker-X1": {
+      "otafixBoardSlug": "mesh_tracker_x1",
+      "sha256": "52764ebe629dae6d9085f6e6d85a8d5d2df7aeea8e47dca55c692fdb0fbcc4e8"
     },
     "nRF52840-SeeedSenseCAPSolarP1-v1": {
       "otafixBoardSlug": "sensecap_solar_p1",
@@ -96,6 +116,10 @@
     "seeed_wio_tracker_L1",
     "seeed_wio_tracker_L1_eink",
     "seeed_solar_node",
-    "seeed_xiao_nrf52840_kit"
+    "seeed_xiao_nrf52840_kit",
+    "seeed_mesh_tracker_X1",
+    "muzi-base",
+    "heltec-mesh-node-t096",
+    "heltec-mesh-node-t1"
   ]
 }
