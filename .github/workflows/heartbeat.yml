@@ -1,0 +1,31 @@
+name: Heartbeat
+
+# GitHub disables scheduled workflows in a public repository after 60 days with no repository
+# activity, and bot pushes are widely reported not to reset that timer. When it trips, every sync
+# stops, nothing alerts, and the API keeps serving 200s with silently frozen data.
+#
+# This is the in-repo half of the mitigation: a real commit, monthly. The other half is the
+# external dead-man's switch pinged by each sync -- an in-repo watchdog cannot detect its own
+# disablement, which is the whole point.
+
+on:
+  schedule:
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  beat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          set -euo pipefail
+          date -u +%Y-%m-%dT%H:%M:%SZ > .github/HEARTBEAT
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/HEARTBEAT
+          git commit -m "chore: heartbeat (keeps scheduled workflows enabled)"
+          git push

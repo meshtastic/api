@@ -1,0 +1,186 @@
+name: Deploy
+
+# Publishes to R2 and deploys the Worker.
+#
+# Two things about how this is triggered are load-bearing:
+#
+#  1. It is NEVER triggered by `on: push`. A push made with the default GITHUB_TOKEN does not
+#     create a workflow run, so a sync that pushes a commit and expects a push-triggered deploy
+#     would silently never publish. Syncs call this as a reusable workflow in the SAME run.
+#
+#  2. Callers MUST pass the SHA they just pushed as `ref`. A reusable workflow inherits the
+#     caller's github.sha, which for a `schedule` trigger is the head at run-creation time --
+#     i.e. BEFORE the sync's own commit. Without `ref`, every publish would ship the previous
+#     cycle's data, forever, off by one, with the next run masking it just enough to be hard to
+#     notice.
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        required: false
+        default: ""
+      environment:
+        type: string
+        required: false
+        default: staging
+      meta_source:
+        type: string
+        required: false
+        default: deploy
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Commit SHA to publish (defaults to the triggering ref)"
+        type: string
+        required: false
+      environment:
+        type: choice
+        options: [staging, production]
+        default: staging
+  push:
+    branches: [v2]
+
+concurrency:
+  group: deploy-${{ inputs.environment || 'staging' }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  # The failure-reporting step opens or comments on a deduplicated issue, which needs issues:
+  # write. Without it that step fails with "Resource not accessible by integration" -- so a failed
+  # deploy produced TWO failures and no notification, which is the one moment the notification
+  # actually matters.
+  issues: write
+
+env:
+  R2_BUCKET: meshtastic-api-v1
+  AWS_DEFAULT_REGION: auto
+  # Newer AWS CLI versions send checksum algorithms R2 can reject (InvalidDigest / BadDigest).
+  # Prophylactic; harmless if the CLI in use never needed it.
+  AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+  AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # A production publish may only ever come from master. Without this, a workflow_dispatch from
+    # an experimental branch could republish production from an untested tree.
+    if: >-
+      (inputs.environment || 'staging') != 'production'
+      || github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          # build-data reads `git log` for deviceLinks' generatedAt, so it needs real history.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile --ignore-scripts=false
+      - run: pnpm build:data
+      - run: pnpm build:static
+      - run: pnpm validate
+
+      - name: Configure R2 credentials
+        run: |
+          echo "R2_ENDPOINT=https://${{ vars.CLOUDFLARE_ACCOUNT_ID }}.r2.cloudflarestorage.com" >> "$GITHUB_ENV"
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+
+      # ---- Upload order is deliberate -----------------------------------------------------
+      # Binaries first, because the manifests that follow reference them by sha256. Publishing a
+      # manifest before its binary would leave a window where a client reads a digest for a file
+      # that is not there yet -- on the one flow that ends in an irreversible bootloader write.
+      - name: Upload binaries (explicit content-type per class)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          set -euo pipefail
+          # Never rely on inferred content-types: extensionless keys become
+          # binary/octet-stream, which breaks strict JSON clients such as the c-sharp CLI's
+          # GetFromJsonAsync. Every class is uploaded with its type stated.
+          for attempt in 1 2 3; do
+            aws s3 sync dist-static/ "s3://$R2_BUCKET/v1/" \
+              --endpoint-url "$R2_ENDPOINT" \
+              --exclude '*' --include '*.png' \
+              --content-type image/png --no-progress && break
+            echo "retry $attempt"; sleep $((attempt * 5))
+          done
+          for attempt in 1 2 3; do
+            aws s3 sync dist-static/ "s3://$R2_BUCKET/v1/" \
+              --endpoint-url "$R2_ENDPOINT" \
+              --exclude '*' --include '*.uf2' \
+              --content-type application/octet-stream --no-progress && break
+            echo "retry $attempt"; sleep $((attempt * 5))
+          done
+          aws s3 cp dist-static/favicon.ico "s3://$R2_BUCKET/v1/favicon.ico" \
+            --endpoint-url "$R2_ENDPOINT" --content-type image/x-icon --no-progress
+
+      - name: Write _meta.json
+        env:
+          META_SOURCE: ${{ inputs.meta_source || 'deploy' }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          set -euo pipefail
+          node tools/write-meta.mjs
+          aws s3 cp dist-meta/_meta.json "s3://$R2_BUCKET/v1/_meta.json" \
+            --endpoint-url "$R2_ENDPOINT" --content-type application/json --no-progress
+
+      - name: Verify every object landed in R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: node tools/verify-r2.mjs
+
+      # ---- Worker last, once every key it can reference exists ----------------------------
+      - name: Deploy Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --env ${{ inputs.environment || 'staging' }}
+
+      # ---- Prune last, never before the deploy --------------------------------------------
+      # Deleting first would pull keys out from under the still-live previous Worker version.
+      # github/* is excluded: those objects are written by sync-firmware-list.yml and are not
+      # present in dist-static/, so --delete would remove them on every run.
+      - name: Prune orphaned objects
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 sync dist-static/ "s3://$R2_BUCKET/v1/" \
+            --endpoint-url "$R2_ENDPOINT" \
+            --delete --size-only --no-progress \
+            --exclude 'github/*' --exclude '_meta.json' --exclude 'manifest.json'
+
+      - name: Report failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const title = '[pipeline] Deploy failed';
+            const body = `Run: ${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+            // List first and check the call itself succeeded -- a transient API error here would
+            // otherwise open a fresh duplicate issue on every run.
+            const { data: open } = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', labels: 'pipeline-alert',
+            });
+            const existing = open.find(i => i.title === title);
+            if (existing) {
+              await github.rest.issues.createComment({ owner, repo, issue_number: existing.number, body });
+            } else {
+              await github.rest.issues.create({ owner, repo, title, body, labels: ['pipeline-alert'] });
+            }

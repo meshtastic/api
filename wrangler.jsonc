@@ -1,0 +1,81 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "meshtastic-api",
+  "main": "worker/src/index.ts",
+  "compatibility_date": "2026-08-22",
+
+  // No node_compat, no nodejs_compat, no polyfills: the Worker has zero runtime dependencies.
+  // Dropping octokit in particular removes the jwa -> buffer.SlowBuffer import chain that took
+  // the whole API down when the builder picked a newer Node.
+
+  // Smart placement is deliberately OFF. It relocates the Worker toward its backend, which adds
+  // eyeball latency on a cache-serving hot path and fragments the per-colo Cache API.
+
+  // Workers Caching. Lets Cloudflare answer a repeat request from cache WITHOUT executing this
+  // Worker, which is the only mechanism that does so on a Worker Route -- Cache Rules cannot,
+  // because a response a Worker generates with no subrequest is CF-Cache-Status: DYNAMIC by
+  // definition, and the CDN cache sits behind the Worker rather than in front of it.
+  //
+  // It is tiered and collapses concurrent requests, neither of which the Cache API does. The
+  // Cache API layer in serveR2 stays anyway: it is a separate, per-colo store that still saves an
+  // R2 read on a Workers-Cache miss.
+  //
+  // cross_version_cache is set to false EXPLICITLY rather than relying on the default, which the
+  // config schema does not state. With it off, the Worker version is part of the
+  // cache key, so every deploy cold-starts the cache -- and that is a feature here, not a cost:
+  // it is what makes a 24h edge TTL safe for the documents compiled into the bundle, since the
+  // only way they can change is a deploy. Turning it on would break that guarantee silently.
+  "cache": { "enabled": true, "cross_version_cache": false },
+
+  "observability": { "enabled": true },
+
+  "r2_buckets": [
+    {
+      "binding": "DATA",
+      "bucket_name": "meshtastic-api-v1"
+    }
+  ],
+
+  "env": {
+    "staging": {
+      "name": "meshtastic-api-staging",
+      "cache": { "enabled": true, "cross_version_cache": false },
+      "routes": [
+        {
+          "pattern": "apiv2.meshtastic.org/*",
+          "zone_name": "meshtastic.org"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "DATA",
+          "bucket_name": "meshtastic-api-v1"
+        }
+      ]
+    },
+
+    "production": {
+      "name": "meshtastic-api",
+      "cache": { "enabled": true, "cross_version_cache": false },
+      // THE FLIP. Uncommenting this block and running `wrangler deploy --env production` is what
+      // moves api.meshtastic.org off Railway. It attaches to the EXISTING proxied DNS record --
+      // no record is deleted and no certificate is issued, so there is no gap. (A Workers Custom
+      // Domain cannot be created on a hostname that already has a CNAME, which would have meant
+      // deleting the Railway record and waiting for cert issuance: minutes of hard downtime and a
+      // DNS-TTL-bound rollback. A Route attaches and detaches in seconds.)
+      //
+      // Rollback order matters: disable the Deploy workflow FIRST, then delete the route --
+      // otherwise the next deploy.yml run silently re-creates it mid-incident. See ROLLBACK.md.
+      //
+      // "routes": [
+      //   { "pattern": "api.meshtastic.org/*", "zone_name": "meshtastic.org" }
+      // ],
+      "r2_buckets": [
+        {
+          "binding": "DATA",
+          "bucket_name": "meshtastic-api-v1"
+        }
+      ]
+    }
+  }
+}

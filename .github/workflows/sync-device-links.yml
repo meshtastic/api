@@ -1,16 +1,18 @@
 name: Sync device links
 
-# Pulls the device-link catalog from msh.to's public /api/urls into data/deviceLinks.json,
-# which the api serves from /resource/deviceLinks. Keeps the data in-repo (reviewable diffs,
-# no runtime dependency on msh.to) and fresh without a code change.
+# Pulls the device-link catalog from msh.to's public /api/urls into data/deviceLinks.json, which
+# the api serves from /resource/deviceLinks. Keeps the data in-repo (reviewable diffs, no runtime
+# dependency on msh.to) and fresh without a code change.
 
 on:
   schedule:
     - cron: "17 * * * *" # hourly (at :17 to avoid top-of-hour congestion)
   workflow_dispatch:
 
+# Shared with sync-firmware-list so two syncs never race on a push to the same branch. GitHub cron
+# is best-effort and routinely fires 5-20 minutes late, so overlap is a matter of when, not if.
 concurrency:
-  group: sync-device-links
+  group: repo-write
   cancel-in-progress: false
 
 permissions:
@@ -19,6 +21,9 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+      sha: ${{ steps.commit.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
 
@@ -28,18 +33,59 @@ jobs:
           curl -fsSL https://msh.to/api/urls -o /tmp/catalog.json
           # Sanity-check the shape before writing, so a bad/empty response never lands.
           jq -e 'has("Routes") and (.Routes | type == "array") and (.Routes | length > 0)' /tmp/catalog.json >/dev/null
+
+          # A catalog that suddenly loses a fifth of its entries is far more likely to be an
+          # upstream incident than a real edit. Refuse it; the committed file keeps serving.
+          before=$(jq '.Routes | length' data/deviceLinks.json)
+          after=$(jq '.Routes | length' /tmp/catalog.json)
+          echo "routes: $before -> $after"
+          if [ "${ALLOW_SHRINK:-0}" != "1" ] && [ "$after" -lt "$(( before * 8 / 10 ))" ]; then
+            echo "::error::catalog shrank from $before to $after routes (>20%). Re-run with ALLOW_SHRINK=1 if this is real."
+            exit 1
+          fi
+
+          jq -e 'all(.Routes[]; .ShortCode != null and .ShortCode != "")' /tmp/catalog.json >/dev/null
+
           mkdir -p data
           jq '.' /tmp/catalog.json > data/deviceLinks.json   # pretty-print for clean diffs
 
       - name: Commit if changed
+        id: commit
         run: |
           set -euo pipefail
           if git diff --quiet -- data/deviceLinks.json; then
-            echo "Catalog unchanged — nothing to commit."
+            echo "Catalog unchanged -- nothing to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/deviceLinks.json
-          git commit -m "chore: sync device links from msh.to [skip ci]"
-          git push
+          # No [skip ci]: CI is now the gate that the published bytes are valid, and this commit
+          # is exactly the kind that needs it.
+          git commit -m "chore: sync device links from msh.to"
+          # Another sync may have landed while this one ran. Rebase and retry rather than failing.
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && git push && break
+            echo "push attempt $attempt failed, retrying"; sleep $((attempt * 5))
+          done
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Ping dead-man's switch
+        if: success() && vars.HEALTHCHECK_DEVICELINKS_URL != ''
+        run: curl -fsS -m 10 "${{ vars.HEALTHCHECK_DEVICELINKS_URL }}" || true
+
+  # Publish in the SAME run, passing the SHA the sync just pushed. A push made with GITHUB_TOKEN
+  # does not create a workflow run, so an `on: push` deploy would never fire; and without the
+  # explicit ref the reusable workflow would check out the caller's SHA, which predates the commit
+  # above -- publishing last cycle's catalog every single time.
+  publish:
+    needs: sync
+    if: needs.sync.outputs.changed == 'true'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      ref: ${{ needs.sync.outputs.sha }}
+      environment: production
+      meta_source: sync-device-links
+    secrets: inherit
