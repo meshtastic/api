@@ -1,53 +1,43 @@
 # Rollback
 
-Read this **before** the flip, not during one. Rehearse the clicks.
+Read this before you need it, not during an incident. Rehearse the clicks.
 
-## Preconditions -- READ FIRST, this is not yet true
+## Current state -- the flip is DONE (2026-09-08)
 
-> **`api.meshtastic.org` is currently a DNS-only (grey-cloud) CNAME straight to Railway.**
->
-> Everything below describes the system *after* the flip, and the flip itself cannot happen until
-> that record is set to **Proxied (orange)** in Cloudflare. A Worker Route only sees traffic that
-> reaches Cloudflare's edge; against a grey-cloud record, uncommenting the route in
-> `wrangler.jsonc` and deploying is a **silent no-op** -- no error, no traffic moved.
-> `tools/setup-cloudflare.sh` states the requirement: "It must be PROXIED (orange) or the route
-> never sees traffic."
->
-> Verified 2026-09-08, four independent ways:
+> `api.meshtastic.org` is **proxied** and served by the **`meshtastic-api`** Worker.
 >
 > ```
-> dig +noall +answer @gene.ns.cloudflare.com api.meshtastic.org
->   api.meshtastic.org. 60 IN CNAME api-production-871d.up.railway.app.
->   api-production-871d.up.railway.app. 60 IN A 69.46.46.101      # Railway's IP, not CF anycast
-> curl -sI https://api.meshtastic.org/ | grep cf-ray              # (nothing)
-> curl -s -o /dev/null -w '%{http_code}' https://api.meshtastic.org/cdn-cgi/trace   # 404
-> openssl s_client -connect api.meshtastic.org:443 ... -issuer    # Let's Encrypt (Railway's), not
->                                                                 # Google Trust Services (CF's)
+> dig +short api.meshtastic.org        -> 104.21.46.221, 172.67.142.226   (CF anycast A, no CNAME)
+> curl -sI https://api.meshtastic.org/ -> server: cloudflare, cf-ray: ...
+> TLS issuer                           -> Google Trust Services (Cloudflare)
 > ```
 >
-> For contrast, `apiv2.meshtastic.org` answers on 104.21.46.221 / 172.67.142.226, sends a `cf-ray`,
-> serves `/cdn-cgi/trace`, and presents a Google Trust Services cert.
+> A proxied record answers with Cloudflare anycast **A records**; a grey-cloud one answers with the
+> origin **CNAME**. That difference is the fastest way to tell which state you are in.
+>
+> Verified at cutover: `parity.mjs --self-check` 12/12 against production, and 39/40 on the full
+> diff against Railway. The single FAIL is a harness artifact -- the old server derives `iconUrl`
+> from the request Host, so the railway.app baseline emits railway.app URLs; the payload is
+> byte-identical.
 
-### Order of operations for the flip
+**Railway is still running and still the rollback target.** Nothing about it changed; the DNS
+record underneath still points at it, which is what makes route deletion an instant rollback.
 
-1. **Set the record to Proxied** in Cloudflare, and confirm SSL/TLS mode is **Full** for this
-   hostname before doing so -- proxying moves TLS termination to Cloudflare, and a Flexible or
-   Full (strict) mismatch against Railway's origin cert breaks every request. With SSL correct
-   this step is transparent: traffic flows eyeball -> Cloudflare -> Railway, still Railway-served.
-   Verify with `curl -sI https://api.meshtastic.org/ | grep -i 'cf-ray\|server'` -- expect a
-   `cf-ray` AND `server: railway-hikari`. This step is independently reversible (toggle back to
-   grey; the record carries a 60s TTL).
-2. **Only then** uncomment the `routes` block under `env.production` in `wrangler.jsonc` and run
-   the Deploy workflow with `environment: production`. That is the actual cutover.
-3. Verify `server: cloudflare` on `api.meshtastic.org`, then soak before touching Railway.
+### One thing to know before you roll back
 
-Doing 2 before 1 is harmless but accomplishes nothing. Doing 1 alone is a safe, reversible
-half-step that proves the SSL path before any traffic changes hands.
+The production route was added **in the dashboard**, not via `wrangler.jsonc` -- the `routes` block
+under `env.production` there is still commented out. Two consequences:
 
-## The one-line summary (post-flip)
+- A `wrangler deploy --env production` does **not** re-create the route, so the "disable the Deploy
+  workflow first" step below is belt-and-braces rather than load-bearing. It is still the right
+  habit, and it becomes load-bearing the moment that block is uncommented.
+- Production routing currently lives only as dashboard state and is not described by the repo.
+  Uncommenting the block to make config match reality is worth doing deliberately, not by accident.
 
-Once the record is proxied, `api.meshtastic.org` is served by a Cloudflare **Worker Route**, not a
-Custom Domain, and the DNS record still points at Railway underneath. Removing the route hands
+## The one-line summary
+
+`api.meshtastic.org` is served by a Cloudflare **Worker Route**, not a Custom Domain, and the DNS
+record still points at Railway underneath. Removing the route hands
 traffic straight back to Railway with no DNS change and no TTL to wait out.
 
 ## If the Worker is serving something wrong
@@ -80,11 +70,10 @@ curl -sI https://api.meshtastic.org/resource/deviceHardware | grep -iE 'server|c
 wrangler rollback --env production
 ```
 
-Reverts to the previous Worker version. **Check there is one first:** every Deploy run before
-2026-09-08 was `--env staging`, so the production Worker script did not exist at all. It has since
-been deployed once (run 34267700592, sha 87c7325, no route attached), which means the script now
-exists but has a single version -- `rollback` needs a *previous* one, so it only becomes a real
-option after the flip deploy makes a second. Until then the route deletion above is the rollback. Because the five consumer-facing JSON documents are
+Reverts to the previous Worker version. This is available now: every Deploy run before 2026-09-08
+was `--env staging` so the production script did not exist, but `meshtastic-api` has since been
+deployed more than once and therefore has a version to fall back to. Route deletion above remains
+the faster and broader rollback -- it does not depend on the Worker being healthy at all. Because the five consumer-facing JSON documents are
 compiled **into the bundle**, this reverts data and routing together, atomically — there is no
 window where a new Worker reads an old object.
 
