@@ -2,11 +2,53 @@
 
 Read this **before** the flip, not during one. Rehearse the clicks.
 
-## The one-line summary
+## Preconditions -- READ FIRST, this is not yet true
 
-`api.meshtastic.org` is served by a Cloudflare **Worker Route**, not a Custom Domain. The DNS
-record still points at Railway. Removing the route hands traffic straight back to Railway with no
-DNS change and no TTL to wait out.
+> **`api.meshtastic.org` is currently a DNS-only (grey-cloud) CNAME straight to Railway.**
+>
+> Everything below describes the system *after* the flip, and the flip itself cannot happen until
+> that record is set to **Proxied (orange)** in Cloudflare. A Worker Route only sees traffic that
+> reaches Cloudflare's edge; against a grey-cloud record, uncommenting the route in
+> `wrangler.jsonc` and deploying is a **silent no-op** -- no error, no traffic moved.
+> `tools/setup-cloudflare.sh` states the requirement: "It must be PROXIED (orange) or the route
+> never sees traffic."
+>
+> Verified 2026-09-08, four independent ways:
+>
+> ```
+> dig +noall +answer @gene.ns.cloudflare.com api.meshtastic.org
+>   api.meshtastic.org. 60 IN CNAME api-production-871d.up.railway.app.
+>   api-production-871d.up.railway.app. 60 IN A 69.46.46.101      # Railway's IP, not CF anycast
+> curl -sI https://api.meshtastic.org/ | grep cf-ray              # (nothing)
+> curl -s -o /dev/null -w '%{http_code}' https://api.meshtastic.org/cdn-cgi/trace   # 404
+> openssl s_client -connect api.meshtastic.org:443 ... -issuer    # Let's Encrypt (Railway's), not
+>                                                                 # Google Trust Services (CF's)
+> ```
+>
+> For contrast, `apiv2.meshtastic.org` answers on 104.21.46.221 / 172.67.142.226, sends a `cf-ray`,
+> serves `/cdn-cgi/trace`, and presents a Google Trust Services cert.
+
+### Order of operations for the flip
+
+1. **Set the record to Proxied** in Cloudflare, and confirm SSL/TLS mode is **Full** for this
+   hostname before doing so -- proxying moves TLS termination to Cloudflare, and a Flexible or
+   Full (strict) mismatch against Railway's origin cert breaks every request. With SSL correct
+   this step is transparent: traffic flows eyeball -> Cloudflare -> Railway, still Railway-served.
+   Verify with `curl -sI https://api.meshtastic.org/ | grep -i 'cf-ray\|server'` -- expect a
+   `cf-ray` AND `server: railway-hikari`. This step is independently reversible (toggle back to
+   grey; the record carries a 60s TTL).
+2. **Only then** uncomment the `routes` block under `env.production` in `wrangler.jsonc` and run
+   the Deploy workflow with `environment: production`. That is the actual cutover.
+3. Verify `server: cloudflare` on `api.meshtastic.org`, then soak before touching Railway.
+
+Doing 2 before 1 is harmless but accomplishes nothing. Doing 1 alone is a safe, reversible
+half-step that proves the SSL path before any traffic changes hands.
+
+## The one-line summary (post-flip)
+
+Once the record is proxied, `api.meshtastic.org` is served by a Cloudflare **Worker Route**, not a
+Custom Domain, and the DNS record still points at Railway underneath. Removing the route hands
+traffic straight back to Railway with no DNS change and no TTL to wait out.
 
 ## If the Worker is serving something wrong
 
@@ -38,7 +80,11 @@ curl -sI https://api.meshtastic.org/resource/deviceHardware | grep -iE 'server|c
 wrangler rollback --env production
 ```
 
-Reverts to the previous Worker version. Because the five consumer-facing JSON documents are
+Reverts to the previous Worker version. **Check there is one first:** every Deploy run before
+2026-09-08 was `--env staging`, so the production Worker script did not exist at all. It has since
+been deployed once (run 34267700592, sha 87c7325, no route attached), which means the script now
+exists but has a single version -- `rollback` needs a *previous* one, so it only becomes a real
+option after the flip deploy makes a second. Until then the route deletion above is the rollback. Because the five consumer-facing JSON documents are
 compiled **into the bundle**, this reverts data and routing together, atomically — there is no
 window where a new Worker reads an old object.
 
@@ -56,7 +102,9 @@ R2 is not versioned, so there is no `git revert` for an object. Two paths:
 ## What NOT to do
 
 - **Do not touch Railway.** It is the rollback target for the whole cutover window and requires no
-  action, ever. Nobody on this project has access to it anyway.
+  action, ever. Nobody on this project has access to it anyway. While the record is grey-cloud,
+  Railway is not merely the rollback target -- it *is* production, and deleting the service takes
+  the API offline immediately.
 - **Do not delete the `api.meshtastic.org` DNS record.** It is what the rollback falls back to.
   Only repoint it to an `AAAA 100::` placeholder once you are confident, and understand that doing
   so makes `wrangler rollback` the only remaining rollback.
