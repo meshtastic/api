@@ -40,10 +40,15 @@ on:
         options: [staging, production]
         default: staging
   push:
-    branches: [v2]
+    # master publishes to PRODUCTION, v2 to staging -- see the environment expression below.
+    # Before this, the only push trigger was v2, so merging a device-registry PR to master
+    # deployed nothing and, because the five documents are compiled into the Worker bundle, the
+    # change never reached production at all. The hourly deviceLinks sync deploys production but
+    # is gated on `changed == 'true'`, so it only ever swept such a merge in by accident.
+    branches: [master, v2]
 
 concurrency:
-  group: deploy-${{ inputs.environment || 'staging' }}
+  group: deploy-${{ inputs.environment || (github.ref == 'refs/heads/master' && 'production' || 'staging') }}
   cancel-in-progress: false
 
 permissions:
@@ -68,7 +73,7 @@ jobs:
     # A production publish may only ever come from master. Without this, a workflow_dispatch from
     # an experimental branch could republish production from an untested tree.
     if: >-
-      (inputs.environment || 'staging') != 'production'
+      (inputs.environment || (github.ref == 'refs/heads/master' && 'production' || 'staging')) != 'production'
       || github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v4
@@ -149,7 +154,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env ${{ inputs.environment || 'staging' }}
+          command: deploy --env ${{ inputs.environment || (github.ref == 'refs/heads/master' && 'production' || 'staging') }}
 
       # ---- Prune last, never before the deploy --------------------------------------------
       # Deleting first would pull keys out from under the still-live previous Worker version.
