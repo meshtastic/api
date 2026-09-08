@@ -12,6 +12,7 @@ import { createHash } from "node:crypto";
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import { sha256 } from "./canonical.js";
+import { collectEraseImages } from "./eraseImages.js";
 
 export interface Entry {
   /** R2 object key. */
@@ -25,6 +26,8 @@ export interface Entry {
   readonly md5: string;
 }
 
+const readJson = (p: string) => JSON.parse(readFileSync(p, "utf8"));
+
 const OUT = "dist-static";
 
 const ICONS = [
@@ -35,9 +38,17 @@ const ICONS = [
   "hamvention.png",
 ];
 
-// Every .uf2 the manifest can name. Kept as an explicit list and cross-checked by validate.ts
-// against data/maintenanceUf2.json, so a manifest entry can never point at an unpublished file.
-const UF2S = ["nrf_erase2.uf2", "nrf_erase_sd7_3.uf2", "pico_erase.uf2"];
+// Every .uf2 the manifest can name, read FROM the manifest via the same helper validate.ts uses.
+// It was a hardcoded list of three, with a comment asserting validate.ts cross-checked it; that
+// cross-check read only the `nrf52` and `rp2040` keys, so `erase.nrf52Bootloader` was published in
+// the manifest and never uploaded -- a 404 on the one flow ending in a bootloader write. Deriving
+// it makes that class of drift impossible rather than merely checked for.
+//
+// This is still an explicit per-file emit with a stated content-type, never a directory glob, so
+// ATTRIBUTION.md stays unpublished.
+const UF2S = collectEraseImages(readJson("data/maintenanceUf2.json").erase).map(
+  (e) => e.fileName,
+);
 
 const entries: Entry[] = [];
 

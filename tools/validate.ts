@@ -10,6 +10,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { deviceHardwareList } from "../src/lib/resource.js";
 import { sha256 } from "./canonical.js";
+import { collectEraseImages } from "./eraseImages.js";
 
 const readJson = (p: string) => JSON.parse(readFileSync(p, "utf8"));
 
@@ -113,10 +114,11 @@ for (const d of quirks.devices ?? []) {
 /* ---------------------------------------------- maintenanceUf2 (fails closed) */
 
 const uf2 = readJson("data/maintenanceUf2.json");
-const eraseEntries = [
-  ...Object.values(uf2.erase?.nrf52 ?? {}),
-  uf2.erase?.rp2040,
-].filter(Boolean) as { fileName: string; sha256: string }[];
+// Every entry under `erase`, whatever its key. This named `nrf52` and `rp2040` literally, which
+// meant the additive `nrf52Bootloader` key was skipped by the one check that is supposed to prove
+// every manifest entry points at a file we actually publish. Shared with build-static.ts so the
+// list that is checked and the list that is uploaded cannot drift apart again.
+const eraseEntries = collectEraseImages(uf2.erase);
 
 if (eraseEntries.length === 0) fail("maintenanceUf2 has no erase images");
 

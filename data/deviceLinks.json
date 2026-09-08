@@ -1482,6 +1482,28 @@
       "Targets": [
         "native"
       ]
+    },
+    {
+      "ShortCode": "ttc",
+      "Description": "Thing Things Conference 2026",
+      "Type": "Internal",
+      "Targets": []
+    },
+    {
+      "ShortCode": "mini-epaper-s3",
+      "Description": "Mini E-Paper S3 Kit",
+      "Type": "Vendor",
+      "Targets": [
+        "mini-epaper-s3"
+      ]
+    },
+    {
+      "ShortCode": "tlora-c6",
+      "Description": "T-Lora C6",
+      "Type": "Vendor",
+      "Targets": [
+        "tlora-c6"
+      ]
     }
   ],
   "Marketplaces": {

@@ -24,6 +24,9 @@ export interface EraseImageEntry {
   fileName: string;
   sha256: string;
   expectedFirstTargetAddress?: number;
+  // Set only on nrf52Bootloader: the UF2 family ID the bootloader consumes itself. Its block
+  // has targetAddr 0, so clients check this instead of expectedFirstTargetAddress.
+  expectedFamilyId?: number;
 }
 
 export interface OtafixAssetEntry {
@@ -44,6 +47,11 @@ export interface MaintenanceUf2Manifest {
     // all, so it correctly has no sub-key, unlike the old flat {s140_6_1_1, s140_7_3_0, rp2040}
     // shape that mixed a SoftDevice-variant axis with an architecture axis in one object.
     nrf52: Record<string, EraseImageEntry>; // keyed by SoftDeviceVariant.fromWire's input, e.g. "6.1.1"
+    // One board-agnostic file the OTAFIX bootloader consumes itself (UF2 family 0x4D455348,
+    // "MESH"), so it needs no SoftDevice sub-key. Clients gate it on the UF2 drive's INFO_UF2.TXT
+    // carrying a "Factory-Erase:" line naming that family; an older bootloader has no such line
+    // and silently ignores the file, so clients fall back to erase.nrf52 for it.
+    nrf52Bootloader?: EraseImageEntry;
     rp2040: EraseImageEntry;
   };
   otafixByBoardId: Record<string, OtafixAssetEntry>;
