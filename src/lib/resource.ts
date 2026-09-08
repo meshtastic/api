@@ -1166,7 +1166,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "TLORA_C6",
     platformioTarget: "tlora-c6",
     architecture: "esp32-c6",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "LilyGo T-Lora C6",
     tags: ["LilyGo"],
