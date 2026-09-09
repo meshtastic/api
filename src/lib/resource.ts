@@ -1103,7 +1103,7 @@ export const deviceHardwareList: DeviceHardware[] = [
   {
     hwModel: 123,
     hwModelSlug: "T5_S3_EPAPER_PRO",
-    platformioTarget: "t5-epaper-s3-v1",
+    platformioTarget: "t5s3-epaper-v1",
     architecture: "esp32-s3",
     activelySupported: true,
     supportLevel: 1,
@@ -1111,7 +1111,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     hasMui: false,
     partitionScheme: "8MB",
-    images: ["t5s3_epaper_v2.svg"],
+    images: ["t5s3_epaper.svg"],
   },
   {
     hwModel: 123,
@@ -1124,7 +1124,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["LilyGo"],
     hasMui: false,
     partitionScheme: "8MB",
-    images: ["t5s3_epaper.svg"],
+    images: ["t5s3_epaper_v2.svg"],
   },
   {
     hwModel: 125,
