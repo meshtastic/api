@@ -1118,7 +1118,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "MINI_EPAPER_S3",
     platformioTarget: "mini-epaper-s3",
     architecture: "esp32-s3",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "LilyGo Mini E-paper S3",
     tags: ["LilyGo"],
