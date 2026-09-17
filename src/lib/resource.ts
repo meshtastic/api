@@ -448,7 +448,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     platformioTarget: "t-watch-s3",
     architecture: "esp32-s3",
     activelySupported: true,
-    supportLevel: 3,
+    supportLevel: 1,
     displayName: "LILYGO T-Watch S3",
     tags: ["LilyGo"],
     images: ["t-watch-s3.svg"],
