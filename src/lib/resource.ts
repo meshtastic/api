@@ -15,6 +15,7 @@ export interface DeviceHardware {
   url?: string; // Override URL for the device (for actively supported devices only)
   key?: string; // Optional key to differentiate multiple entries for the same hwModel
   variant?: string; // Optional variant to differentiate multiple entries for the same hwModel
+  isMaker: bool; // Optional indicator for maker tier 
 }
 
 export const deviceHardwareList: DeviceHardware[] = [
@@ -1406,5 +1407,17 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["seeed_wio_tracker_l2.svg"],
     requiresDfu: true,
     partitionScheme: "16MB",
+  },
+  {
+    hwModel: 148,
+    hwModelSlug: "AXIOMETA_GENESIS_MINI",
+    platformioTarget: "axiometa-genesis-mini",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Axiometa Genesis Mini",
+    tags: ["Axiometa"],
+    images: ["axiometa-genesis-mini.svg"],
+    isMaker: true,
   },
 ];
