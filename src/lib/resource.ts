@@ -15,6 +15,7 @@ export interface DeviceHardware {
   url?: string; // Override URL for the device (for actively supported devices only)
   key?: string; // Optional key to differentiate multiple entries for the same hwModel
   variant?: string; // Optional variant to differentiate multiple entries for the same hwModel
+  isMaker?: bool; // Optional indicator for maker tier 
 }
 
 export const deviceHardwareList: DeviceHardware[] = [
@@ -1416,5 +1417,6 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Axiometa Genesis Mini",
     tags: ["Axiometa"],
+    isMaker: true,
   },
 ];
