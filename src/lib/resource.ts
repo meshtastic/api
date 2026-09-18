@@ -1417,6 +1417,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Axiometa Genesis Mini",
     tags: ["Axiometa"],
+    images: ["axiometa-genesis-mini.svg"],
     isMaker: true,
   },
 ];
