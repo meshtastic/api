@@ -1407,4 +1407,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     requiresDfu: true,
     partitionScheme: "16MB",
   },
+  {
+    hwModel: 148,
+    hwModelSlug: "AXIOMETA_GENESIS_MINI",
+    platformioTarget: "axiometa-genesis-mini",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Axiometa Genesis Mini",
+    tags: ["Axiometa"],
+  },
 ];
