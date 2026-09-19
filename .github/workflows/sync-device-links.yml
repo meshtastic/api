@@ -15,12 +15,17 @@ concurrency:
   group: repo-write
   cancel-in-progress: false
 
+# Read-only floor. Both jobs below declare exactly what they need, so nothing inherits a write
+# scope it has no use for.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   sync:
     runs-on: ubuntu-latest
+    # Commits and pushes the refreshed catalog; that is the only elevated scope it needs.
+    permissions:
+      contents: write
     outputs:
       changed: ${{ steps.commit.outputs.changed }}
       sha: ${{ steps.commit.outputs.sha }}
@@ -83,6 +88,16 @@ jobs:
   publish:
     needs: sync
     if: needs.sync.outputs.changed == 'true'
+    # Exactly what deploy.yml declares, and no more. A called workflow cannot request a permission
+    # its caller does not hold, so omitting `issues: write` here rejects the entire run before any
+    # job starts -- conclusion `startup_failure`, with no job log and no annotation saying why.
+    # That is what has been happening on every scheduled run since 2026-09-08.
+    #
+    # Set on this job rather than at workflow level so `sync` -- which fetches an external URL and
+    # pushes a commit -- never holds issue write access it has no use for.
+    permissions:
+      contents: read
+      issues: write
     uses: ./.github/workflows/deploy.yml
     with:
       ref: ${{ needs.sync.outputs.sha }}
