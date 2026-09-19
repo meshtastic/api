@@ -151,6 +151,14 @@
       ]
     },
     {
+      "ShortCode": "t-watch-s3-plus",
+      "Description": "T-Watch S3 Plus",
+      "Type": "Vendor",
+      "Targets": [
+        "t-watch-s3"
+      ]
+    },
+    {
       "ShortCode": "t-deck",
       "Description": "T-Deck",
       "Type": "Vendor",
@@ -1503,6 +1511,42 @@
       "Type": "Vendor",
       "Targets": [
         "tlora-c6"
+      ]
+    },
+    {
+      "ShortCode": "t5s3-epaper-v1",
+      "Description": "LilyGo T5 E-paper S3 Pro",
+      "Type": "Vendor",
+      "Targets": [
+        "t5s3-epaper-v1"
+      ]
+    },
+    {
+      "ShortCode": "t5s3-epaper-v2",
+      "Description": "LilyGo T5 E-paper S3 Pro V2",
+      "Type": "Vendor",
+      "Targets": [
+        "t5s3-epaper-v2"
+      ]
+    },
+    {
+      "ShortCode": "fdroid",
+      "Description": "Meshtastic FDroid App Listing",
+      "Type": "Internal",
+      "Targets": []
+    },
+    {
+      "ShortCode": "nightly",
+      "Description": "Meshtastic Nightly Index",
+      "Type": "Internal",
+      "Targets": []
+    },
+    {
+      "ShortCode": "seeed_mesh_tracker_x1",
+      "Description": "Seeed Mesh Tracker X1",
+      "Type": "Vendor",
+      "Targets": [
+        "seeed_mesh_tracker_x1"
       ]
     }
   ],
