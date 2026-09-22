@@ -1353,7 +1353,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "Seeed Wio Tracker L1 Pro 1W",
     tags: ["Seeed"],
-    images: ["wio_tracker_l1_case.svg"],
+    images: ["seeed_wio_tracker_l1_pro_1w.svg"],
     requiresDfu: true,
   },
   // The WisMesh Pocket V3 and both Repeater Mini V2 builds report their parent
