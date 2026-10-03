@@ -1546,7 +1546,15 @@
       "Description": "Seeed Mesh Tracker X1",
       "Type": "Vendor",
       "Targets": [
-        "seeed_mesh_tracker_x1"
+        "seeed_mesh_tracker_X1"
+      ]
+    },
+    {
+      "ShortCode": "rokland-rak3401-high-power",
+      "Description": "RAK3401 High Power Starter Kit (Rokland)",
+      "Type": "Marketplace",
+      "Targets": [
+        "rak3401-1watt"
       ]
     }
   ],
