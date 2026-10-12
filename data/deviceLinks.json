@@ -1556,6 +1556,22 @@
       "Targets": [
         "rak3401-1watt"
       ]
+    },
+    {
+      "ShortCode": "seeed-wio-tracker-l2",
+      "Description": "Seeed Wio Tracker L2 Pro",
+      "Type": "Vendor",
+      "Targets": [
+        "seeed-wio-tracker-l2"
+      ]
+    },
+    {
+      "ShortCode": "rokland-wismesh-pocket-v3",
+      "Description": "RAKwireless WisMesh Pocket V3",
+      "Type": "Marketplace",
+      "Targets": [
+        "rak4631"
+      ]
     }
   ],
   "Marketplaces": {
