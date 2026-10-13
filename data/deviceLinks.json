@@ -1558,6 +1558,42 @@
       ]
     },
     {
+      "ShortCode": "x",
+      "Description": "Meshtastic on X",
+      "Type": "Internal",
+      "Targets": []
+    },
+    {
+      "ShortCode": "facebook",
+      "Description": "Meshtastic Facebook Page",
+      "Type": "Internal",
+      "Targets": []
+    },
+    {
+      "ShortCode": "bluesky",
+      "Description": "Meshtastic on Bluesky",
+      "Type": "Internal",
+      "Targets": []
+    },
+    {
+      "ShortCode": "mastodon",
+      "Description": "Meshtastic on Mastodon",
+      "Type": "Internal",
+      "Targets": []
+    },
+    {
+      "ShortCode": "linkedin",
+      "Description": "Meshtastic LinkedIn Page",
+      "Type": "Internal",
+      "Targets": []
+    },
+    {
+      "ShortCode": "telegram",
+      "Description": "Meshtastic Telegram Group",
+      "Type": "Internal",
+      "Targets": []
+    },
+    {
       "ShortCode": "seeed-wio-tracker-l2",
       "Description": "Seeed Wio Tracker L2 Pro",
       "Type": "Vendor",
