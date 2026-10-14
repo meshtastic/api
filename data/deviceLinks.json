@@ -1594,11 +1594,11 @@
       "Targets": []
     },
     {
-      "ShortCode": "seeed-wio-tracker-l2",
+      "ShortCode": "seeed_wio_tracker_L2-tft",
       "Description": "Seeed Wio Tracker L2 Pro",
       "Type": "Vendor",
       "Targets": [
-        "seeed-wio-tracker-l2"
+        "seeed_wio_tracker_L2-tft"
       ]
     },
     {
