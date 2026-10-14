@@ -31,12 +31,27 @@ const headers = {
     : {}),
 };
 
+// One run makes ~30 requests (a comments fetch per open PR), so a single transient 5xx or network
+// blip used to fail the whole sync and file a pipeline-alert issue. Retry those; anything else
+// (4xx, including rate limiting) still fails immediately.
+const ATTEMPTS = 3;
+
 const gh = async (url) => {
-  const res = await fetch(url, { headers });
-  if (!res.ok) {
-    throw new Error(`GitHub ${res.status} ${res.statusText} for ${url}`);
+  for (let attempt = 1; ; attempt++) {
+    let res;
+    try {
+      res = await fetch(url, { headers });
+    } catch (err) {
+      if (attempt >= ATTEMPTS) throw err;
+      await new Promise((r) => setTimeout(r, 1000 * 2 ** (attempt - 1)));
+      continue;
+    }
+    if (res.ok) return res.json();
+    if (res.status < 500 || attempt >= ATTEMPTS) {
+      throw new Error(`GitHub ${res.status} ${res.statusText} for ${url}`);
+    }
+    await new Promise((r) => setTimeout(r, 1000 * 2 ** (attempt - 1)));
   }
-  return res.json();
 };
 
 // Matches the old server's GitHub.FirmwareLinkRegex.
