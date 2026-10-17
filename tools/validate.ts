@@ -171,6 +171,82 @@ for (const ed of events.editions ?? []) {
   }
 }
 
+/* ---------------------------------------------------------------- mqttRoots */
+
+// Clients save a root straight into the radio, so an entry must pass the firmware's own root rules:
+// 31 bytes, printable ASCII, no wildcards, no empty segment, not ending in the /2 version level.
+const ISO_SUBDIVISION = /^[A-Z]{2}-[A-Z0-9]{1,3}$/;
+const roots = readJson("data/mqttRoots.json");
+const seenRoots = new Set<string>();
+for (const e of roots.entries ?? []) {
+  const where = `mqttRoots "${e.root}"`;
+  if (typeof e.root !== "string" || !e.root.startsWith("msh/")) {
+    fail(`${where}: root must start with msh/`);
+    continue;
+  }
+  if (Buffer.byteLength(e.root) > 31) fail(`${where}: longer than 31 bytes`);
+  if (!/^[\x21-\x7e]+$/.test(e.root)) fail(`${where}: not printable ASCII`);
+  if (/[+#]/.test(e.root)) fail(`${where}: contains a wildcard`);
+  if (e.root.endsWith("/") || e.root.includes("//"))
+    fail(`${where}: empty segment`);
+  if (e.root.split("/").at(-1) === "2") fail(`${where}: ends with /2`);
+  const key = e.root.toLowerCase();
+  if (seenRoots.has(key)) fail(`${where}: duplicate root`);
+  seenRoots.add(key);
+  if (typeof e.name !== "string" || e.name.trim() === "")
+    fail(`${where}: missing name`);
+  for (const s of e.subdivisions ?? []) {
+    if (!ISO_SUBDIVISION.test(s))
+      fail(`${where}: "${s}" is not an ISO 3166-2 code`);
+  }
+  const hasCenter = e.center !== undefined || e.radiusKm !== undefined;
+  if (hasCenter) {
+    const [lat, lon] = Array.isArray(e.center) ? e.center : [];
+    if (
+      typeof lat !== "number" ||
+      lat < -90 ||
+      lat > 90 ||
+      typeof lon !== "number" ||
+      lon < -180 ||
+      lon > 180
+    ) {
+      fail(`${where}: center must be [lat, lon]`);
+    }
+    if (typeof e.radiusKm !== "number" || e.radiusKm <= 0)
+      fail(`${where}: radiusKm must be positive`);
+  }
+  if (!hasCenter && (e.subdivisions ?? []).length === 0) {
+    fail(
+      `${where}: needs subdivisions or a center and radius, or no client can place it`,
+    );
+  }
+}
+for (const [code, list] of Object.entries<string[]>(roots.neighbors ?? {})) {
+  if (!ISO_SUBDIVISION.test(code))
+    fail(`mqttRoots neighbors: "${code}" is not an ISO 3166-2 code`);
+  for (const other of list) {
+    if (!(roots.neighbors[other] ?? []).includes(code)) {
+      fail(
+        `mqttRoots neighbors: ${code} lists ${other} but ${other} does not list ${code}`,
+      );
+    }
+  }
+}
+for (const [country, names] of Object.entries<Record<string, string>>(
+  roots.subdivisionSegments ?? {},
+)) {
+  for (const [name, segment] of Object.entries(names)) {
+    if (name !== name.toLowerCase())
+      fail(
+        `mqttRoots subdivisionSegments ${country}: "${name}" must be lowercase`,
+      );
+    if (!/^[A-Za-z0-9_-]+$/.test(segment))
+      fail(
+        `mqttRoots subdivisionSegments ${country}: bad segment "${segment}"`,
+      );
+  }
+}
+
 /* --------------------------------------------------- binary immutability */
 
 // Clients pin these by sha256 and cache them by filename. Changing the bytes under an unchanged

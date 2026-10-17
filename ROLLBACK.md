@@ -82,7 +82,7 @@ window where a new Worker reads an old object.
 R2 is not versioned, so there is no `git revert` for an object. Two paths:
 
 - The bundled documents (`deviceHardware`, `deviceLinks`, `eventFirmware`, `bootloaderOtaQuirks`,
-  `maintenanceUf2`) are in the Worker — use `wrangler rollback` above.
+  `maintenanceUf2`, `mqttRoots`) are in the Worker — use `wrangler rollback` above.
 - The R2-held objects (`github/*`, binaries, favicon) are all built from files in git. Re-publish
   a known-good commit:
 
