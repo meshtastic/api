@@ -198,7 +198,6 @@
     ],
     "US-AZ": [
       "US-CA",
-      "US-CO",
       "US-NM",
       "US-NV",
       "US-UT"
@@ -209,7 +208,6 @@
       "US-OR"
     ],
     "US-CO": [
-      "US-AZ",
       "US-KS",
       "US-NE",
       "US-NM",

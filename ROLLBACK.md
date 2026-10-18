@@ -73,7 +73,7 @@ wrangler rollback --env production
 Reverts to the previous Worker version. This is available now: every Deploy run before 2026-09-08
 was `--env staging` so the production script did not exist, but `meshtastic-api` has since been
 deployed more than once and therefore has a version to fall back to. Route deletion above remains
-the faster and broader rollback -- it does not depend on the Worker being healthy at all. Because the five consumer-facing JSON documents are
+the faster and broader rollback -- it does not depend on the Worker being healthy at all. Because the six consumer-facing JSON documents are
 compiled **into the bundle**, this reverts data and routing together, atomically — there is no
 window where a new Worker reads an old object.
 
@@ -83,6 +83,8 @@ R2 is not versioned, so there is no `git revert` for an object. Two paths:
 
 - The bundled documents (`deviceHardware`, `deviceLinks`, `eventFirmware`, `bootloaderOtaQuirks`,
   `maintenanceUf2`, `mqttRoots`) are in the Worker — use `wrangler rollback` above.
+  `mqttRoots` is v2-only: Railway does not serve it, so deleting the Worker Route makes
+  `/resource/mqttRoots` return 404 until the route is restored.
 - The R2-held objects (`github/*`, binaries, favicon) are all built from files in git. Re-publish
   a known-good commit:
 
