@@ -76,9 +76,12 @@ Android and Apple suggest the same roots for the same place (meshtastic/design#1
 
 - **`entries`** are community roots whose name says nothing about where they are. Each gives the
   area it serves as ISO 3166-2 `subdivisions`, a `center` (`[lat, lon]`) and `radiusKm`, or both.
-  An entry is a root seen active on the public broker, curated by hand; personal roots (a name,
-  callsign or single node) and data-collection roots stay out. The area comes from the people who
-  run the mesh.
+  Entries come from the public broker, not from claims: sample it for at least an hour, since map
+  reports arrive at most hourly, and keep a root below the country or state level with at least
+  three distinct map-reporting nodes. The center is their median position and the radius their
+  90th-percentile distance from it, rounded up to 5 km with a 25 km floor. A root spread wider
+  than 250 km is a republisher or a statewide root and stays out. Prune by hand after; an area
+  is where a root's nodes are, never where a group says it serves.
 - **`neighbors`** maps a subdivision to the ones it borders, both directions present, so a root in
   a bordering state ranks above unrelated ones.
 - **`subdivisionSegments`** maps a geocoder's lowercased subdivision name to the topic segment
