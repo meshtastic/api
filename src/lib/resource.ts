@@ -1382,7 +1382,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     supportLevel: 1,
     displayName: "RAK WisMesh Pocket V3",
     tags: ["RAK"],
-    images: ["rak4631.svg"],
+    images: ["rak_wismesh_pocket.svg"],
     requiresDfu: true,
   },
   {
