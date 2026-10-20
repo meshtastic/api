@@ -1435,4 +1435,14 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["axiometa-genesis-mini.svg"],
     isMaker: true,
   },
+  {
+    hwModel: 146,
+    hwModelSlug: "MESHPAGER_X2",
+    platformioTarget: "seeed_meshpager_x2",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Seeed MeshPager X2",
+    tags: ["Seeed"],
+  },
 ];
