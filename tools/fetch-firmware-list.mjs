@@ -79,7 +79,7 @@ export const buildDocuments = async () => {
 
   // /github/firmware/list: major version > 1, and not revoked.
   const releases = allReleases
-    .filter((r) => Number.parseInt(r.tag_name.substring(1, 2)) > 1)
+    .filter((r) => Number.parseInt(r.tag_name.substring(1, 2), 10) > 1)
     .filter((r) => !r.name?.includes("(Revoked)"));
 
   const prs = await gh(`${API}/pulls`);
