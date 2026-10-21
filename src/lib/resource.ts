@@ -1412,11 +1412,11 @@ export const deviceHardwareList: DeviceHardware[] = [
   {
     hwModel: 137,
     hwModelSlug: "SEEED_WIO_TRACKER_L2",
-    platformioTarget: "seeed_wio_tracker_L2-tft",
+    platformioTarget: "seeed_wio_tracker_L2",
     architecture: "esp32-s3",
     activelySupported: true,
     supportLevel: 1,
-    displayName: "Seeed Wio Tracker L2 Pro",
+    displayName: "Seeed Wio Tracker L2",
     tags: ["Seeed"],
     images: ["seeed_wio_tracker_l2.svg"],
     requiresDfu: true,
