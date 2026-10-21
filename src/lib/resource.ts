@@ -1448,4 +1448,15 @@ export const deviceHardwareList: DeviceHardware[] = [
     displayName: "Seeed MeshPager X2",
     tags: ["Seeed"],
   },
+  {
+    hwModel: 151,
+    hwModelSlug: "NODARA",
+    platformioTarget: "nodara",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Radioddity Nodara",
+    tags: ["Radioddity"],
+    requiresDfu: true,
+  },
 ];
