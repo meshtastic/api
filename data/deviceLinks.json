@@ -1608,6 +1608,30 @@
       "Targets": [
         "rak4631"
       ]
+    },
+    {
+      "ShortCode": "heltec-rcc6",
+      "Description": "Radiocore C6",
+      "Type": "Vendor",
+      "Targets": [
+        "heltec-rcc6"
+      ]
+    },
+    {
+      "ShortCode": "heltec-rc32",
+      "Description": "Radiocore S3",
+      "Type": "Vendor",
+      "Targets": [
+        "heltec-rc32"
+      ]
+    },
+    {
+      "ShortCode": "heltec-rc52",
+      "Description": "Radiocore nRF52",
+      "Type": "Vendor",
+      "Targets": [
+        "heltec-rc52"
+      ]
     }
   ],
   "Marketplaces": {
