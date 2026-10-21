@@ -1598,7 +1598,7 @@
       "Description": "Seeed Wio Tracker L2 Pro",
       "Type": "Vendor",
       "Targets": [
-        "seeed_wio_tracker_L2-tft"
+        "seeed_wio_tracker_L2"
       ]
     },
     {
