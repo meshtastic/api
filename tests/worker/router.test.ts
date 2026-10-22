@@ -222,6 +222,7 @@ describe("edge cache policy", () => {
     ["/resource/deviceHardware", "s-maxage=86400"],
     ["/resource/deviceLinks", "s-maxage=86400"],
     ["/resource/eventFirmware", "s-maxage=86400"],
+    ["/resource/mqttRoots", "s-maxage=86400"],
     ["/github/firmware/list", "s-maxage=900"],
     ["/github/releases", "s-maxage=900"],
     ["/resource/eventFirmware/hamvention.png", "s-maxage=86400"],

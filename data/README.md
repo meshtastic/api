@@ -14,6 +14,7 @@ re-serializes (`tools/canonical.ts`). Never `cp` a file into the published outpu
 | `eventFirmware.json` | `/resource/eventFirmware` | by hand |
 | `bootloaderOtaQuirks.json` | `/resource/bootloaderOtaQuirks` | by hand |
 | `maintenanceUf2.json` | `/resource/maintenanceUf2` | `sync-maintenance-uf2.yml`, by dispatch, via PR |
+| `mqttRoots.json` | `/resource/mqttRoots` | by hand |
 | `mqtt.snapshot.json` | *(none — frozen capture)* | captured once, 2026-09-01 |
 | `updater.manifest.json` | `/updater/:app/:target/:arch/:ver` | captured once, 2026-09-01 |
 
@@ -67,6 +68,26 @@ place.
 `sync-maintenance-uf2.yml` is `workflow_dispatch`-only and opens a PR rather than pushing, unlike
 the device-links sync. That is deliberate: this data gates an irreversible bootloader write, so a
 new board's Board-ID needs a human who has confirmed it on real hardware.
+
+## `mqttRoots.json`
+
+The geography an MQTT root topic finder cannot learn from a one-minute broker sample, shared so
+Android and Apple suggest the same roots for the same place (meshtastic/design#167):
+
+- **`entries`** are community roots whose name says nothing about where they are. Each gives the
+  area it serves as ISO 3166-2 `subdivisions`, a `center` (`[lat, lon]`) and `radiusKm`, or both.
+  Entries come from the public broker, not from claims: sample it for at least an hour, since map
+  reports arrive at most hourly, and keep a root below the country or state level with at least
+  three distinct map-reporting nodes. The center is their median position and the radius their
+  90th-percentile distance from it, rounded up to 5 km with a 25 km floor. A root spread wider
+  than 250 km is a republisher or a statewide root and stays out. Prune by hand after; an area
+  is where a root's nodes are, never where a group says it serves.
+- **`neighbors`** maps a subdivision to the ones it borders, both directions present, so a root in
+  a bordering state ranks above unrelated ones.
+- **`subdivisionSegments`** maps a geocoder's lowercased subdivision name to the topic segment
+  (`washington` → `WA`), since platform geocoders disagree on which they return.
+
+Radio settings do not belong here: Mesh Beacons carry those over RF.
 
 ## `mqtt.snapshot.json`
 

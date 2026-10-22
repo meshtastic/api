@@ -45,6 +45,7 @@ const documents = {
   EVENT_FIRMWARE: canonical(readJson("data/eventFirmware.json")),
   BOOTLOADER_OTA_QUIRKS: canonical(readJson("data/bootloaderOtaQuirks.json")),
   MAINTENANCE_UF2: canonical(readJson("data/maintenanceUf2.json")),
+  MQTT_ROOTS: canonical(readJson("data/mqttRoots.json")),
   UPDATER_MANIFEST: canonical(readJson("data/updater.manifest.json")),
 } as const;
 

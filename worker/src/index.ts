@@ -6,6 +6,7 @@ import {
   type Doc,
   EVENT_FIRMWARE,
   MAINTENANCE_UF2,
+  MQTT_ROOTS,
   UPDATER_MANIFEST,
 } from "./generated/documents.js";
 import {
@@ -43,6 +44,7 @@ const BUNDLED: Readonly<Record<string, { doc: Doc; cls: Cls }>> = Object.freeze(
       doc: MAINTENANCE_UF2,
       cls: "flashCriticalJson",
     },
+    "/resource/mqttroots": { doc: MQTT_ROOTS, cls: "bundledJson" },
   },
 );
 
