@@ -289,7 +289,9 @@ describe("edge cache policy", () => {
   // will be ignored, potentially causing cache bypass."
   it("all TTLs are integers", async () => {
     for (const p of ["/resource/deviceHardware", "/github/releases"]) {
-      for (const [, n] of (await cc(p))!.matchAll(
+      const header = await cc(p);
+      expect(header).not.toBeNull();
+      for (const [, n] of (header ?? "").matchAll(
         /(?:max-age|s-maxage)=(\S+?)(?:,|$)/g,
       )) {
         expect(n).toMatch(/^\d+$/);

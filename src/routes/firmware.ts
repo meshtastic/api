@@ -172,7 +172,7 @@ export const FirmwareRoutes = () => {
           GitHub.DeviceRequestOptions,
         )
       ).data
-        .filter((r) => Number.parseInt(r.tag_name.substring(1, 2)) > 1)
+        .filter((r) => Number.parseInt(r.tag_name.substring(1, 2), 10) > 1)
         .filter((r) => !r.name?.includes("(Revoked)"));
       const prs = await GitHub.deviceOctokit.rest.pulls.list(
         GitHub.DeviceRequestOptions,

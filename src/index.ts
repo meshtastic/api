@@ -84,7 +84,7 @@ app
         router.service(GatewayService, new Gateway());
       },
       connect: true,
-      // @ts-ignore
+      // @ts-expect-error
     })(req, res, next);
   });
 
@@ -102,7 +102,7 @@ EventFirmwareIconRoutes();
 UpdaterRoutes();
 MqttRoutes();
 
-app.listen(Number.parseInt(process.env.PORT ?? "4000"));
+app.listen(Number.parseInt(process.env.PORT ?? "4000", 10));
 
 // After listen, deliberately: MQTT is an optional ingest, and nothing it does should be able to
 // stand between the process starting and the port being served. See lib/mqtt.ts.

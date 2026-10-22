@@ -18,7 +18,7 @@ API backend used for meshtastic.org and associated tools.
 
 - There's a codespace available for this repository, so you can start coding right away.
 - To build the project, run `pnpm install` and then `pnpm build`.
-- To run the project, use `pnpm dev`.   
+- To run the project, use `pnpm dev`.
 - To run the linter, use `pnpm biome lint`, or to fix files automatically, use `pnpm biome lint --write`.
 - To run the formatter, use `pnpm biome format`, or to fix files automatically, use `pnpm biome format --write`.
 - To run the type checker, use `pnpm biome check`, or to fix files automatically, use `pnpm biome check --write`.
