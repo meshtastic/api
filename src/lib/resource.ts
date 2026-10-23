@@ -1459,4 +1459,16 @@ export const deviceHardwareList: DeviceHardware[] = [
     tags: ["Radioddity"],
     requiresDfu: true,
   },
+  {
+    hwModel: 105,
+    hwModelSlug: "WISMESH_TAG",
+    platformioTarget: "rak_wismesh_pod",
+    architecture: "nrf52840",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "RAKwireless WisMesh Pod",
+    tags: ["RAKwireless"],
+    images: ["wismesh_pod.svg"],
+    requiresDfu: true,
+  },
 ];
