@@ -107,7 +107,9 @@ for (const v of quirks.softDeviceVariants ?? []) {
 // so clients refuse factory erase for it and nothing else notices.
 const variantTargets = new Map<number, Set<string>>();
 for (const v of quirks.softDeviceVariants ?? []) {
-  variantTargets.set(v.hwModel, new Set(v.platformioTargets ?? []));
+  const set = variantTargets.get(v.hwModel) ?? new Set<string>();
+  for (const t of v.platformioTargets ?? []) set.add(t);
+  variantTargets.set(v.hwModel, set);
 }
 for (const d of deviceHardwareList) {
   if (d.architecture !== "nrf52840") continue;
