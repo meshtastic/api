@@ -103,6 +103,22 @@ for (const v of quirks.softDeviceVariants ?? []) {
     }
   }
 }
+// The reverse direction: an nRF52840 build missing from its model's row resolves to no SoftDevice,
+// so clients refuse factory erase for it and nothing else notices.
+const variantTargets = new Map<number, Set<string>>();
+for (const v of quirks.softDeviceVariants ?? []) {
+  variantTargets.set(v.hwModel, new Set(v.platformioTargets ?? []));
+}
+for (const d of deviceHardwareList) {
+  if (d.architecture !== "nrf52840") continue;
+  if (!variantTargets.get(d.hwModel)?.has(d.platformioTarget)) {
+    fail(
+      `bootloaderOtaQuirks: nrf52840 target "${d.platformioTarget}" (${d.hwModelSlug}) is in no softDeviceVariants ` +
+        "row -- add it, with the SoftDevice from meshtastic/firmware boards/<board>.json build.arduino.ldscript " +
+        "(nrf52840_s140_v6.ld = 6.1.1, _v7.ld = 7.3.0), or a row with no softDevice to refuse it deliberately",
+    );
+  }
+}
 for (const d of quirks.devices ?? []) {
   if (d.hwModelSlug && !slugs.has(d.hwModelSlug)) {
     fail(
