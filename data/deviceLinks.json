@@ -1632,6 +1632,22 @@
       "Targets": [
         "heltec-rc52"
       ]
+    },
+    {
+      "ShortCode": "axiometa-genesis-mini",
+      "Description": "Axiometa Genesis Mini",
+      "Type": "Vendor",
+      "Targets": [
+        "axiometa-genesis-mini"
+      ]
+    },
+    {
+      "ShortCode": "rak_wismesh_pod",
+      "Description": "WisMesh Pod",
+      "Type": "Vendor",
+      "Targets": [
+        "rak_wismesh_pod"
+      ]
     }
   ],
   "Marketplaces": {
