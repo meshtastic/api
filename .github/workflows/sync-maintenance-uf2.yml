@@ -1,6 +1,6 @@
 name: Sync maintenance UF2 manifest
 
-# Manually run by whoever cuts a new OTAFIX release, to update data/maintenanceUf2.json's pinned
+# Manually run by whoever cuts a new nRF52 bootloader release, to update data/maintenanceUf2.json's pinned
 # digests and release tag. Deliberately NOT scheduled and NOT auto-merged, unlike sync-device-links
 # — this data gates an irreversible bootloader/erase write, so a new board's Board-ID needs a human
 # to confirm it on real hardware before it's trusted. Opens a PR for review; never pushes to main
@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       otafix_release_tag:
-        description: "The Adafruit_nRF52_Bootloader_OTAFIX release tag to sync (e.g. 0.9.2-OTAFIX2.3-BP1.5)"
+        description: "The meshtastic/nRF52_Bootloader release tag to sync (e.g. 0.9.2-OTAFIX2.3-BP1.5)"
         required: true
 
 permissions:

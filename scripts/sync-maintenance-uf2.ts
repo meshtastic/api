@@ -5,14 +5,14 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 // Run by .github/workflows/sync-maintenance-uf2.yml, manually dispatched by whoever cuts a new
-// OTAFIX release — never scheduled, and never auto-merged. Unlike deviceLinks.json (a pure
+// nRF52 bootloader release — never scheduled, and never auto-merged. Unlike deviceLinks.json (a pure
 // pass-through catalog), this data gates an irreversible bootloader write, so a new board's
 // Board-ID needs a human to confirm it on real hardware before it's trusted; this script updates
 // digests for boards it already knows and calls out anything it doesn't, rather than guessing.
 //
 // Usage: tsx scripts/sync-maintenance-uf2.ts <otafixReleaseTag>
 
-const REPO = "meshtastic/Adafruit_nRF52_Bootloader_OTAFIX";
+const REPO = "meshtastic/nRF52_Bootloader";
 const DATA_PATH = new URL("../data/maintenanceUf2.json", import.meta.url);
 const ASSET_FILE_RE = /^update-(.+)_bootloader-(.+)_nosd\.uf2$/;
 

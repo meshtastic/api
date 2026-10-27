@@ -41,7 +41,7 @@ Two fields with opposite failure semantics, and the difference matters:
 
 ## `maintenanceUf2.json`
 
-Pinned nRF52/RP2040 maintenance UF2 manifest — factory-erase images and OTAFIX bootloader
+Pinned nRF52/RP2040 maintenance UF2 manifest — factory-erase images and nRF52 bootloader
 self-update images, keyed by hardware. Source of truth was Meshtastic-Android's
 `feature/firmware/.../MaintenanceUf2.kt` (moved here 2026-08-20).
 
@@ -52,7 +52,7 @@ Two couplings ended when it moved here:
   which cuts no releases). They are now vendored into `static/maintenanceUf2/` and served by this
   API. See `static/maintenanceUf2/ATTRIBUTION.md`.
 - The **OTAFIX board map** had been hand-copied into Apple's OTAFIX branch. The OTAFIX images stay
-  hosted on `Adafruit_nRF52_Bootloader_OTAFIX`'s GitHub releases (`otafixBase` +
+  hosted on `meshtastic/nRF52_Bootloader`'s GitHub releases (`otafixBase` +
   `otafixReleaseTag`), resolved by URL template rather than re-hosted — that repo does cut
   releases, and mirroring release binaries here would be a second copy to keep in sync.
 
