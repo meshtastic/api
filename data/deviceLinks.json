@@ -1648,6 +1648,14 @@
       "Targets": [
         "rak_wismesh_pod"
       ]
+    },
+    {
+      "ShortCode": "station-g3",
+      "Description": "Station G3",
+      "Type": "Vendor",
+      "Targets": [
+        "station-g3"
+      ]
     }
   ],
   "Marketplaces": {
