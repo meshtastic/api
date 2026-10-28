@@ -7,9 +7,9 @@ releases. Digests are pinned in `../../data/maintenanceUf2.json` and re-verified
 `scripts/validate-maintenance-uf2.ts`.
 
 `meshtastic_factory_erase.uf2` is `tools/meshtastic_factory_erase.uf2` from
-[meshtastic/Adafruit_nRF52_Bootloader_OTAFIX](https://github.com/meshtastic/Adafruit_nRF52_Bootloader_OTAFIX)
+[meshtastic/nRF52_Bootloader](https://github.com/meshtastic/nRF52_Bootloader)
 (MIT) at commit
-[`c8ccd1d7419fda4c01c30c8a9bf144d30a424c46`](https://github.com/meshtastic/Adafruit_nRF52_Bootloader_OTAFIX/blob/c8ccd1d7419fda4c01c30c8a9bf144d30a424c46/tools/meshtastic_factory_erase.uf2),
+[`c8ccd1d7419fda4c01c30c8a9bf144d30a424c46`](https://github.com/meshtastic/nRF52_Bootloader/blob/c8ccd1d7419fda4c01c30c8a9bf144d30a424c46/tools/meshtastic_factory_erase.uf2),
 generated there by `tools/make_factory_erase_uf2.py` and shipped as the `meshtastic_factory_erase.uf2`
-asset of release [`0.9.2-OTAFIX2.4`](https://github.com/meshtastic/Adafruit_nRF52_Bootloader_OTAFIX/releases/tag/0.9.2-OTAFIX2.4)
+asset of release [`0.9.2-OTAFIX2.4`](https://github.com/meshtastic/nRF52_Bootloader/releases/tag/0.9.2-OTAFIX2.4)
 (same bytes, same digest). Same digest pinning and re-verification as above.

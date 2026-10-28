@@ -59,7 +59,7 @@ const checkSha256 = (sha256: string, where: string) => {
 };
 
 // --- bootloader-consumed erase image: one UF2 block whose family ID is the whole contract ---
-// The OTAFIX bootloader acts on this file by family ID alone (targetAddr is 0, so the clients'
+// The nRF52 bootloader acts on this file by family ID alone (targetAddr is 0, so the clients'
 // first-target-address check does not apply); a wrong family here would make every device treat
 // it as an ordinary firmware block. Check the header the way the bootloader reads it.
 const UF2_BLOCK_SIZE = 512;

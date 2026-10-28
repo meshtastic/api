@@ -1,13 +1,13 @@
 import { readFileSync } from "node:fs";
 
-// Pinned nRF52/RP2040 maintenance UF2 manifest — factory-erase images and OTAFIX bootloader
+// Pinned nRF52/RP2040 maintenance UF2 manifest — factory-erase images and nRF52 bootloader
 // self-update images, keyed by hardware. Source of truth was Meshtastic-Android's
 // feature/firmware/.../MaintenanceUf2.kt (moved here 2026-08-20): the erase-image URLs used to
 // point at a commit-pinned raw.githubusercontent.com URL into meshtastic/web-flasher's own
 // public/uf2/ (built from meshtastic/nrf52_factory_erase, GPL-3.0, which cuts no releases), and
 // the OTAFIX board map was independently hand-copied into apple's (unmerged) OTAFIX branch. Both
 // couplings end here: the erase images are vendored into this repo's own static/maintenanceUf2/
-// and served below; the OTAFIX images stay hosted on Adafruit_nRF52_Bootloader_OTAFIX's GitHub
+// and served below; the bootloader images stay hosted on meshtastic/nRF52_Bootloader's GitHub
 // releases (otafixBase + otafixReleaseTag), resolved by URL template rather than re-hosted, since
 // that repo does cut releases and mirroring release binaries here would be a second copy to keep
 // in sync.
