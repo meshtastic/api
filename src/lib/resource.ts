@@ -1181,7 +1181,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "STATION_G3",
     platformioTarget: "station-g3",
     architecture: "esp32-s3",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "Station G3",
     tags: ["B&Q"],
