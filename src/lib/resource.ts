@@ -1467,7 +1467,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     activelySupported: true,
     supportLevel: 1,
     displayName: "RAKwireless WisMesh Pod",
-    tags: ["RAKwireless"],
+    tags: ["RAK"],
     images: ["wismesh_pod.svg"],
     requiresDfu: true,
   },
