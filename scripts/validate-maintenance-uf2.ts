@@ -188,8 +188,17 @@ const sha256BySlug = new Map(
   ]),
 );
 for (const [boardId, entry] of Object.entries(manifest.otafixByBoardId)) {
+  const overrides: unknown = entry.targetOverrides ?? {};
+  if (
+    typeof overrides !== "object" ||
+    overrides === null ||
+    Array.isArray(overrides)
+  ) {
+    fail(`otafixByBoardId["${boardId}"].targetOverrides: must be an object`);
+    continue;
+  }
   for (const [target, override] of Object.entries(
-    entry.targetOverrides ?? {},
+    overrides as NonNullable<typeof entry.targetOverrides>,
   )) {
     const where = `otafixByBoardId["${boardId}"].targetOverrides["${target}"]`;
     if (!target.trim()) fail(`${where}: blank target key`);
