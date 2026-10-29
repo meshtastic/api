@@ -1464,7 +1464,7 @@ export const deviceHardwareList: DeviceHardware[] = [
     hwModelSlug: "WISMESH_TAG",
     platformioTarget: "rak_wismesh_pod",
     architecture: "nrf52840",
-    activelySupported: false,
+    activelySupported: true,
     supportLevel: 1,
     displayName: "RAKwireless WisMesh Pod",
     tags: ["RAKwireless"],
