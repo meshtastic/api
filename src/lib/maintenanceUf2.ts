@@ -36,6 +36,17 @@ export interface OtafixAssetEntry {
   // the confusion the doc comment above already has to spell out in prose.
   otafixBoardSlug: string;
   sha256: string;
+  // Images for boards whose bootloader reports this row's Board-ID but which have their own
+  // bootloader build, keyed by platformioTarget. Nested under the Board-ID so a target alone never
+  // resolves an image: the drive must still report a Board-ID this manifest knows.
+  targetOverrides?: Record<string, OtafixTargetOverride>;
+}
+
+// One targetOverrides image, named and pinned the same way as its parent row. Its own type rather
+// than OtafixAssetEntry so an override cannot carry overrides.
+export interface OtafixTargetOverride {
+  otafixBoardSlug: string;
+  sha256: string;
 }
 
 export interface MaintenanceUf2Manifest {

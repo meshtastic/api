@@ -21,7 +21,17 @@ interface Manifest {
   otafixReleaseTag: string;
   otafixBase: string;
   erase: unknown; // untouched by this script — see maintenanceUf2.ts for the real shape
-  otafixByBoardId: Record<string, { otafixBoardSlug: string; sha256: string }>;
+  otafixByBoardId: Record<
+    string,
+    {
+      otafixBoardSlug: string;
+      sha256: string;
+      targetOverrides?: Record<
+        string,
+        { otafixBoardSlug: string; sha256: string }
+      >;
+    }
+  >;
   otafixSupportedTargets: string[];
 }
 
@@ -89,6 +99,20 @@ for (const fileName of readdirSync(workdir)) {
     console.log(`  ${boardId} (${board}): digest changed`);
     entry.sha256 = sha256;
     changedBoards.push(boardId);
+  }
+  // The same asset may also be pinned as another row's target override; keep those in step.
+  for (const [parentId, parent] of Object.entries(manifest.otafixByBoardId)) {
+    for (const [target, override] of Object.entries(
+      parent.targetOverrides ?? {},
+    )) {
+      if (override.otafixBoardSlug !== board || override.sha256 === sha256)
+        continue;
+      console.log(
+        `  ${parentId} override ${target} (${board}): digest changed`,
+      );
+      override.sha256 = sha256;
+      changedBoards.push(`${parentId}/${target}`);
+    }
   }
 }
 
