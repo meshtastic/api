@@ -160,6 +160,17 @@ for (const t of uf2.otafixSupportedTargets ?? []) {
     fail(`maintenanceUf2: otafixSupportedTarget "${t}" is not a known device`);
   }
 }
+for (const [boardId, entry] of Object.entries(uf2.otafixByBoardId ?? {})) {
+  const overrides = (entry as { targetOverrides?: Record<string, unknown> })
+    .targetOverrides;
+  for (const t of Object.keys(overrides ?? {})) {
+    if (!targets.has(t)) {
+      fail(
+        `maintenanceUf2: otafixByBoardId["${boardId}"] targetOverride "${t}" is not a known device`,
+      );
+    }
+  }
+}
 
 /* ---------------------------------------------------------------- eventFirmware */
 
