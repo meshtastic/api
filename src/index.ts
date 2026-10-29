@@ -1,5 +1,6 @@
 import { GatewayService } from "@buf/meshtastic_api.connectrpc_es/protobufs/gateway/v1/gateway_service_connect.js";
 import { expressConnectMiddleware } from "@connectrpc/connect-express";
+import { compressionGzip } from "@connectrpc/connect-node";
 import { App } from "@tinyhttp/app";
 import { cors } from "@tinyhttp/cors";
 import { config } from "@tinyhttp/dotenv";
@@ -84,6 +85,10 @@ app
         router.service(GatewayService, new Gateway());
       },
       connect: true,
+      // gzip only. Left unset, this also accepts br on all three protocols, which hands any
+      // client's request bytes to Node's bundled Brotli decoder -- the decoder CVE-2026-111497
+      // (Node2Shell) writes out of bounds in. Nothing calls this service with compressed requests.
+      acceptCompression: [compressionGzip],
       // @ts-expect-error
     })(req, res, next);
   });

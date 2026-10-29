@@ -41,7 +41,7 @@ jobs:
           # buffer.SlowBuffer is gone and the octokit -> jwa import chain throws on load, so the
           # server could not boot at all on the version CI was testing -- while the version we
           # actually ship was never exercised.
-          node-version: "22"
+          node-version-file: .nvmrc
 
       - name: Install Dependencies
         run: pnpm install --ignore-scripts=false
@@ -65,7 +65,7 @@ jobs:
           # buffer.SlowBuffer is gone and the octokit -> jwa import chain throws on load, so the
           # server could not boot at all on the version CI was testing -- while the version we
           # actually ship was never exercised.
-          node-version: "22"
+          node-version-file: .nvmrc
 
       - name: Install Dependencies
         run: pnpm install --ignore-scripts=false
