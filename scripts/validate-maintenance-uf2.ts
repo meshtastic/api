@@ -148,9 +148,11 @@ if (manifest.erase.nrf52Bootloader) {
 checkEraseEntry(manifest.erase.rp2040, "erase.rp2040");
 eraseImageCount++;
 
-// --- OTAFIX board map: unique non-blank Board-IDs, valid board slugs, valid digests ---
+// --- OTAFIX board map: unique non-blank Board-IDs, valid board slugs, valid digests. Two Board-IDs
+// may share a slug when a vendor's stock bootloader reports a different Board-ID for the same board,
+// but they must pin the same digest ---
 const seenBoardIds = new Set<string>();
-const seenBoardSlugs = new Set<string>();
+const sha256BySeenSlug = new Map<string, string>();
 for (const [boardId, entry] of Object.entries(manifest.otafixByBoardId)) {
   if (!boardId.trim()) fail("otafixByBoardId: blank Board-ID key");
   if (seenBoardIds.has(boardId))
@@ -162,12 +164,13 @@ for (const [boardId, entry] of Object.entries(manifest.otafixByBoardId)) {
       `otafixByBoardId["${boardId}"]: otafixBoardSlug "${entry.otafixBoardSlug}" doesn't match ${BOARD_RE}`,
     );
   }
-  if (seenBoardSlugs.has(entry.otafixBoardSlug)) {
+  const pinnedForSlug = sha256BySeenSlug.get(entry.otafixBoardSlug);
+  if (pinnedForSlug !== undefined && pinnedForSlug !== entry.sha256) {
     fail(
-      `otafixByBoardId["${boardId}"]: otafixBoardSlug "${entry.otafixBoardSlug}" reused by another Board-ID`,
+      `otafixByBoardId["${boardId}"]: sha256 differs from another Board-ID that maps "${entry.otafixBoardSlug}"`,
     );
   }
-  seenBoardSlugs.add(entry.otafixBoardSlug);
+  sha256BySeenSlug.set(entry.otafixBoardSlug, entry.sha256);
   checkSha256(entry.sha256, `otafixByBoardId["${boardId}"]`);
 }
 
