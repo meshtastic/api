@@ -61,6 +61,11 @@ vocabularies (`wiscore_rak4631_board` vs `rak4631`), and a shared name would inv
 confusion this paragraph exists to prevent. The same trap exists for `architecture`: this data uses
 hyphenated values (`esp32-s3`) while the firmware CI's artifact names do not (`esp32s3`).
 
+A row's `targetOverrides` maps a `platformioTarget` to a different image for boards that ship a
+bootloader reporting that row's Board-ID but have their own bootloader build (a stock Wio Tracker
+L1 Pro 1W reports `TRACKER L1`). It is nested under the Board-ID so a target alone never selects an
+image; the override's slug must be an asset some other row already maps, with the same digest.
+
 Each image's `sha256` is checked against the downloaded bytes before any write. That guards against
 a corrupted download — a different concern from trusting this endpoint's content in the first
 place.

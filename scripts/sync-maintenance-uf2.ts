@@ -21,7 +21,17 @@ interface Manifest {
   otafixReleaseTag: string;
   otafixBase: string;
   erase: unknown; // untouched by this script — see maintenanceUf2.ts for the real shape
-  otafixByBoardId: Record<string, { otafixBoardSlug: string; sha256: string }>;
+  otafixByBoardId: Record<
+    string,
+    {
+      otafixBoardSlug: string;
+      sha256: string;
+      targetOverrides?: Record<
+        string,
+        { otafixBoardSlug: string; sha256: string }
+      >;
+    }
+  >;
   otafixSupportedTargets: string[];
 }
 
@@ -57,12 +67,15 @@ execFileSync(
   },
 );
 
-const boardBySlug = new Map(
-  Object.entries(manifest.otafixByBoardId).map(([boardId, e]) => [
-    e.otafixBoardSlug,
+// A slug can map from several Board-IDs (a vendor's stock bootloader reporting its own), so every
+// one of them takes the new digest.
+const boardIdsBySlug = new Map<string, string[]>();
+for (const [boardId, e] of Object.entries(manifest.otafixByBoardId)) {
+  boardIdsBySlug.set(e.otafixBoardSlug, [
+    ...(boardIdsBySlug.get(e.otafixBoardSlug) ?? []),
     boardId,
-  ]),
-);
+  ]);
+}
 
 const changedBoards: string[] = [];
 const unmappedAssets: string[] = [];
@@ -76,19 +89,34 @@ for (const fileName of readdirSync(workdir)) {
   const sha256 = createHash("sha256")
     .update(readFileSync(join(workdir, fileName)))
     .digest("hex");
-  const boardId = boardBySlug.get(board);
-  if (!boardId) {
+  const boardIds = boardIdsBySlug.get(board);
+  if (!boardIds) {
     unmappedAssets.push(
       `${fileName} (board slug "${board}" has no Board-ID mapping yet)`,
     );
     continue;
   }
 
-  const entry = manifest.otafixByBoardId[boardId];
-  if (entry.sha256 !== sha256) {
+  for (const boardId of boardIds) {
+    const entry = manifest.otafixByBoardId[boardId];
+    if (entry.sha256 === sha256) continue;
     console.log(`  ${boardId} (${board}): digest changed`);
     entry.sha256 = sha256;
     changedBoards.push(boardId);
+  }
+  // The same asset may also be pinned as another row's target override; keep those in step.
+  for (const [parentId, parent] of Object.entries(manifest.otafixByBoardId)) {
+    for (const [target, override] of Object.entries(
+      parent.targetOverrides ?? {},
+    )) {
+      if (override.otafixBoardSlug !== board || override.sha256 === sha256)
+        continue;
+      console.log(
+        `  ${parentId} override ${target} (${board}): digest changed`,
+      );
+      override.sha256 = sha256;
+      changedBoards.push(`${parentId}/${target}`);
+    }
   }
 }
 

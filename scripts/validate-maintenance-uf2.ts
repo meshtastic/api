@@ -13,7 +13,7 @@ const ASSET_DIR = new URL("../static/maintenanceUf2/", import.meta.url);
 
 const SHA256_RE = /^[0-9a-f]{64}$/;
 const FILENAME_RE = /^[a-z0-9_.-]+\.uf2$/;
-const BOARD_RE = /^[a-z0-9_]+$/;
+const BOARD_RE = /^[a-z0-9_.]+$/;
 
 const errors: string[] = [];
 const fail = (msg: string) => errors.push(msg);
@@ -34,7 +34,17 @@ const manifest = JSON.parse(readFileSync(DATA_PATH, "utf8")) as {
     nrf52Bootloader?: EraseImageEntry;
     rp2040: EraseImageEntry;
   };
-  otafixByBoardId: Record<string, { otafixBoardSlug: string; sha256: string }>;
+  otafixByBoardId: Record<
+    string,
+    {
+      otafixBoardSlug: string;
+      sha256: string;
+      targetOverrides?: Record<
+        string,
+        { otafixBoardSlug: string; sha256: string }
+      >;
+    }
+  >;
   otafixSupportedTargets: string[];
 };
 
@@ -138,9 +148,11 @@ if (manifest.erase.nrf52Bootloader) {
 checkEraseEntry(manifest.erase.rp2040, "erase.rp2040");
 eraseImageCount++;
 
-// --- OTAFIX board map: unique non-blank Board-IDs, valid board slugs, valid digests ---
+// --- OTAFIX board map: unique non-blank Board-IDs, valid board slugs, valid digests. Two Board-IDs
+// may share a slug when a vendor's stock bootloader reports a different Board-ID for the same board,
+// but they must pin the same digest ---
 const seenBoardIds = new Set<string>();
-const seenBoardSlugs = new Set<string>();
+const sha256BySeenSlug = new Map<string, string>();
 for (const [boardId, entry] of Object.entries(manifest.otafixByBoardId)) {
   if (!boardId.trim()) fail("otafixByBoardId: blank Board-ID key");
   if (seenBoardIds.has(boardId))
@@ -152,12 +164,13 @@ for (const [boardId, entry] of Object.entries(manifest.otafixByBoardId)) {
       `otafixByBoardId["${boardId}"]: otafixBoardSlug "${entry.otafixBoardSlug}" doesn't match ${BOARD_RE}`,
     );
   }
-  if (seenBoardSlugs.has(entry.otafixBoardSlug)) {
+  const pinnedForSlug = sha256BySeenSlug.get(entry.otafixBoardSlug);
+  if (pinnedForSlug !== undefined && pinnedForSlug !== entry.sha256) {
     fail(
-      `otafixByBoardId["${boardId}"]: otafixBoardSlug "${entry.otafixBoardSlug}" reused by another Board-ID`,
+      `otafixByBoardId["${boardId}"]: sha256 differs from another Board-ID that maps "${entry.otafixBoardSlug}"`,
     );
   }
-  seenBoardSlugs.add(entry.otafixBoardSlug);
+  sha256BySeenSlug.set(entry.otafixBoardSlug, entry.sha256);
   checkSha256(entry.sha256, `otafixByBoardId["${boardId}"]`);
 }
 
@@ -167,6 +180,54 @@ for (const target of manifest.otafixSupportedTargets) {
   if (seenTargets.has(target))
     fail(`otafixSupportedTargets: duplicate "${target}"`);
   seenTargets.add(target);
+}
+
+// --- target overrides: a known target, a slug some row already maps (so the asset exists in the
+// release), and the digest that row pins for it ---
+const sha256BySlug = new Map(
+  Object.values(manifest.otafixByBoardId).map((e) => [
+    e.otafixBoardSlug,
+    e.sha256,
+  ]),
+);
+for (const [boardId, entry] of Object.entries(manifest.otafixByBoardId)) {
+  const overrides: unknown = entry.targetOverrides ?? {};
+  if (
+    typeof overrides !== "object" ||
+    overrides === null ||
+    Array.isArray(overrides)
+  ) {
+    fail(`otafixByBoardId["${boardId}"].targetOverrides: must be an object`);
+    continue;
+  }
+  for (const [target, override] of Object.entries(
+    overrides as NonNullable<typeof entry.targetOverrides>,
+  )) {
+    const where = `otafixByBoardId["${boardId}"].targetOverrides["${target}"]`;
+    if (!target.trim()) fail(`${where}: blank target key`);
+    if (!seenTargets.has(target)) {
+      fail(`${where}: target is not in otafixSupportedTargets`);
+    }
+    if (!BOARD_RE.test(override.otafixBoardSlug)) {
+      fail(
+        `${where}: otafixBoardSlug "${override.otafixBoardSlug}" doesn't match ${BOARD_RE}`,
+      );
+    }
+    if (override.otafixBoardSlug === entry.otafixBoardSlug) {
+      fail(`${where}: override names its own row's slug`);
+    }
+    checkSha256(override.sha256, where);
+    const pinned = sha256BySlug.get(override.otafixBoardSlug);
+    if (pinned === undefined) {
+      fail(
+        `${where}: otafixBoardSlug "${override.otafixBoardSlug}" is not an asset any Board-ID row maps`,
+      );
+    } else if (pinned !== override.sha256) {
+      fail(
+        `${where}: sha256 differs from the row that maps "${override.otafixBoardSlug}"`,
+      );
+    }
+  }
 }
 
 if (errors.length > 0) {
