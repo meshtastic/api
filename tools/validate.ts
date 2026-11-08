@@ -203,7 +203,9 @@ for (const ed of events.editions ?? []) {
 /* ---------------------------------------------------------------- mqttRoots */
 
 // Clients save a root straight into the radio, so an entry must pass the firmware's own root rules:
-// 31 bytes, printable ASCII, no wildcards, no empty segment, not ending in the /2 version level.
+// 31 bytes, no whitespace, control or invisible characters, no wildcards, no empty segment, not
+// ending in the /2 version level. Letters in any script are fine: the firmware stores the root as
+// UTF-8, and communities write theirs in their own letters (msh/EU_868/NO/Østlandet).
 const ISO_SUBDIVISION = /^[A-Z]{2}-[A-Z0-9]{1,3}$/;
 const roots = readJson("data/mqttRoots.json");
 const seenRoots = new Set<string>();
@@ -214,7 +216,8 @@ for (const e of roots.entries ?? []) {
     continue;
   }
   if (Buffer.byteLength(e.root) > 31) fail(`${where}: longer than 31 bytes`);
-  if (!/^[\x21-\x7e]+$/.test(e.root)) fail(`${where}: not printable ASCII`);
+  if (/[\s\p{Cc}\p{Cf}]/u.test(e.root))
+    fail(`${where}: contains whitespace, a control or an invisible character`);
   if (/[+#]/.test(e.root)) fail(`${where}: contains a wildcard`);
   if (e.root.endsWith("/") || e.root.includes("//"))
     fail(`${where}: empty segment`);
@@ -269,7 +272,7 @@ for (const [country, names] of Object.entries<Record<string, string>>(
       fail(
         `mqttRoots subdivisionSegments ${country}: "${name}" must be lowercase`,
       );
-    if (!/^[A-Za-z0-9_-]+$/.test(segment))
+    if (!/^[\p{L}\p{N}_-]+$/u.test(segment))
       fail(
         `mqttRoots subdivisionSegments ${country}: bad segment "${segment}"`,
       );
