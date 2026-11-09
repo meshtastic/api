@@ -67,6 +67,19 @@ export interface MaintenanceUf2Manifest {
   };
   otafixByBoardId: Record<string, OtafixAssetEntry>;
   otafixSupportedTargets: string[];
+  // Keyed by platformioTarget: over BLE a client cannot read the drive's Board-ID, so the running
+  // node's target picks the row and the bootloader's DIS Model Number must equal bleModel before
+  // anything is written.
+  otafixBleDfuByTarget?: Record<string, OtafixBleDfuEntry>;
+}
+
+// The legacy DFU SoftDevice+bootloader package a board takes over BLE:
+// <otafixBoardSlug>_bootloader-<otafixReleaseTag>_s140_<softDevice>.zip on the release.
+export interface OtafixBleDfuEntry {
+  otafixBoardSlug: string;
+  softDevice: string; // the S140 version the package carries, e.g. "6.1.1"
+  bleModel: string; // the bootloader's BLEDIS_MODEL, read back from DIS 0x2A24 in DFU mode
+  sha256: string;
 }
 
 // Parse once per process — the file only changes via a committed edit + redeploy, same as

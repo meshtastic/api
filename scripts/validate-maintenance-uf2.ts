@@ -46,6 +46,15 @@ const manifest = JSON.parse(readFileSync(DATA_PATH, "utf8")) as {
     }
   >;
   otafixSupportedTargets: string[];
+  otafixBleDfuByTarget?: Record<
+    string,
+    {
+      otafixBoardSlug: string;
+      softDevice: string;
+      bleModel: string;
+      sha256: string;
+    }
+  >;
 };
 
 const checkFileName = (fileName: string, where: string) => {
@@ -228,6 +237,61 @@ for (const [boardId, entry] of Object.entries(manifest.otafixByBoardId)) {
       );
     }
   }
+}
+
+// --- BLE DFU packages: keyed by a supported target, a slug some Board-ID row maps, a SoftDevice an
+// erase image exists for, and a non-blank DIS Model Number the app checks before writing ---
+const knownSlugs = new Set(
+  Object.values(manifest.otafixByBoardId).flatMap((e) => [
+    e.otafixBoardSlug,
+    ...Object.values(e.targetOverrides ?? {}).map((o) => o.otafixBoardSlug),
+  ]),
+);
+const overrideSlugByTarget = new Map<string, string>();
+const targetByOverrideSlug = new Map<string, string>();
+for (const e of Object.values(manifest.otafixByBoardId)) {
+  for (const [t, o] of Object.entries(e.targetOverrides ?? {})) {
+    overrideSlugByTarget.set(t, o.otafixBoardSlug);
+    targetByOverrideSlug.set(o.otafixBoardSlug, t);
+  }
+}
+for (const [target, entry] of Object.entries(
+  manifest.otafixBleDfuByTarget ?? {},
+)) {
+  const where = `otafixBleDfuByTarget["${target}"]`;
+  if (!seenTargets.has(target)) {
+    fail(`${where}: target is not in otafixSupportedTargets`);
+  }
+  if (!BOARD_RE.test(entry.otafixBoardSlug)) {
+    fail(
+      `${where}: otafixBoardSlug "${entry.otafixBoardSlug}" doesn't match ${BOARD_RE}`,
+    );
+  } else if (!knownSlugs.has(entry.otafixBoardSlug)) {
+    fail(
+      `${where}: otafixBoardSlug "${entry.otafixBoardSlug}" is not a slug any Board-ID row maps`,
+    );
+  }
+  // A target with its own bootloader build (a targetOverride) must take that build's package, and
+  // no other target may take it.
+  const overrideSlug = overrideSlugByTarget.get(target);
+  if (overrideSlug !== undefined && entry.otafixBoardSlug !== overrideSlug) {
+    fail(
+      `${where}: otafixBoardSlug "${entry.otafixBoardSlug}" is not its targetOverride's "${overrideSlug}"`,
+    );
+  }
+  const overrideTarget = targetByOverrideSlug.get(entry.otafixBoardSlug);
+  if (overrideTarget !== undefined && overrideTarget !== target) {
+    fail(
+      `${where}: otafixBoardSlug "${entry.otafixBoardSlug}" is the targetOverride build for "${overrideTarget}"`,
+    );
+  }
+  if (!Object.hasOwn(manifest.erase.nrf52, entry.softDevice)) {
+    fail(
+      `${where}: softDevice "${entry.softDevice}" is not a known S140 version`,
+    );
+  }
+  if (!entry.bleModel?.trim()) fail(`${where}: blank bleModel`);
+  checkSha256(entry.sha256, where);
 }
 
 if (errors.length > 0) {
