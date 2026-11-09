@@ -247,6 +247,14 @@ const knownSlugs = new Set(
     ...Object.values(e.targetOverrides ?? {}).map((o) => o.otafixBoardSlug),
   ]),
 );
+const overrideSlugByTarget = new Map<string, string>();
+const targetByOverrideSlug = new Map<string, string>();
+for (const e of Object.values(manifest.otafixByBoardId)) {
+  for (const [t, o] of Object.entries(e.targetOverrides ?? {})) {
+    overrideSlugByTarget.set(t, o.otafixBoardSlug);
+    targetByOverrideSlug.set(o.otafixBoardSlug, t);
+  }
+}
 for (const [target, entry] of Object.entries(
   manifest.otafixBleDfuByTarget ?? {},
 )) {
@@ -263,7 +271,21 @@ for (const [target, entry] of Object.entries(
       `${where}: otafixBoardSlug "${entry.otafixBoardSlug}" is not a slug any Board-ID row maps`,
     );
   }
-  if (!(entry.softDevice in manifest.erase.nrf52)) {
+  // A target with its own bootloader build (a targetOverride) must take that build's package, and
+  // no other target may take it.
+  const overrideSlug = overrideSlugByTarget.get(target);
+  if (overrideSlug !== undefined && entry.otafixBoardSlug !== overrideSlug) {
+    fail(
+      `${where}: otafixBoardSlug "${entry.otafixBoardSlug}" is not its targetOverride's "${overrideSlug}"`,
+    );
+  }
+  const overrideTarget = targetByOverrideSlug.get(entry.otafixBoardSlug);
+  if (overrideTarget !== undefined && overrideTarget !== target) {
+    fail(
+      `${where}: otafixBoardSlug "${entry.otafixBoardSlug}" is the targetOverride build for "${overrideTarget}"`,
+    );
+  }
+  if (!Object.hasOwn(manifest.erase.nrf52, entry.softDevice)) {
     fail(
       `${where}: softDevice "${entry.softDevice}" is not a known S140 version`,
     );
