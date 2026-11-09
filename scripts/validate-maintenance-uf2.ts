@@ -46,6 +46,15 @@ const manifest = JSON.parse(readFileSync(DATA_PATH, "utf8")) as {
     }
   >;
   otafixSupportedTargets: string[];
+  otafixBleDfuByTarget?: Record<
+    string,
+    {
+      otafixBoardSlug: string;
+      softDevice: string;
+      bleModel: string;
+      sha256: string;
+    }
+  >;
 };
 
 const checkFileName = (fileName: string, where: string) => {
@@ -228,6 +237,39 @@ for (const [boardId, entry] of Object.entries(manifest.otafixByBoardId)) {
       );
     }
   }
+}
+
+// --- BLE DFU packages: keyed by a supported target, a slug some Board-ID row maps, a SoftDevice an
+// erase image exists for, and a non-blank DIS Model Number the app checks before writing ---
+const knownSlugs = new Set(
+  Object.values(manifest.otafixByBoardId).flatMap((e) => [
+    e.otafixBoardSlug,
+    ...Object.values(e.targetOverrides ?? {}).map((o) => o.otafixBoardSlug),
+  ]),
+);
+for (const [target, entry] of Object.entries(
+  manifest.otafixBleDfuByTarget ?? {},
+)) {
+  const where = `otafixBleDfuByTarget["${target}"]`;
+  if (!seenTargets.has(target)) {
+    fail(`${where}: target is not in otafixSupportedTargets`);
+  }
+  if (!BOARD_RE.test(entry.otafixBoardSlug)) {
+    fail(
+      `${where}: otafixBoardSlug "${entry.otafixBoardSlug}" doesn't match ${BOARD_RE}`,
+    );
+  } else if (!knownSlugs.has(entry.otafixBoardSlug)) {
+    fail(
+      `${where}: otafixBoardSlug "${entry.otafixBoardSlug}" is not a slug any Board-ID row maps`,
+    );
+  }
+  if (!(entry.softDevice in manifest.erase.nrf52)) {
+    fail(
+      `${where}: softDevice "${entry.softDevice}" is not a known S140 version`,
+    );
+  }
+  if (!entry.bleModel?.trim()) fail(`${where}: blank bleModel`);
+  checkSha256(entry.sha256, where);
 }
 
 if (errors.length > 0) {

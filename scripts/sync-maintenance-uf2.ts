@@ -33,6 +33,15 @@ interface Manifest {
     }
   >;
   otafixSupportedTargets: string[];
+  otafixBleDfuByTarget?: Record<
+    string,
+    {
+      otafixBoardSlug: string;
+      softDevice: string;
+      bleModel: string;
+      sha256: string;
+    }
+  >;
 }
 
 const tag = process.argv[2];
@@ -59,6 +68,8 @@ execFileSync(
     REPO,
     "--pattern",
     "update-*_nosd.uf2",
+    "--pattern",
+    "*_bootloader-*_s140_*.zip",
     "--dir",
     workdir,
   ],
@@ -118,6 +129,28 @@ for (const fileName of readdirSync(workdir)) {
       changedBoards.push(`${parentId}/${target}`);
     }
   }
+}
+
+// BLE DFU packages: a row keeps its target, slug, SoftDevice and DIS model (confirmed on hardware)
+// and only takes the new digest. A row whose package is missing from the release is reported.
+for (const [target, entry] of Object.entries(
+  manifest.otafixBleDfuByTarget ?? {},
+)) {
+  const fileName = `${entry.otafixBoardSlug}_bootloader-${tag}_s140_${entry.softDevice}.zip`;
+  let bytes: Buffer;
+  try {
+    bytes = readFileSync(join(workdir, fileName));
+  } catch {
+    unmappedAssets.push(
+      `${fileName} (otafixBleDfuByTarget["${target}"] has no package in this release)`,
+    );
+    continue;
+  }
+  const sha256 = createHash("sha256").update(bytes).digest("hex");
+  if (entry.sha256 === sha256) continue;
+  console.log(`  BLE ${target} (${fileName}): digest changed`);
+  entry.sha256 = sha256;
+  changedBoards.push(`ble/${target}`);
 }
 
 manifest.otafixReleaseTag = tag;
