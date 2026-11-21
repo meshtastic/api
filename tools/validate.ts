@@ -34,6 +34,7 @@ const ARCHITECTURES = new Set([
   "rp2040",
   "rp2350",
   "stm32",
+  "virtual",
 ]);
 
 if (deviceHardwareList.length < 100) {
