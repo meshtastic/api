@@ -1471,4 +1471,12 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["wismesh_pod.svg"],
     requiresDfu: true,
   },
+  {
+    hwModel: 254,
+    hwModelSlug: "VIRTUAL_NODE",
+    platformioTarget: "virtual-node",
+    architecture: "virtual",
+    activelySupported: false,
+    displayName: "Virtual Node",
+  },
 ];
