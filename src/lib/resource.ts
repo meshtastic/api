@@ -1471,4 +1471,16 @@ export const deviceHardwareList: DeviceHardware[] = [
     images: ["wismesh_pod.svg"],
     requiresDfu: true,
   },
+  {
+    hwModel: 153,
+    hwModelSlug: "MESHNOLOGY_W15",
+    platformioTarget: "meshnology_w15",
+    architecture: "esp32-s3",
+    activelySupported: false,
+    supportLevel: 1,
+    displayName: "Meshnology W15",
+    tags: ["Meshnology"],
+    requiresDfu: true,
+    partitionScheme: "8MB",
+  },
 ];
